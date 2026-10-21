@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     database_url: str = f"sqlite:///{REPO_ROOT / 'data' / 'vericanopy.db'}"
     rpc_url: str = "http://127.0.0.1:8545"
     chain_id: int = 31337
-    deployments_file: str = str(REPO_ROOT / "contracts" / "deployments" / "31337.json")
+    deployments_file: str = ""  # defaults to contracts/deployments/<chain_id>.json
     admin_api_key: str = "change-me"
     ipfs_api_url: str = ""
     ipfs_gateway: str = "https://ipfs.io/ipfs/"
@@ -32,3 +32,5 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+if not settings.deployments_file:
+    settings.deployments_file = str(REPO_ROOT / "contracts" / "deployments" / f"{settings.chain_id}.json")
