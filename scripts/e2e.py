@@ -122,12 +122,17 @@ def scenario() -> int:
         "on-chain integrity matches submission",
     )
     check(r["score_bps"] >= 7000, "A score ≥ minIssueScoreBps, so vintages can be issued")
-    for v in (2021, 2022, 2023):
-        send(
-            web3,
-            cs["VeriCredit"].functions.mintVintage(A, v, buyer, 40_000),
-            ANVIL_KEYS["deployer"],
-        )
+    debt = cs["BufferPool"].functions.shortfallOf(A).call()
+    check(debt == r["reversal_tco2e"], f"pre-issuance background loss recorded as shortfall ({debt} t)")
+    try:
+        send(web3, cs["VeriCredit"].functions.mintVintage(A, 2021, buyer, 40_000), ANVIL_KEYS["deployer"])
+        check(False, "mint must be refused while a shortfall is outstanding")
+    except TxError as e:
+        check("OutstandingShortfall" in str(e), f"mint refused while shortfall outstanding: {e}")
+    # governance nets the debt from the first vintage, then settles it
+    send(web3, cs["BufferPool"].functions.settleShortfall(A, debt), ANVIL_KEYS["deployer"])
+    for v, amt in ((2021, 40_000 - debt), (2022, 40_000), (2023, 40_000)):
+        send(web3, cs["VeriCredit"].functions.mintVintage(A, v, buyer, amt), ANVIL_KEYS["deployer"])
     tidA = cs["VeriCredit"].functions.tokenIdFor(A, 2023).call()
     send(
         web3,
@@ -140,7 +145,7 @@ def scenario() -> int:
         "retirement indexed with score at retirement",
     )
     check(
-        cs["BufferPool"].functions.bufferBalance(A, 2021).call() == 8_000,
+        cs["BufferPool"].functions.bufferBalance(A, 2022).call() == 8_000,
         "buffer pool holds 20% of each vintage",
     )
 
@@ -167,11 +172,10 @@ def scenario() -> int:
     finalize_due(log=print)
     idx()
     check(r["score_bps"] >= 7000, "C 2019 pre-fire score issuable")
-    send(
-        web3,
-        cs["VeriCredit"].functions.mintVintage(C, 2019, buyer, 30_000),
-        ANVIL_KEYS["deployer"],
-    )
+    debt_c = cs["BufferPool"].functions.shortfallOf(C).call()
+    if debt_c:
+        send(web3, cs["BufferPool"].functions.settleShortfall(C, debt_c), ANVIL_KEYS["deployer"])
+    send(web3, cs["VeriCredit"].functions.mintVintage(C, 2019, buyer, 30_000), ANVIL_KEYS["deployer"])
     tidC = cs["VeriCredit"].functions.tokenIdFor(C, 2019).call()
     send(
         web3,

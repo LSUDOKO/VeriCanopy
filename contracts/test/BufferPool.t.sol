@@ -95,6 +95,18 @@ contract BufferPoolTest is Test {
         vm.prank(issuer);
         vm.expectRevert(IVeriCredit.OutstandingShortfall.selector);
         credit.mintVintage(p2, 2024, buyer, 1000);
+        // governance settles the debt (netted from the first vintage off-chain), then issuance proceeds
+        vm.prank(buyer);
+        vm.expectRevert();
+        pool.settleShortfall(p2, 123);
+        vm.prank(gov);
+        vm.expectRevert(IBufferPool.SettlementExceedsShortfall.selector);
+        pool.settleShortfall(p2, 124);
+        vm.prank(gov);
+        pool.settleShortfall(p2, 123);
+        assertEq(pool.shortfallOf(p2), 0);
+        vm.prank(issuer);
+        credit.mintVintage(p2, 2024, buyer, 1000);
     }
 
     function test_only_oracle_handles_reversal() public {

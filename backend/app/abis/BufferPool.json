@@ -327,6 +327,24 @@
  },
  {
   "type": "function",
+  "name": "settleShortfall",
+  "inputs": [
+   {
+    "name": "projectId",
+    "type": "uint256",
+    "internalType": "uint256"
+   },
+   {
+    "name": "amount",
+    "type": "uint256",
+    "internalType": "uint256"
+   }
+  ],
+  "outputs": [],
+  "stateMutability": "nonpayable"
+ },
+ {
+  "type": "function",
   "name": "shortfallOf",
   "inputs": [
    {
@@ -520,6 +538,31 @@
   "anonymous": false
  },
  {
+  "type": "event",
+  "name": "ShortfallSettled",
+  "inputs": [
+   {
+    "name": "projectId",
+    "type": "uint256",
+    "indexed": true,
+    "internalType": "uint256"
+   },
+   {
+    "name": "amount",
+    "type": "uint256",
+    "indexed": false,
+    "internalType": "uint256"
+   },
+   {
+    "name": "remaining",
+    "type": "uint256",
+    "indexed": false,
+    "internalType": "uint256"
+   }
+  ],
+  "anonymous": false
+ },
+ {
   "type": "error",
   "name": "AccessControlBadConfirmation",
   "inputs": []
@@ -548,6 +591,11 @@
  {
   "type": "error",
   "name": "NotVeriCredit",
+  "inputs": []
+ },
+ {
+  "type": "error",
+  "name": "SettlementExceedsShortfall",
   "inputs": []
  }
 ]

@@ -62,6 +62,16 @@ contract BufferPool is AccessControl, ERC1155Holder, IBufferPool {
     }
 
     /// @inheritdoc IBufferPool
+    /// @dev Governance records that a reversal debt has been covered off-pool (e.g. the issuer nets it from the next
+    ///      vintage or an insurance pool pays). Until the debt is zero, VeriCredit refuses to mint for the project.
+    function settleShortfall(uint256 projectId, uint256 amount) external onlyRole(GOVERNANCE_ROLE) {
+        uint256 debt = _shortfall[projectId];
+        if (amount > debt) revert SettlementExceedsShortfall();
+        _shortfall[projectId] = debt - amount;
+        emit ShortfallSettled(projectId, amount, debt - amount);
+    }
+
+    /// @inheritdoc IBufferPool
     function bufferBalance(uint256 projectId, uint16 vintage) external view returns (uint256) {
         return _balance[projectId][vintage];
     }

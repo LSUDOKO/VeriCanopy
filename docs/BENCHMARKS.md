@@ -38,7 +38,7 @@ from `ai/zk/artifacts/*.json` and `docs/gas-report.txt`. Entries marked `—` ha
 ## Smart contracts — `forge test --gas-report` (`docs/gas-report.txt`)
 | Function | min gas | mean gas | max gas |
 |---|---|---|---|
-| `handleReversal` | 23,903 | 33,734 | 130,821 |
+| `handleReversal` | 23,903 | 50,032 | 130,821 |
 | `openChallenge` | 57,184 | 250,028 | 250,100 |
 | `vote` | 24,176 | 58,230 | 185,033 |
 | `withdraw` | 28,591 | 30,458 | 32,325 |
@@ -49,9 +49,9 @@ from `ai/zk/artifacts/*.json` and `docs/gas-report.txt`. Entries marked `—` ha
 | `addCells` | 24,723 | 62,786 | 76,113 |
 | `createProject` | 83,132 | 120,144 | 140,649 |
 | `proveOverlap` | 23,777 | 33,603 | 40,270 |
-| `mintVintage` | 46,866 | 56,803 | 208,260 |
+| `mintVintage` | 46,866 | 56,825 | 208,326 |
 | `retire` | 27,837 | 172,110 | 206,418 |
-| `retire` | 15,516 | 18,016 | 230,315 |
+| `retire` | 18,016 | 18,016 | 230,315 |
 
 `submitScore` max includes on-chain Halo2 proof verification (real EZKL proof fixture, `test/IntegrityOracle.zk.t.sol`).
 
