@@ -45,9 +45,7 @@ def main() -> int:
     try:
         Web3(Web3.HTTPProvider(rpc)).eth.block_number
     except Exception:
-        anvil = subprocess.Popen(
-            ["anvil", "--chain-id", "31337", "--silent"], stdout=subprocess.DEVNULL
-        )
+        anvil = subprocess.Popen(["anvil", "--chain-id", "31337", "--silent"], stdout=subprocess.DEVNULL)
         time.sleep(2)
     try:
         return scenario()
@@ -106,9 +104,7 @@ def scenario() -> int:
         "D (overlapping A) rejected on-chain with OverlapDetected",
     )
     db = SessionLocal()
-    check(
-        db.query(Project).count() == 4, "indexer has 4 project rows (D stays Pending)"
-    )
+    check(db.query(Project).count() == 4, "indexer has 4 project rows (D stays Pending)")
     A, B, C = ids["A"], ids["B"], ids["C"]
 
     print("\n== 2. Score A 2023 → finalise → mint vintages → retire")
@@ -125,9 +121,7 @@ def scenario() -> int:
         cs["VeriCredit"].functions.integrityOf(A).call()[0] == r["score_bps"],
         "on-chain integrity matches submission",
     )
-    check(
-        r["score_bps"] >= 7000, "A score ≥ minIssueScoreBps, so vintages can be issued"
-    )
+    check(r["score_bps"] >= 7000, "A score ≥ minIssueScoreBps, so vintages can be issued")
     for v in (2021, 2022, 2023):
         send(
             web3,
@@ -150,9 +144,7 @@ def scenario() -> int:
         "buffer pool holds 20% of each vintage",
     )
 
-    print(
-        "\n== 3. Score A 2024 (background loss) → reversal burns buffer, holders notified"
-    )
+    print("\n== 3. Score A 2024 (background loss) → reversal burns buffer, holders notified")
     r = run_score_job(A, 2024, log=print)
     warp(301)
     finalize_due(log=print)
@@ -169,9 +161,7 @@ def scenario() -> int:
     n = db.query(Notification).filter_by(address=buyer.lower(), kind="reversal").count()
     check(n == 1, "buyer received one reversal notification")
 
-    print(
-        "\n== 4. Project C: score 2019 → mint → retire → fire year 2021 → shortfall → Frozen"
-    )
+    print("\n== 4. Project C: score 2019 → mint → retire → fire year 2021 → shortfall → Frozen")
     r = run_score_job(C, 2019, log=print)
     warp(301)
     finalize_due(log=print)
@@ -219,18 +209,14 @@ def scenario() -> int:
     try:
         send(
             web3,
-            cs["VeriCredit"].functions.safeTransferFrom(
-                buyer, challenger, tidC, 1, b""
-            ),
+            cs["VeriCredit"].functions.safeTransferFrom(buyer, challenger, tidC, 1, b""),
             ANVIL_KEYS["buyer"],
         )
         check(False, "frozen credits must not transfer")
     except TxError as e:
         check("ProjectFrozen" in str(e), f"frozen credit transfer reverted: {e}")
 
-    print(
-        "\n== 5. Project B: low score → challenge (WrongDates) → upheld → oracle slashed"
-    )
+    print("\n== 5. Project B: low score → challenge (WrongDates) → upheld → oracle slashed")
     r = run_score_job(B, 2024, log=print)
     sid = r["submission_id"]
     stake = r["stake_wei"]
@@ -251,8 +237,7 @@ def scenario() -> int:
         "challenge upheld; submission rejected",
     )
     check(
-        cs["IntegrityOracle"].functions.pendingWithdrawals(challenger).call()
-        == stake // 2,
+        cs["IntegrityOracle"].functions.pendingWithdrawals(challenger).call() == stake // 2,
         "challenger receives half of the oracle stake",
     )
     check(

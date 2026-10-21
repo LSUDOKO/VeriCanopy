@@ -37,8 +37,7 @@ def deploy(rpc: str, key: str) -> str:
 if __name__ == "__main__":
     rpc = os.environ.get("RPC_URL", "http://127.0.0.1:8545")
     key = (
-        os.environ.get("DEPLOYER_KEY")
-        or "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+        os.environ.get("DEPLOYER_KEY") or "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
     )
     addr = deploy(rpc, key)
     print(addr if "--quiet" in sys.argv else f"Halo2Verifier deployed at {addr}")

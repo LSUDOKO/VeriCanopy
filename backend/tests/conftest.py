@@ -9,10 +9,10 @@ os.environ["DATABASE_URL"] = f"sqlite:///{_tmp}/test.db"
 os.environ["IPFS_STORE_DIR"] = f"{_tmp}/ipfs"
 os.environ["ADMIN_API_KEY"] = "test-key"
 
-from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient  # noqa: E402
 
-from app.db import SessionLocal, init_db
-from app.main import app
+from app.db import SessionLocal, init_db  # noqa: E402
+from app.main import app  # noqa: E402
 
 
 @pytest.fixture(scope="session")

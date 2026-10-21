@@ -82,7 +82,10 @@ class MLP:
     @classmethod
     def random(cls, seed: int = 0, h1: int = 16, h2: int = 8) -> MLP:
         rng = np.random.default_rng(seed)
-        s = lambda i, o: rng.normal(0, np.sqrt(2 / i), (i, o))
+
+        def s(i, o):
+            return rng.normal(0, np.sqrt(2 / i), (i, o))
+
         return cls(s(16, h1), np.zeros(h1), s(h1, h2), np.zeros(h2), s(h2, 1), np.zeros(1))
 
     def forward(self, X: np.ndarray):
@@ -174,7 +177,9 @@ def train(
 
 
 def export_onnx(m: MLP, path: Path) -> None:
-    f32 = lambda a, n: numpy_helper.from_array(np.asarray(a, dtype=np.float32), n)
+    def f32(a, n):
+        return numpy_helper.from_array(np.asarray(a, dtype=np.float32), n)
+
     inits = [
         f32(m.W1, "W1"),
         f32(m.b1, "b1"),

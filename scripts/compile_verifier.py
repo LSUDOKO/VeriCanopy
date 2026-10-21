@@ -24,9 +24,7 @@ def solc_bin() -> str:
             return str(cand)
     found = shutil.which("solc")
     if not found:
-        raise SystemExit(
-            "solc not found; install solc 0.8.x or run `forge build` once so svm downloads it"
-        )
+        raise SystemExit("solc not found; install solc 0.8.x or run `forge build` once so svm downloads it")
     return found
 
 
@@ -38,11 +36,7 @@ def compile_verifier() -> dict:
             "optimizer": {"enabled": True, "runs": 1},
             "viaIR": False,
             "evmVersion": "cancun",
-            "outputSelection": {
-                "*": {
-                    "*": ["abi", "evm.bytecode.object", "evm.deployedBytecode.object"]
-                }
-            },
+            "outputSelection": {"*": {"*": ["abi", "evm.bytecode.object", "evm.deployedBytecode.object"]}},
         },
     }
     r = subprocess.run(
@@ -62,9 +56,7 @@ def compile_verifier() -> dict:
         "bytecode": "0x" + c["evm"]["bytecode"]["object"],
         "deployedBytecode": "0x" + c["evm"]["deployedBytecode"]["object"],
         "deployedSize": len(c["evm"]["deployedBytecode"]["object"]) // 2,
-        "solc": subprocess.run(
-            [solc_bin(), "--version"], capture_output=True, text=True
-        )
+        "solc": subprocess.run([solc_bin(), "--version"], capture_output=True, text=True)
         .stdout.strip()
         .splitlines()[-1],
     }

@@ -18,10 +18,7 @@ def main() -> None:
     env = dict(os.environ)
     env["PATH"] = f"{FOUNDRY}:{env['PATH']}"
     rpc = env.get("RPC_URL", "http://127.0.0.1:8545")
-    key = (
-        env.get("DEPLOYER_KEY")
-        or "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-    )
+    key = env.get("DEPLOYER_KEY") or "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
     rep = ART / "training_report.json"
     if rep.exists():
         env["MODEL_HASH"] = json.loads(rep.read_text())["model_hash"]
@@ -29,11 +26,7 @@ def main() -> None:
     if st.exists():
         env["OUTPUT_SCALE"] = str(json.loads(st.read_text())["model_output_scales"][0])
     vjson = ROOT / "contracts" / "verifier" / "Halo2Verifier.json"
-    if (
-        env.get("ZK_MODE", "onchain") == "onchain"
-        and vjson.exists()
-        and not env.get("VERIFIER_ADDRESS")
-    ):
+    if env.get("ZK_MODE", "onchain") == "onchain" and vjson.exists() and not env.get("VERIFIER_ADDRESS"):
         sys.path.insert(0, str(ROOT / "scripts"))
         from deploy_verifier import deploy
 
@@ -57,9 +50,7 @@ def main() -> None:
         cmd += ["--verify"]
     subprocess.run(cmd, cwd=ROOT / "contracts", env=env, check=True)
     subprocess.run([sys.executable, str(ROOT / "scripts" / "sync_abis.py")], check=True)
-    dep = json.loads(
-        (ROOT / "contracts" / "deployments" / f"{_chain_id(rpc)}.json").read_text()
-    )
+    dep = json.loads((ROOT / "contracts" / "deployments" / f"{_chain_id(rpc)}.json").read_text())
     print(json.dumps(dep["contracts"], indent=1))
 
 

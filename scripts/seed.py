@@ -29,9 +29,7 @@ def seed(names=("A", "B", "C"), try_overlap=True, log=print) -> dict[str, int]:
     dep = load_deployments()
     cs = contracts(dep)
     reg = cs["ProjectRegistry"]
-    key = (
-        settings.oracle_private_key and ANVIL_KEYS["deployer"] or ANVIL_KEYS["deployer"]
-    )
+    key = settings.oracle_private_key and ANVIL_KEYS["deployer"] or ANVIL_KEYS["deployer"]
     import os
 
     key = os.environ.get("DEPLOYER_KEY") or ANVIL_KEYS["deployer"]
@@ -52,9 +50,7 @@ def seed(names=("A", "B", "C"), try_overlap=True, log=print) -> dict[str, int]:
             "cell_count": cells["cell_count"],
         }
         cid = ipfs.put_json(meta)
-        start_ts = int(
-            datetime.fromisoformat(p["start_date"]).replace(tzinfo=UTC).timestamp()
-        )
+        start_ts = int(datetime.fromisoformat(p["start_date"]).replace(tzinfo=UTC).timestamp())
         rcpt = send(
             web3,
             reg.functions.createProject(
@@ -67,12 +63,8 @@ def seed(names=("A", "B", "C"), try_overlap=True, log=print) -> dict[str, int]:
             ),
             key,
         )
-        pid = int(
-            reg.events.ProjectCreated().process_receipt(rcpt)[0]["args"]["projectId"]
-        )
-        log(
-            f"{name}: createProject → #{pid} ({cells['cell_count']} cells, metadata ipfs://{cid})"
-        )
+        pid = int(reg.events.ProjectCreated().process_receipt(rcpt)[0]["args"]["projectId"])
+        log(f"{name}: createProject → #{pid} ({cells['cell_count']} cells, metadata ipfs://{cid})")
         all_cells = [int(c) for c in cells["cells"]]
         try:
             for i in range(0, len(all_cells), BATCH):
