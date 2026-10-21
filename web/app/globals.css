@@ -1,26 +1,91 @@
 @import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
 
+/* 08 §1 design tokens: scientific instrument meets trustworthy registry */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --forest: #0f3d2e;
+  --canopy: #2e7d4f;
+  --teal: #14b8a6;
+  --amber: #f59e0b;
+  --red: #dc2626;
+  --bg: #f6f8f7;
+  --surface: #ffffff;
+  --surface-2: #eef2f0;
+  --fg: #10231b;
+  --fg-muted: #51635b;
+  --border: #d9e1dd;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --bg: #0b1511;
+    --surface: #10201a;
+    --surface-2: #162a22;
+    --fg: #e6efe9;
+    --fg-muted: #9bb0a6;
+    --border: #22382e;
   }
 }
 
+@theme inline {
+  --color-forest: var(--forest);
+  --color-canopy: var(--canopy);
+  --color-teal: var(--teal);
+  --color-amber: var(--amber);
+  --color-red: var(--red);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-border: var(--border);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "JetBrains Mono", monospace;
+}
+
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.btn {
+  @apply inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition disabled:opacity-50;
+}
+.btn-primary {
+  background: var(--canopy);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--forest);
+}
+.btn-ghost {
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.btn-ghost:hover {
+  background: var(--surface-2);
+}
+.mono {
+  font-family: var(--font-mono);
+}
+.label {
+  @apply text-xs uppercase tracking-wide;
+  color: var(--fg-muted);
+}
+.input {
+  @apply w-full rounded-md px-3 py-2 text-sm;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--fg);
+}
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
 }
