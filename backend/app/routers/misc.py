@@ -3,12 +3,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
 from sqlalchemy.orm import Session
 
 from app.config import REPO_ROOT, settings
 from app.db import get_db
 from app.models import IndexerState
+from app.schemas import WebhookIn
 
 router = APIRouter(tags=["misc"])
 
@@ -58,11 +59,40 @@ def demo_timeline():
     return json.loads(p.read_text())
 
 
-@router.post("/webhooks")
-def webhooks():
-    raise HTTPException(
-        status_code=501, detail="webhooks are a P1 feature (see docs/spec/02_FEATURES_SPEC.md F12)"
-    )
+@router.post("/webhooks", status_code=201)
+def register_webhook(body: WebhookIn, db: Session = Depends(get_db)):
+    """Register a webhook (returns the HMAC secret once).
+    Events: score.finalized, project.reversal, project.status, challenge.resolved."""
+    import secrets as _secrets
+
+    from app.models import Webhook
+
+    if len(body.url) > 2000:
+        raise HTTPException(status_code=400, detail="url too long")
+    secret = _secrets.token_hex(32)
+    w = Webhook(url=body.url, project_id=body.project_id, secret=secret, active=True)
+    db.add(w)
+    db.commit()
+    return {
+        "id": w.id,
+        "url": w.url,
+        "project_id": w.project_id,
+        "secret": secret,
+        "signature_header": "X-VeriCanopy-Signature",
+        "events": ["score.finalized", "project.reversal", "project.status", "challenge.resolved"],
+    }
+
+
+@router.delete("/webhooks/{wid}")
+def delete_webhook(wid: int, x_webhook_secret: str = Header(default=""), db: Session = Depends(get_db)):
+    from app.models import Webhook
+
+    w = db.get(Webhook, wid)
+    if not w or w.secret != x_webhook_secret:
+        raise HTTPException(status_code=404, detail="webhook not found")
+    w.active = False
+    db.commit()
+    return {"ok": True}
 
 
 @router.post("/projects/{pid}/pdd")

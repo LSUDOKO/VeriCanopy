@@ -12,7 +12,7 @@ import type { Overlay } from "@/components/MapView";
 
 const MapView = dynamic(() => import("@/components/MapView").then((m) => m.MapView), { ssr: false });
 
-type Overlap = { h3_res: number; cells: string[]; cell_count: number; geometry_sha256: string; conflicts: { cell: string; project_id: number; project_name: string | null }[]; conflict_cells_geojson: GeoJSON.GeoJSON | null; cells_geojson: GeoJSON.GeoJSON };
+type Overlap = { h3_res: number; fine_cell_root?: string | null; cells: string[]; cell_count: number; geometry_sha256: string; conflicts: { cell: string; project_id: number; project_name: string | null }[]; conflict_cells_geojson: GeoJSON.GeoJSON | null; cells_geojson: GeoJSON.GeoJSON };
 
 const BATCH = 60;
 
@@ -83,7 +83,7 @@ export default function Register() {
       if (!cid) throw new Error("metadata upload returned no CID");
       const geometryHash = overlap.geometry_sha256 as `0x${string}`;
       const startTs = BigInt(Math.floor(new Date(start).getTime() / 1000));
-      const h1 = await writeContractAsync({ ...reg, functionName: "createProject", args: [geometryHash, keccak256(stringToHex("fine-root-not-computed-in-browser")), 8, startTs, Math.round(Number(baseline) * 100), `ipfs://${cid}`] });
+      const h1 = await writeContractAsync({ ...reg, functionName: "createProject", args: [geometryHash, (overlap.fine_cell_root as `0x${string}` | null | undefined) ?? keccak256(stringToHex("fine-root-not-computed-in-browser")), 8, startTs, Math.round(Number(baseline) * 100), `ipfs://${cid}`] });
       log(`createProject tx ${h1}`);
       const r1 = await client.waitForTransactionReceipt({ hash: h1 });
       const topic = r1.logs.find((l) => l.topics.length >= 3);

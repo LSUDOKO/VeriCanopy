@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import Challenge, Holding, Notification, Project, Retirement, Submission
+from app.services.webhooks import deliver
 
 
 def _of_project(token_id: str, project_id: int) -> bool:
@@ -71,10 +72,12 @@ def on_reversal(
 
 
 def on_score_finalized(db: Session, project_id: int, period: int, score_bps: int, tx: str) -> None:
-    pass  # impairment notices are sent from IntegrityUpdated (status transition)
+    # in-app impairment notices are sent from IntegrityUpdated (status transition); webhooks get every finalisation
+    deliver(db, "score.finalized", project_id, {"period": period, "score_bps": score_bps, "tx_hash": tx})
 
 
 def on_integrity_status(db: Session, project_id: int, status: str, score_bps: int, tx: str) -> int:
+    deliver(db, "project.status", project_id, {"status": status, "score_bps": score_bps, "tx_hash": tx})
     n = 0
     for addr in _audience(db, project_id):
         db.add(
@@ -100,6 +103,12 @@ def on_challenge_resolved(db: Session, c: Challenge) -> None:
     s = db.get(Submission, c.submission_id)
     if not s:
         return
+    deliver(
+        db,
+        "challenge.resolved",
+        s.project_id,
+        {"challenge_id": c.id, "submission_id": c.submission_id, "outcome": c.outcome},
+    )
     for addr in {c.challenger, s.oracle or ""} - {""}:
         db.add(
             Notification(

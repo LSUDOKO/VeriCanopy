@@ -716,6 +716,11 @@
  },
  {
   "type": "error",
+  "name": "InvalidParams",
+  "inputs": []
+ },
+ {
+  "type": "error",
   "name": "NothingToWithdraw",
   "inputs": []
  },
@@ -727,6 +732,11 @@
  {
   "type": "error",
   "name": "ResolutionPeriodNotOver",
+  "inputs": []
+ },
+ {
+  "type": "error",
+  "name": "ResolutionPeriodOver",
   "inputs": []
  },
  {

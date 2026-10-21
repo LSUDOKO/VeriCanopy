@@ -33,8 +33,14 @@ def overlap_check(db: Session, geometry: dict, h3_res: int = 8) -> dict:
             conflicts.append(
                 {"cell": r.cell, "project_id": r.project_id, "project_name": names.get(r.project_id)}
             )
+    fine_root = None
+    if len(cells) <= 400:  # res-11 fill is ~343x denser; cap keeps the request under a few seconds
+        from vericanopy_ai.h3cells import FINE_RESOLUTION, fine_cell_root
+
+        fine_root = fine_cell_root(polyfill_cells(geometry, FINE_RESOLUTION))
     return {
         "h3_res": h3_res,
+        "fine_cell_root": fine_root,
         "cells": strs,
         "cell_count": len(strs),
         "geometry_sha256": geometry_sha256(geometry),

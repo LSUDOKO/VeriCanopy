@@ -54,7 +54,11 @@ def _zk_bootstrap() -> None:
         got = hashlib.sha256(VK.read_bytes()).hexdigest()
         want = (ART / "vk.sha256").read_text().strip()
         if got != want:
-            log.error("zk bootstrap: verifying key hash mismatch (%s != %s); proofs would not verify on-chain", got, want)
+            log.error(
+                "zk bootstrap: verifying key hash mismatch (%s != %s); proofs would not verify on-chain",
+                got,
+                want,
+            )
             (ART / "pk.key").unlink(missing_ok=True)
         else:
             log.info("zk bootstrap: ready (vk matches committed hash)")
@@ -63,7 +67,10 @@ def _zk_bootstrap() -> None:
 
 
 def main() -> None:
-    logging.basicConfig(level=logging.INFO, format='{"ts":"%(asctime)s","lvl":"%(levelname)s","src":"%(name)s","msg":"%(message)s"}')
+    logging.basicConfig(
+        level=logging.INFO,
+        format='{"ts":"%(asctime)s","lvl":"%(levelname)s","src":"%(name)s","msg":"%(message)s"}',
+    )
     if os.environ.get("RUN_INDEXER", "1") == "1":
         threading.Thread(target=_indexer_loop, name="indexer", daemon=True).start()
     if os.environ.get("RUN_SCHEDULER", "1") == "1":

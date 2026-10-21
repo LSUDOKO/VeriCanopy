@@ -109,6 +109,6 @@ def test_metadata_shape(client):
 
 def test_jobs_requires_api_key(client):
     assert client.post("/api/v1/jobs/score", json={"project_id": 1, "period": 2024}).status_code == 401
-    assert client.post("/api/v1/webhooks").status_code == 501
+    assert client.post("/api/v1/webhooks", json={}).status_code == 422
     assert client.get("/api/v1/stats").json()["projects"] == 1
     assert client.get("/api/v1/portfolio/0xB1").json()["holdings"] == []

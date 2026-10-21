@@ -20,3 +20,8 @@ class ScoreJobIn(BaseModel):
     period: int
     demo_id: str | None = None
     submit: bool = True
+
+
+class WebhookIn(BaseModel):
+    url: str = Field(pattern=r"^https?://")
+    project_id: int | None = None

@@ -170,3 +170,17 @@ class ProcessedLog(Base):
     tx_hash: Mapped[str] = mapped_column(String(66), primary_key=True)
     log_index: Mapped[int] = mapped_column(Integer, primary_key=True)
     block_number: Mapped[int] = mapped_column(BigInteger)
+
+
+class Webhook(Base):
+    """Registered webhook: receives JSON POSTs for project events (score finalised, reversal, status, challenge)."""
+
+    __tablename__ = "webhooks"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    url: Mapped[str] = mapped_column(Text)
+    project_id: Mapped[int | None] = mapped_column(BigInteger, index=True)  # null = all projects
+    secret: Mapped[str] = mapped_column(String(128))
+    active: Mapped[bool] = mapped_column(default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    last_status: Mapped[int | None] = mapped_column(Integer)
+    last_delivery_at: Mapped[datetime | None] = mapped_column(DateTime)

@@ -992,6 +992,11 @@
  },
  {
   "type": "error",
+  "name": "InvalidParams",
+  "inputs": []
+ },
+ {
+  "type": "error",
   "name": "InvalidZkProof",
   "inputs": []
  },
