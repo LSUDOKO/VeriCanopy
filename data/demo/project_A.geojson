@@ -1,0 +1,38 @@
+{
+ "type": "Feature",
+ "properties": {
+  "name": "Demo Project A (honest, intact forest)",
+  "demo_id": "A",
+  "country": "BR",
+  "start_date": "2019-01-01",
+  "claimed_baseline_rate": 0.012,
+  "description": "Polygon drawn by VeriCanopy in a forested area of Par\u00e1, Brazil. Not a real registered project."
+ },
+ "geometry": {
+  "type": "Polygon",
+  "coordinates": [
+   [
+    [
+     -54.8,
+     -3.4
+    ],
+    [
+     -54.68,
+     -3.4
+    ],
+    [
+     -54.68,
+     -3.3
+    ],
+    [
+     -54.8,
+     -3.3
+    ],
+    [
+     -54.8,
+     -3.4
+    ]
+   ]
+  ]
+ }
+}

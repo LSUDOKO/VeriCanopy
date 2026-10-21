@@ -1,0 +1,38 @@
+{
+ "type": "Feature",
+ "properties": {
+  "name": "Demo Project B (inflated baseline)",
+  "demo_id": "B",
+  "country": "PE",
+  "start_date": "2019-01-01",
+  "claimed_baseline_rate": 0.045,
+  "description": "Polygon drawn by VeriCanopy in a low-pressure forest area of Loreto, Peru, with an intentionally inflated claimed baseline. Not a real registered project."
+ },
+ "geometry": {
+  "type": "Polygon",
+  "coordinates": [
+   [
+    [
+     -74.3,
+     -3.9
+    ],
+    [
+     -74.17999999999999,
+     -3.9
+    ],
+    [
+     -74.17999999999999,
+     -3.8
+    ],
+    [
+     -74.3,
+     -3.8
+    ],
+    [
+     -74.3,
+     -3.9
+    ]
+   ]
+  ]
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "type": "Feature",
+ "properties": {
+  "name": "Demo Project D (overlaps A; used to demonstrate rejection)",
+  "demo_id": "D",
+  "country": "BR",
+  "start_date": "2020-01-01",
+  "claimed_baseline_rate": 0.015,
+  "description": "Deliberately overlaps the eastern half of Demo Project A."
+ },
+ "geometry": {
+  "type": "Polygon",
+  "coordinates": [
+   [
+    [
+     -54.74,
+     -3.38
+    ],
+    [
+     -54.620000000000005,
+     -3.38
+    ],
+    [
+     -54.620000000000005,
+     -3.28
+    ],
+    [
+     -54.74,
+     -3.28
+    ],
+    [
+     -54.74,
+     -3.38
+    ]
+   ]
+  ]
+ }
+}
