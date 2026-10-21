@@ -15,5 +15,12 @@
  "settings_s": 0.13,
  "compile_s": 0.0,
  "srs_s": 28.28,
- "setup_s": 7.63
+ "setup_s": 7.63,
+ "bench_vectors": 20,
+ "prove_seconds_mean": 6.02,
+ "prove_seconds_max": 7.156,
+ "proof_bytes": 4416,
+ "float_vs_proven_max_abs_err": 0.002309922361373895,
+ "float_vs_proven_mean_abs_err": 0.0009282774376869224,
+ "peak_rss_mb_prove": 2548.8
 }
