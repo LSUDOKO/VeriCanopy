@@ -27,6 +27,12 @@ def load_keypair(pk_path: Path, sk_path: Path) -> tuple[bytes, bytes]:
 
 
 def load_or_create(pk_path: Path, sk_path: Path) -> tuple[bytes, bytes]:
+    """Hosted services keep the keypair in env (`PQ_PUBLIC_KEY_B64` / `PQ_SECRET_KEY_B64`); local runs use files."""
+    import base64
+
+    env_pk, env_sk = os.environ.get("PQ_PUBLIC_KEY_B64"), os.environ.get("PQ_SECRET_KEY_B64")
+    if env_pk and env_sk:
+        return base64.b64decode(env_pk), base64.b64decode(env_sk)
     if pk_path.exists() and sk_path.exists():
         return load_keypair(pk_path, sk_path)
     pk, sk = keygen()
