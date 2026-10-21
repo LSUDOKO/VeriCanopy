@@ -3,8 +3,8 @@
 | Layer | Where | Identifier |
 |---|---|---|
 | Web (Next.js) | Vercel, project `vericanopy` (root dir `web/`) | https://vericanopy.vercel.app |
-| API + indexer + finalizer | AWS App Runner `vericanopy-api` (ap-south-1), 2 vCPU / 4 GB, min=max=1 instance | https://mympbpgymg.ap-south-1.awsapprunner.com |
-| Container image | AWS ECR `vericanopy-backend` (ap-south-1), built from `backend/Dockerfile` at the repo root | auto-deploys on push of `:latest` |
+| API + indexer + finalizer | Render web service `vericanopy-api` (singapore, Docker, free plan — spins down after 15 min idle; upgrade to Starter for always-on indexing), built from `backend/Dockerfile`, auto-deploys from `main` | https://vericanopy-api.onrender.com |
+| Standby | AWS App Runner `vericanopy-api` (ap-south-1), paused; image in ECR `vericanopy-backend` | https://mympbpgymg.ap-south-1.awsapprunner.com |
 | Database | Neon Postgres 17, project `vericanopy` (aws-ap-southeast-1), schema managed by Alembic | `backend/alembic` |
 | Chain | Polygon Amoy (80002) via `https://polygon-amoy-bor-rpc.publicnode.com` | `contracts/deployments/80002.json` once deployed |
 | Secrets | `secrets/` (git-ignored) on the operator machine; App Runner / Vercel env for hosted services | never committed |
@@ -15,16 +15,13 @@
 # 1. contracts + demo seed (needs a funded deployer; prints the address if unfunded)
 scripts/deploy_amoy.sh
 
-# 2. point the hosted API at the new addresses (no rebuild needed)
-DEP=$(jq -c . contracts/deployments/80002.json)
-aws apprunner update-service --region ap-south-1 --service-arn <service arn> \
-  --source-configuration "{\"ImageRepository\":{\"ImageIdentifier\":\"941089721992.dkr.ecr.ap-south-1.amazonaws.com/vericanopy-backend:latest\",\"ImageRepositoryType\":\"ECR\",\"ImageConfiguration\":{\"Port\":\"8000\",\"RuntimeEnvironmentVariables\":{\"DEPLOYMENTS_JSON\":$DEP, ...other vars...}}}}"
+# 2. commit contracts/deployments/80002.json — Render rebuilds from main and the API picks it up by CHAIN_ID
+git add contracts/deployments/80002.json && git commit -m "deploy: amoy" && git push
 
 # 3. oracle run for a project/period (proves locally or on the App Runner instance once RUN_ZK_BOOTSTRAP=1)
 cd backend && ../.venv/bin/python -m app.workers.oracle --project 1 --period 2023
 
-# 4. new backend image
-docker build -f backend/Dockerfile -t vericanopy-backend . && docker tag ... && docker push ...   # App Runner auto-deploys
+# 4. backend: push to main; Render builds backend/Dockerfile automatically (render.yaml documents the service)
 
 # 5. web
 vercel --prod   # from the repo root (project root dir is web/)

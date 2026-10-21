@@ -1,0 +1,37 @@
+# Render Blueprint (documents the service created via API; `render blueprints` can recreate it)
+services:
+  - type: web
+    name: vericanopy-api
+    runtime: docker
+    region: singapore
+    plan: free
+    branch: main
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: CHAIN_ID
+        value: "80002"
+      - key: RPC_URL
+        value: https://polygon-amoy-bor-rpc.publicnode.com
+      - key: EXPLORER_URL
+        value: https://amoy.polygonscan.com
+      - key: CORS_ORIGINS
+        value: https://vericanopy.vercel.app,http://localhost:3000
+      - key: ZK_MODE
+        value: onchain
+      - key: RUN_ZK_BOOTSTRAP
+        value: "0"
+      - key: INDEXER_CONFIRMATIONS
+        value: "5"
+      - key: IPFS_STORE_DIR
+        value: /tmp/vc-ipfs
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_API_KEY
+        sync: false
+      - key: PQ_PUBLIC_KEY_B64
+        sync: false
+      - key: PQ_SECRET_KEY_B64
+        sync: false

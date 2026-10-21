@@ -1,0 +1,29 @@
+{
+  "chainId": 80002,
+  "contracts": {
+    "BufferPool": "0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f",
+    "ChallengeManager": "0xa3a203519f86DdeeCA51771F43ca0840e51387b6",
+    "IntegrityOracle": "0xd760B9004F5ACF3814Ea833E601a23b060B922c2",
+    "ModelRegistry": "0x1D042FddCA42542D51CA4c33aB55db1835b010a9",
+    "PQKeyRegistry": "0xa536e7C93c32179747d6eD83fA5138B2b7879700",
+    "ProjectRegistry": "0xfA399d3CEb1fD524E8898A95e2D0AFdc8d424Dd7",
+    "RetirementRegistry": "0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a",
+    "VeriCredit": "0x333c45Cbbb7AB746244767c199551e69A4Fa4965",
+    "Verifier": "0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d"
+  },
+  "deployer": "0x94A26d8B64dbF046428DE7D237cc0E527Bc6cC8a",
+  "oracleAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "params": {
+    "bufferBps": 2000,
+    "challengeWindow": 300,
+    "impairThresholdBps": 5000,
+    "minChallengeBond": 500000000000000,
+    "minIssueScoreBps": 7000,
+    "minOracleStake": 1000000000000000,
+    "mockVerifier": true,
+    "modelHash": "0x32ce653a28048cfab13eceae836f4165620bae2aae2da6cc7f5058c7e9b07d9f",
+    "outputScale": 7,
+    "resolutionPeriod": 600,
+    "resolverQuorum": 2
+  }
+}
