@@ -1,0 +1,41 @@
+[project]
+name = "vericanopy-ai"
+version = "0.1.0"
+description = "VeriCanopy satellite AI pipeline, zkML prover and post-quantum attestations"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.2",
+  "scikit-learn>=1.5",
+  "onnx>=1.16",
+  "onnxruntime>=1.18",
+  "h3>=4.1",
+  "shapely>=2.0",
+  "pyarrow>=16",
+  "dilithium-py>=1.5",
+  "pycryptodome>=3.20",
+  "eth-account>=0.13",
+  "eth-hash[pycryptodome]",
+  "multiformats>=0.3",
+  "ezkl>=23.0.5",
+]
+
+[project.optional-dependencies]
+ee = ["earthengine-api>=1.0"]
+oqs = ["liboqs-python>=0.12"]
+dev = ["pytest>=8", "ruff>=0.6", "black>=24"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["vericanopy_ai*", "pq*", "zk*"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: slow tests (zk proving)"]

@@ -1,0 +1,35 @@
+# node
+node_modules/
+web/.next/
+web/out/
+web/next-env.d.ts
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+# foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+# secrets & env
+.env
+secrets/
+# zk large artifacts
+ai/zk/artifacts/*.compiled
+ai/zk/artifacts/*.key
+ai/zk/artifacts/*.srs
+ai/zk/artifacts/kzg*.srs
+ai/zk/artifacts/witness*.json
+# data
+data/cache/
+data/ipfs/
+data/outputs/
+*.db
+# sdd scratch
+.superpowers/
+# misc
+.DS_Store
+*.log

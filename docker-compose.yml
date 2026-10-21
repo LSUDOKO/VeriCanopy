@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment: { POSTGRES_USER: vc, POSTGRES_PASSWORD: vc, POSTGRES_DB: vericanopy }
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+  ipfs:
+    image: ipfs/kubo:latest
+    ports: ["5001:5001", "8080:8080"]
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:latest
+    command: ["anvil --host 0.0.0.0 --block-time 1 --chain-id 31337"]
+    ports: ["8545:8545"]
+  api:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://vc:vc@postgres:5432/vericanopy
+      REDIS_URL: redis://redis:6379/0
+      RPC_URL: http://anvil:8545
+    ports: ["8000:8000"]
+    depends_on: [postgres, redis, anvil]
+  indexer:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    command: python -m app.indexer.run
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://vc:vc@postgres:5432/vericanopy
+      RPC_URL: http://anvil:8545
+    depends_on: [postgres, anvil]
+  worker:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    command: python -m app.workers.scheduler
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://vc:vc@postgres:5432/vericanopy
+      REDIS_URL: redis://redis:6379/0
+      RPC_URL: http://anvil:8545
+    depends_on: [postgres, redis, anvil]
+  web:
+    build: { context: ./web }
+    environment: { NEXT_PUBLIC_API_URL: http://localhost:8000 }
+    ports: ["3000:3000"]
+    depends_on: [api]
+volumes:
+  pgdata: {}
