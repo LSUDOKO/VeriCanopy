@@ -64,8 +64,8 @@ class PipelineConfig:
     pre_years: int = 5
     h3_resolution: int = 8
     # fixture provider sizes (kept small so tests and demo runs are fast)
-    fixture_n_t: int = 600
-    fixture_n_c: int = 6000
+    fixture_n_t: int = 1500
+    fixture_n_c: int = 9000
     provider: str = field(default_factory=lambda: os.environ.get("VC_PROVIDER", "auto"))
 
     def to_manifest(self) -> dict:

@@ -19,7 +19,7 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("--out")
 
     s = sub.add_parser("score", help="run the full pipeline for a project/period")
-    s.add_argument("--project", type=int, required=True)
+    s.add_argument("--project", required=True, help="demo name (A,B,C) or on-chain id")
     s.add_argument("--period", type=int, required=True)
     s.add_argument("--out-dir", default=None)
 

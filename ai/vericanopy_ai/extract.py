@@ -159,7 +159,7 @@ class FixtureProvider:
             )
             df["pre_loss_pressure"] = np.clip(rng.beta(2, 20, n) * p["pressure_scale"], 0, 1)
             df["agb"] = np.clip(rng.normal(p["agb_mean"], 25, n), 20, 400)
-            df["cloud_free"] = np.clip(rng.beta(8, 2, n), 0, 1)
+            df["cloud_free"] = np.clip(rng.beta(12, 2, n), 0, 1)
             df["dw_trees_start"] = np.clip(rng.beta(9, 1.5, n), 0, 1)
             return df
 

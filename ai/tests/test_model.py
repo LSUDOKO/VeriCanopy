@@ -3,6 +3,8 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+
+from vericanopy_ai.config import FEATURE_NAMES
 from vericanopy_ai.model import (
     MLP,
     expert_score,
@@ -12,8 +14,6 @@ from vericanopy_ai.model import (
     sample_features,
     train,
 )
-
-from vericanopy_ai.config import FEATURE_NAMES
 
 ART = Path(__file__).resolve().parents[1] / "zk" / "artifacts" / "model.onnx"
 

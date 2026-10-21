@@ -45,7 +45,7 @@ def match(
     ps_t, ps_c = ps[: len(tw)], ps[len(tw) :]
     caliper = cfg.caliper_sd * ps.std() if ps.std() > 0 else np.inf
     nn = NearestNeighbors(n_neighbors=min(10, len(cw))).fit(cw)
-    dist, idx = nn.kneighbors(tw)
+    _dist, idx = nn.kneighbors(tw)
     pairs = []
     for i in range(len(tw)):
         for j in idx[i]:

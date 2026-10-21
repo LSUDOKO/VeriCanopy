@@ -2,9 +2,9 @@ import json
 from pathlib import Path
 
 import pytest
-from vericanopy_ai.score import run
 
 from vericanopy_ai.config import PipelineConfig
+from vericanopy_ai.score import run
 
 ART = Path(__file__).resolve().parents[1] / "zk" / "artifacts" / "model.onnx"
 SNAP = Path(__file__).resolve().parent / "snapshots"
