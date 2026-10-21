@@ -1,0 +1,150 @@
+[
+ {
+  "type": "function",
+  "name": "getKey",
+  "inputs": [
+   {
+    "name": "keyId",
+    "type": "bytes32",
+    "internalType": "bytes32"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "",
+    "type": "tuple",
+    "internalType": "struct PQKeyRegistry.PQKey",
+    "components": [
+     {
+      "name": "owner",
+      "type": "address",
+      "internalType": "address"
+     },
+     {
+      "name": "algorithm",
+      "type": "string",
+      "internalType": "string"
+     },
+     {
+      "name": "pubKeyHash",
+      "type": "bytes32",
+      "internalType": "bytes32"
+     },
+     {
+      "name": "pubKeyURI",
+      "type": "string",
+      "internalType": "string"
+     },
+     {
+      "name": "active",
+      "type": "bool",
+      "internalType": "bool"
+     }
+    ]
+   }
+  ],
+  "stateMutability": "view"
+ },
+ {
+  "type": "function",
+  "name": "registerKey",
+  "inputs": [
+   {
+    "name": "algorithm",
+    "type": "string",
+    "internalType": "string"
+   },
+   {
+    "name": "pubKeyHash",
+    "type": "bytes32",
+    "internalType": "bytes32"
+   },
+   {
+    "name": "pubKeyURI",
+    "type": "string",
+    "internalType": "string"
+   }
+  ],
+  "outputs": [
+   {
+    "name": "keyId",
+    "type": "bytes32",
+    "internalType": "bytes32"
+   }
+  ],
+  "stateMutability": "nonpayable"
+ },
+ {
+  "type": "function",
+  "name": "revokeKey",
+  "inputs": [
+   {
+    "name": "keyId",
+    "type": "bytes32",
+    "internalType": "bytes32"
+   }
+  ],
+  "outputs": [],
+  "stateMutability": "nonpayable"
+ },
+ {
+  "type": "event",
+  "name": "PQKeyRegistered",
+  "inputs": [
+   {
+    "name": "keyId",
+    "type": "bytes32",
+    "indexed": true,
+    "internalType": "bytes32"
+   },
+   {
+    "name": "owner",
+    "type": "address",
+    "indexed": true,
+    "internalType": "address"
+   },
+   {
+    "name": "algorithm",
+    "type": "string",
+    "indexed": false,
+    "internalType": "string"
+   },
+   {
+    "name": "pubKeyHash",
+    "type": "bytes32",
+    "indexed": false,
+    "internalType": "bytes32"
+   },
+   {
+    "name": "pubKeyURI",
+    "type": "string",
+    "indexed": false,
+    "internalType": "string"
+   }
+  ],
+  "anonymous": false
+ },
+ {
+  "type": "event",
+  "name": "PQKeyRevoked",
+  "inputs": [
+   {
+    "name": "keyId",
+    "type": "bytes32",
+    "indexed": true,
+    "internalType": "bytes32"
+   }
+  ],
+  "anonymous": false
+ },
+ {
+  "type": "error",
+  "name": "KeyExists",
+  "inputs": []
+ },
+ {
+  "type": "error",
+  "name": "NotKeyOwner",
+  "inputs": []
+ }
+]
