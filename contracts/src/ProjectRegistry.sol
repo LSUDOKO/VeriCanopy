@@ -55,17 +55,19 @@ contract ProjectRegistry is AccessControl, IProjectRegistry {
         if (p.developer != msg.sender) revert NotDeveloper();
         if (p.status != ProjectStatus.Pending) revert InvalidStatus();
         uint256 n = cells.length;
+        uint256 added;
         for (uint256 i = 0; i < n; ++i) {
             uint64 cell = cells[i];
             uint256 owner = _cellOwner[cell];
             if (owner != 0) {
-                if (owner == projectId) continue;
+                if (owner == projectId) continue; // duplicate within or across batches: already ours
                 revert OverlapDetected(cell, owner);
             }
             _cellOwner[cell] = projectId;
+            ++added;
         }
-        p.cellCount += uint32(n);
-        emit CellsAdded(projectId, n);
+        p.cellCount += uint32(added);
+        emit CellsAdded(projectId, added);
     }
 
     /// @inheritdoc IProjectRegistry

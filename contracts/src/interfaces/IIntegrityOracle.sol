@@ -41,6 +41,7 @@ interface IIntegrityOracle {
     error WindowNotOver();
     error WindowOver();
     error NothingToWithdraw();
+    error InvalidParams();
 
     event ScoreSubmitted(
         uint256 indexed submissionId,

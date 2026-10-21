@@ -59,6 +59,7 @@ contract IntegrityOracle is AccessControl, Pausable, ReentrancyGuard, IIntegrity
         external
         onlyRole(GOVERNANCE_ROLE)
     {
+        if (challengeWindow_ == 0 || treasury == address(0)) revert InvalidParams();
         challengeWindow = challengeWindow_;
         minOracleStake = minOracleStake_;
         insuranceTreasury = treasury;

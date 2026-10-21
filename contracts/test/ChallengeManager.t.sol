@@ -104,6 +104,30 @@ contract ChallengeManagerTest is BaseTest {
         cm.vote(cid, true);
     }
 
+    function test_vote_after_deadline_reverts() public {
+        uint256 cid = _open();
+        skip(10 minutes);
+        vm.prank(r1);
+        vm.expectRevert(IChallengeManager.ResolutionPeriodOver.selector);
+        cm.vote(cid, true);
+        cm.resolveTimeout(cid);
+    }
+
+    function test_set_params_bounds() public {
+        vm.startPrank(gov);
+        vm.expectRevert(IChallengeManager.InvalidParams.selector);
+        cm.setParams(BOND, 0, 10 minutes, treasury);
+        vm.expectRevert(IChallengeManager.InvalidParams.selector);
+        cm.setParams(BOND, 2, 0, treasury);
+        vm.expectRevert(IChallengeManager.InvalidParams.selector);
+        cm.setParams(BOND, 2, 10 minutes, address(0));
+        vm.expectRevert(IIntegrityOracle.InvalidParams.selector);
+        oracle.setParams(0, STAKE, treasury);
+        vm.expectRevert(IIntegrityOracle.InvalidParams.selector);
+        oracle.setParams(5 minutes, STAKE, address(0));
+        vm.stopPrank();
+    }
+
     function test_double_vote_reverts() public {
         uint256 cid = _open();
         vm.prank(r1);

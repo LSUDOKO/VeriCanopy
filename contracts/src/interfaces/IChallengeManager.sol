@@ -38,6 +38,8 @@ interface IChallengeManager {
     error ResolutionPeriodNotOver();
     error NothingToWithdraw();
     error UnknownChallenge();
+    error ResolutionPeriodOver();
+    error InvalidParams();
 
     event ChallengeOpened(
         uint256 indexed challengeId,

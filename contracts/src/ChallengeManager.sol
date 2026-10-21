@@ -37,6 +37,7 @@ contract ChallengeManager is AccessControl, ReentrancyGuard, IChallengeManager {
         external
         onlyRole(GOVERNANCE_ROLE)
     {
+        if (quorum == 0 || period == 0 || treasury == address(0)) revert InvalidParams();
         minChallengeBond = minBond;
         resolverQuorum = quorum;
         resolutionPeriod = period;
@@ -82,6 +83,7 @@ contract ChallengeManager is AccessControl, ReentrancyGuard, IChallengeManager {
     function vote(uint256 challengeId, bool uphold) external onlyRole(RESOLVER_ROLE) {
         Challenge storage c = _challenge(challengeId);
         if (c.outcome != Outcome.Open) revert ChallengeNotOpen();
+        if (block.timestamp >= c.deadline) revert ResolutionPeriodOver(); // after the deadline only resolveTimeout applies
         if (_voted[challengeId][msg.sender]) revert AlreadyVoted();
         _voted[challengeId][msg.sender] = true;
         emit ChallengeVoted(challengeId, msg.sender, uphold);

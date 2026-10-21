@@ -115,6 +115,20 @@ contract ProjectRegistryTest is Test {
         reg.proveOverlap(a, b, 555, proofA, bad);
     }
 
+    function test_add_cells_ignores_duplicates_in_batch_and_repeats() public {
+        uint256 a = _create(dev1);
+        uint64[] memory c = new uint64[](3);
+        c[0] = 7;
+        c[1] = 7;
+        c[2] = 8;
+        vm.prank(dev1);
+        reg.addCells(a, c);
+        assertEq(reg.getProject(a).cellCount, 2);
+        vm.prank(dev1);
+        reg.addCells(a, c); // re-sending the same cells must not inflate the count
+        assertEq(reg.getProject(a).cellCount, 2);
+    }
+
     function test_prove_overlap_same_project_reverts() public {
         (bytes32 rootA, bytes32[] memory proofA) = _twoLeafTree(555, 556);
         vm.prank(dev1);
