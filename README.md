@@ -47,12 +47,15 @@ Copy `.env.example` to `.env`. Without `EE_SERVICE_ACCOUNT_JSON` the pipeline us
 
 ## Deployed addresses
 
-| Network | Status |
-|---|---|
-| Local Anvil (31337) | `make deploy` writes `contracts/deployments/31337.json` |
-| Polygon Amoy (80002) | — not yet deployed (needs a funded deployer key; `RPC_URL=https://rpc-amoy.polygon.technology DEPLOYER_KEY=… make deploy`) |
+| Component | Where | Status |
+|---|---|---|
+| Web app | https://vericanopy.vercel.app (Vercel) | live |
+| API + indexer | https://mympbpgymg.ap-south-1.awsapprunner.com (AWS App Runner, ap-south-1) | live — `GET /healthz` |
+| Database | Neon Postgres (Alembic-managed schema) | live |
+| Contracts — Local Anvil (31337) | `make deploy` → `contracts/deployments/31337.json` | works |
+| Contracts — Polygon Amoy (80002) | `scripts/deploy_amoy.sh` | **pending deployer funding** (deployer `0x94A26d8B64dbF046428DE7D237cc0E527Bc6cC8a`) |
 
-Live demo URL: — (see `docs/spec/11_DEPLOYMENT.md` for the Vercel + Railway/Render layout).
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the runbook.
 
 ## Measured numbers
 
