@@ -25,6 +25,8 @@ class Project(Base):
     metadata_uri: Mapped[str | None] = mapped_column(Text)
     demo_id: Mapped[str | None] = mapped_column(String(16))
     cell_count: Mapped[int] = mapped_column(Integer, default=0)
+    integrity_status: Mapped[str | None] = mapped_column(String(16))
+    score_bps: Mapped[int | None] = mapped_column(Integer)
     created_tx: Mapped[str | None] = mapped_column(String(66))
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 

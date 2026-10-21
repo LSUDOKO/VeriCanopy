@@ -34,3 +34,5 @@ data/outputs/
 .DS_Store
 *.log
 contracts/deployments/31337.json
+data/e2e/
+contracts/verifier/Halo2Verifier.abi.json

@@ -123,7 +123,12 @@ class FixtureProvider:
         self.params = json.loads(self.params_path.read_text())
 
     def sample(self, project: Project, period: int, cfg: PipelineConfig) -> Samples:
-        p = self.params[str(project.id)]
+        key = str(project.properties.get("demo_id") or project.id)
+        if key not in self.params:
+            raise RuntimeError(
+                f"no fixture params for project {key}; set EE_SERVICE_ACCOUNT_JSON for real extraction"
+            )
+        p = self.params[key]
         seed = int(cfg.seed) * 1000 + int(p["seed"])
         rng = np.random.default_rng(seed)
         geom = shape(project.geometry)

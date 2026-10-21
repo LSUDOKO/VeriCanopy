@@ -1,0 +1,139 @@
+{
+ "schema": "vc-manifest/1",
+ "project_id": "A",
+ "period": "2022",
+ "geometry_sha256": "0xe4455b0c0b449bd71f3dc83f9730e54401c84a8d4a9f6c2056a55fe988787078",
+ "h3_resolution": 8,
+ "provider": "fixture",
+ "provenance": "fixture-synthetic",
+ "datasets": [
+  {
+   "id": "fixture:data/demo/samples/params.json",
+   "bands": [
+    "lat",
+    "lon",
+    "treecover2000",
+    "elevation",
+    "slope",
+    "travel_time",
+    "pre_loss_pressure",
+    "agb",
+    "loss_year",
+    "burned_year",
+    "ndvi_drop",
+    "sar_change",
+    "cloud_free",
+    "dw_trees_start",
+    "dw_trees_end"
+   ]
+  }
+ ],
+ "date_ranges": {
+  "pre": [
+   "2014-01-01",
+   "2018-12-31"
+  ],
+  "eval": [
+   "2019-01-01",
+   "2022-12-31"
+  ]
+ },
+ "matching": {
+  "ring_km": [
+   10.0,
+   50.0
+  ],
+  "n_t": 2000,
+  "n_c": 20000,
+  "seed": 42,
+  "caliper_sd": 0.25,
+  "bootstrap": 100,
+  "covariates": [
+   "treecover2000",
+   "elevation",
+   "slope",
+   "travel_time",
+   "pre_loss_pressure",
+   "agb"
+  ]
+ },
+ "constants": {
+  "carbon_fraction": 0.47,
+  "forest_threshold": 30
+ },
+ "code_commit": "c0e9e2227f69e718d86dc7858f98f5562824bbed",
+ "feature_version": "fv1",
+ "features": [
+  1.431003,
+  1.07431,
+  1.5,
+  0.02736,
+  0.991,
+  0.361321,
+  1.561473,
+  -0.071445,
+  0.004824,
+  0.0,
+  0.852787,
+  0.9125,
+  -0.245689,
+  0.133333,
+  0.000379,
+  0.0
+ ],
+ "feature_commitment": null,
+ "model_hash": "0x9cfcdf677203b7f680f3c35af51a9d5e75999c52c9a8a7001f68440c9db2df5d",
+ "score_bps": 7386,
+ "reversal_tco2e": 18855,
+ "provisional": false,
+ "diagnostics": {
+  "feature_names": [
+   "support_ratio",
+   "support_ci_low",
+   "support_ci_high",
+   "max_smd",
+   "matched_fraction",
+   "project_loss_rate",
+   "control_loss_rate",
+   "leakage_delta",
+   "reversal_fraction",
+   "fire_fraction",
+   "cloud_free_fraction",
+   "sar_optical_agreement",
+   "biomass_trend",
+   "years_since_start",
+   "log_claim_ratio",
+   "data_freshness"
+  ],
+  "n_treat": 2000,
+  "n_ctrl": 10000,
+  "n_pairs": 1982,
+  "balance": {
+   "treecover2000": 0.018144339807970578,
+   "elevation": 0.003278044076865456,
+   "slope": 0.02735989853648203,
+   "travel_time": 0.00801084466037016,
+   "pre_loss_pressure": 0.0223463279819883,
+   "agb": 0.0035856389671489325,
+   "max_smd": 0.02735989853648203
+  },
+  "project_loss_rate": 0.0036132140399174123,
+  "control_loss_rate": 0.015614727153188691,
+  "observed_avoided_loss_rate": 0.01200151311327128,
+  "claimed_avoided_loss_rate": 0.008386785960082587,
+  "claim_flag_no_claimable_effect": false,
+  "support_ci": [
+   1.07431,
+   1.5
+  ],
+  "years_since_start": 4,
+  "forest_area_ha_estimate": 10770.163640956802,
+  "agb_mg_per_ha": 210.57954398158103,
+  "observed_avoided_tco2e_per_year": 46907.660714402075,
+  "claimed_avoided_tco2e_per_year": 32779.57592404227,
+  "fire_fraction": 0.0,
+  "reversal_fraction": 0.004824259131633356
+ },
+ "created_at": "2026-10-21T12:54:31+00:00",
+ "signatures": {}
+}

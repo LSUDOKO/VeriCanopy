@@ -123,6 +123,17 @@ def get_project(pid: int, db: Session = Depends(get_db)):
     return _proj(db, p)
 
 
+@router.get("/{pid}/cells")
+def cells(pid: int, db: Session = Depends(get_db)):
+    """H3 cells of a project as GeoJSON (for the map overlay)."""
+    from vericanopy_ai.h3cells import cells_to_geojson
+
+    from app.models import ProjectCell
+
+    rows = db.execute(select(ProjectCell.cell).where(ProjectCell.project_id == pid)).scalars().all()
+    return {"project_id": pid, "count": len(rows), "geojson": cells_to_geojson([int(c) for c in rows])}
+
+
 @router.get("/{pid}/history")
 def history(pid: int, db: Session = Depends(get_db)):
     subs = (

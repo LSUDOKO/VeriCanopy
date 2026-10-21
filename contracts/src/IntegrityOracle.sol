@@ -101,7 +101,11 @@ contract IntegrityOracle is AccessControl, Pausable, ReentrancyGuard, IIntegrity
         PQKeyRegistry.PQKey memory k = pqKeyRegistry.getKey(pqKeyId);
         if (!k.active || k.owner != msg.sender) revert InvalidPQKey();
         if (instances.length < 2) revert InvalidInstances();
-        if (!IHalo2Verifier(m.verifier).verifyProof(proof, instances)) revert InvalidZkProof();
+        try IHalo2Verifier(m.verifier).verifyProof(proof, instances) returns (bool ok) {
+            if (!ok) revert InvalidZkProof();
+        } catch {
+            revert InvalidZkProof(); // EZKL verifiers revert on malformed proofs instead of returning false
+        }
         uint16 scoreBps = _decodeScore(instances[instances.length - 1], m.outputScale);
 
         submissionId = ++_count;

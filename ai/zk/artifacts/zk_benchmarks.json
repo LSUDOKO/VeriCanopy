@@ -1,0 +1,19 @@
+{
+ "machine": "Linux-7.1.11-arch1-1-x86_64-with-glibc2.44 / 16 cpus",
+ "ezkl_version": "23.0.5",
+ "logrows": 16,
+ "input_scale": 9,
+ "param_scale": 9,
+ "output_scale": 9,
+ "input_visibility": "hashed",
+ "param_visibility": "fixed",
+ "output_visibility": "public",
+ "pk_bytes": 742566787,
+ "vk_bytes": 174151,
+ "srs_bytes": 8388868,
+ "peak_rss_mb_build": 1276.2,
+ "settings_s": 0.13,
+ "compile_s": 0.0,
+ "srs_s": 28.28,
+ "setup_s": 7.63
+}

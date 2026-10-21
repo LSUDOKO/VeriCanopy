@@ -72,6 +72,17 @@ contract BufferPoolTest is Test {
         credit.retire(tid, 1, "x");
     }
 
+    function test_reversal_before_issuance_records_shortfall_without_freeze() public {
+        vm.prank(dev1);
+        uint256 p2 = reg.createProject(keccak256("g2"), bytes32(0), 8, 0, 0, "");
+        vm.prank(issuer);
+        reg.activate(p2);
+        vm.prank(oracle);
+        pool.handleReversal(p2, 123, 1);
+        assertEq(pool.shortfallOf(p2), 123);
+        assertEq(uint8(credit.integrityOf(p2).status), uint8(IVeriCredit.IntegrityStatus.Active));
+    }
+
     function test_only_oracle_handles_reversal() public {
         vm.prank(buyer);
         vm.expectRevert(IBufferPool.NotOracle.selector);

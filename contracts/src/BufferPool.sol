@@ -55,7 +55,8 @@ contract BufferPool is AccessControl, ERC1155Holder, IBufferPool {
         uint64 covered = tonnes - uint64(remaining);
         if (remaining > 0) {
             _shortfall[projectId] += remaining;
-            credit.freeze(projectId);
+            // Nothing to protect before the first issuance: record the debt, freeze only issued projects.
+            if (vs.length > 0) credit.freeze(projectId);
         }
         emit ProjectReversal(projectId, period, tonnes, covered, uint64(remaining));
     }

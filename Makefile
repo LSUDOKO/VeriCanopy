@@ -19,8 +19,11 @@ chain:
 	anvil --block-time 1 --chain-id 31337
 
 deploy:
-	cd contracts && forge script script/Deploy.s.sol --rpc-url $(RPC_URL) --private-key $${DEPLOYER_KEY:-$(ANVIL_KEY)} --broadcast -q
-	$(MAKE) abis
+	RPC_URL=$(RPC_URL) $(PY) scripts/deploy_all.py
+
+verifier:
+	$(PY) -m zk.evm_verifier
+	$(PY) scripts/compile_verifier.py
 
 abis:
 	$(PY) scripts/sync_abis.py
@@ -29,16 +32,17 @@ seed:
 	$(PY) scripts/seed.py
 
 pipeline:
-	$(PY) -m vericanopy_ai score --project $(P) --period $(Y)
+	cd ai && ../$(PY) -m vericanopy_ai score --project $(P) --period $(Y)
 
 prove:
-	$(PY) -m zk.prove --project $(P) --period $(Y)
+	cd ai && ../$(PY) -m zk.prove --project $(P) --period $(Y)
 
 submit:
-	$(PY) -m app.workers.oracle --project $(P) --period $(Y)
+	cd backend && ../$(PY) -m app.workers.oracle --project $(P) --period $(Y)
 
 zk-setup:
-	$(PY) -m zk.build_circuit
+	cd ai && ../$(PY) -m zk.build_circuit
+	$(MAKE) verifier
 
 demo-data:
 	$(PY) scripts/make_demo_outputs.py

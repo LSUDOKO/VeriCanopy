@@ -23,7 +23,7 @@ def make_engine(url: str | None = None):
 
 
 engine = make_engine()
-SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
 
 
 def init_db(eng=None) -> None:

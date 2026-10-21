@@ -4,7 +4,7 @@
   "name": "Demo Project C (2021 wildfire reversal)",
   "demo_id": "C",
   "country": "TR",
-  "start_date": "2018-01-01",
+  "start_date": "2015-01-01",
   "claimed_baseline_rate": 0.01,
   "description": "Polygon drawn by VeriCanopy inside the Manavgat (Antalya, T\u00fcrkiye) forest area affected by the late-July 2021 wildfires [VERIFY exact burned extent/dates via MODIS MCD64A1 before public use]. Not a real registered project.",
   "fire_year": 2021
