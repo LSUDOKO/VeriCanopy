@@ -1,0 +1,7 @@
+{
+  "_comment": "Parameters of the deterministic FIXTURE sample generator (ai/vericanopy_ai/extract.py::FixtureProvider). These are synthetic stand-ins used when Earth Engine credentials are absent. They are NOT satellite measurements.",
+  "A": {"seed": 1, "cover_mean": 85, "elev_mean": 120, "travel_mean": 420, "pressure_scale": 1.0, "agb_mean": 210, "ctrl_loss_rate": 0.016, "effect": 0.80, "leakage": 0.05},
+  "B": {"seed": 2, "cover_mean": 88, "elev_mean": 140, "travel_mean": 900, "pressure_scale": 0.4, "agb_mean": 230, "ctrl_loss_rate": 0.004, "effect": 0.30, "leakage": 0.0},
+  "C": {"seed": 3, "cover_mean": 70, "elev_mean": 600, "travel_mean": 90, "pressure_scale": 0.8, "agb_mean": 110, "ctrl_loss_rate": 0.009, "effect": 0.60, "leakage": 0.02, "fire_year": 2021, "fire_fraction_inside": 0.55, "fire_fraction_outside": 0.12},
+  "D_overlap": {"seed": 4, "cover_mean": 85, "elev_mean": 120, "travel_mean": 420, "pressure_scale": 1.0, "agb_mean": 210, "ctrl_loss_rate": 0.016, "effect": 0.50, "leakage": 0.0}
+}

@@ -50,7 +50,11 @@ def main(argv: list[str] | None = None) -> None:
         from vericanopy_ai.score import run
 
         r = run(args.project, args.period, out_dir=Path(args.out_dir) if args.out_dir else None)
-        print(json.dumps({"score_bps": r.score_bps, "reversal_tco2e": r.reversal_tco2e, "out_dir": str(r.out_dir)}))
+        print(
+            json.dumps(
+                {"score_bps": r.score_bps, "reversal_tco2e": r.reversal_tco2e, "out_dir": str(r.out_dir)}
+            )
+        )
     elif args.cmd == "train":
         from vericanopy_ai.model import train_and_export
 

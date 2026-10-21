@@ -55,7 +55,9 @@ def _layers(cells: list[int]) -> list[list[bytes]]:
     layer = sorted({_leaf(c) for c in cells})
     layers = [layer]
     while len(layer) > 1:
-        nxt = [_pair(layer[i], layer[i + 1]) if i + 1 < len(layer) else layer[i] for i in range(0, len(layer), 2)]
+        nxt = [
+            _pair(layer[i], layer[i + 1]) if i + 1 < len(layer) else layer[i] for i in range(0, len(layer), 2)
+        ]
         layers.append(nxt)
         layer = nxt
     return layers
