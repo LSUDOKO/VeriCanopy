@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: foundry-rs/foundry-toolchain@v1
-        with: { version: stable }
+        with: { version: v1.4.2 }
       - run: cd contracts && forge fmt --check
       - run: cd contracts && forge build --sizes
       - run: cd contracts && forge test -vv
@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - uses: foundry-rs/foundry-toolchain@v1
-        with: { version: stable }
+        with: { version: v1.4.2 }
       - run: uv venv .venv --python 3.11 && VIRTUAL_ENV=$PWD/.venv uv pip install -e "./ai[dev]" -e "./backend[dev]"
       - run: cd backend && ../.venv/bin/ruff check .
       - run: cd backend && ../.venv/bin/python -m pytest -q
