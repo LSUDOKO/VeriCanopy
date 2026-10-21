@@ -43,6 +43,12 @@ def _name(db: Session, project_id: int) -> str:
 def on_reversal(
     db: Session, project_id: int, period: int, tonnes: int, covered: int, shortfall: int, tx: str
 ) -> int:
+    deliver(
+        db,
+        "project.reversal",
+        project_id,
+        {"period": period, "tonnes": tonnes, "covered": covered, "shortfall": shortfall, "tx_hash": tx},
+    )
     n = 0
     for addr in _audience(db, project_id):
         db.add(
