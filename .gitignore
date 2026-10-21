@@ -36,3 +36,4 @@ data/outputs/
 contracts/deployments/31337.json
 data/e2e/
 contracts/verifier/Halo2Verifier.abi.json
+.vercel
