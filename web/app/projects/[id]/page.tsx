@@ -35,9 +35,10 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   if (q.isLoading) return <div className="mx-auto max-w-6xl p-6"><Skeleton className="h-40" /></div>;
   if (q.error || !q.data) return <div className="mx-auto max-w-6xl p-6"><ErrorState error={q.error ?? "not found"} onRetry={() => q.refetch()} /></div>;
   const p = q.data;
-  const oc = onchain.data as readonly [number, number, number] | undefined;
-  const chainStatus = oc ? (["Active", "UnderReview", "Impaired", "Frozen"][oc[1]] ?? "Active") : null;
-  const scoreBps = oc ? oc[0] : p.integrity.score_bps;
+  // viem decodes the named struct as an object: { scoreBps, status, lastPeriod }
+  const oc = onchain.data as { scoreBps: number; status: number; lastPeriod: number } | undefined;
+  const chainStatus = oc ? (["Active", "UnderReview", "Impaired", "Frozen"][oc.status] ?? "Active") : null;
+  const scoreBps = oc && oc.lastPeriod > 0 ? oc.scoreBps : p.integrity.score_bps;
   const status = chainStatus && (chainStatus === "Frozen" || chainStatus === "Impaired") ? chainStatus : integrityStatus(scoreBps, p.status);
   const latest = p.integrity.latest_submission;
   const subs = hist.data?.submissions ?? [];
@@ -59,7 +60,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
         <div className="flex flex-col items-end gap-2">
           <IntegrityBadge scoreBps={scoreBps} status={status} size="lg" />
           <ProofBadge mode={latestFinal?.proof_mode ?? latest?.proof_mode} txHash={latestFinal?.tx_hash ?? latest?.tx_hash} />
-          {oc && <span className="text-xs" style={{ color: "var(--fg-muted)" }}>score & status read directly from chain</span>}
+          {oc && oc.lastPeriod > 0 && <span className="text-xs" style={{ color: "var(--fg-muted)" }}>score & status read directly from chain (period {oc.lastPeriod})</span>}
         </div>
       </header>
 

@@ -9,9 +9,21 @@ from vericanopy_ai.h3cells import cells_to_geojson, polyfill_cells
 
 from app.models import Project, ProjectCell
 
+MAX_CELLS = 5000  # ≈3,700 km² at res 8; larger projects use res 7 or batch registration
+
+
+class TooManyCells(ValueError):
+    pass
+
 
 def overlap_check(db: Session, geometry: dict, h3_res: int = 8) -> dict:
+    from vericanopy_ai.geometry import area_ha
+
+    if area_ha(geometry) > MAX_CELLS * 74:  # res-8 cell ≈ 74 ha; cheap check before polyfill
+        raise TooManyCells(f"geometry too large for the overlap pre-check (max ≈{MAX_CELLS} res-8 cells)")
     cells = polyfill_cells(geometry, h3_res)
+    if len(cells) > MAX_CELLS:
+        raise TooManyCells(f"{len(cells)} cells exceeds the {MAX_CELLS}-cell limit")
     strs = [str(c) for c in cells]
     conflicts: list[dict] = []
     if strs:

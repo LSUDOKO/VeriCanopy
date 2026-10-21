@@ -78,6 +78,7 @@ def test_verify_pq_valid_and_tampered(client, db):
             manifest_hash=manifest_sha256(signed),
             manifest_cid=cid,
             pq_key_id=key_id,
+            oracle="0xac1e",
             status="Finalized",
             tx_hash="0xabc",
             proof_mode="onchain",

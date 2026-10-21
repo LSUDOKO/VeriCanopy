@@ -38,20 +38,20 @@ from `ai/zk/artifacts/*.json` and `docs/gas-report.txt`. Entries marked `—` ha
 ## Smart contracts — `forge test --gas-report` (`docs/gas-report.txt`)
 | Function | min gas | mean gas | max gas |
 |---|---|---|---|
-| `handleReversal` | 23,903 | 55,679 | 130,821 |
+| `handleReversal` | 23,903 | 33,734 | 130,821 |
 | `openChallenge` | 57,184 | 250,028 | 250,100 |
 | `vote` | 24,176 | 58,230 | 185,033 |
 | `withdraw` | 28,591 | 30,458 | 32,325 |
-| `finalize` | 30,873 | 137,120 | 145,109 |
-| `submitScore` | 27,526 | 475,061 | 1,077,734 |
+| `finalize` | 30,894 | 137,628 | 145,657 |
+| `submitScore` | 27,526 | 428,117 | 1,077,734 |
 | `withdraw` | 32,413 | 32,413 | 32,413 |
 | `registerKey` | 118,810 | 139,255 | 139,255 |
 | `addCells` | 24,723 | 62,786 | 76,113 |
 | `createProject` | 83,132 | 120,144 | 140,649 |
-| `proveOverlap` | 33,581 | 36,914 | 40,248 |
-| `mintVintage` | 46,866 | 91,732 | 205,021 |
+| `proveOverlap` | 23,777 | 33,603 | 40,270 |
+| `mintVintage` | 46,866 | 56,803 | 208,260 |
 | `retire` | 27,837 | 172,110 | 206,418 |
-| `retire` | 18,016 | 51,685 | 230,315 |
+| `retire` | 15,516 | 18,016 | 230,315 |
 
 `submitScore` max includes on-chain Halo2 proof verification (real EZKL proof fixture, `test/IntegrityOracle.zk.t.sol`).
 

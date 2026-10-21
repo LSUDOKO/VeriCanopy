@@ -115,6 +115,15 @@ contract ProjectRegistryTest is Test {
         reg.proveOverlap(a, b, 555, proofA, bad);
     }
 
+    function test_prove_overlap_same_project_reverts() public {
+        (bytes32 rootA, bytes32[] memory proofA) = _twoLeafTree(555, 556);
+        vm.prank(dev1);
+        uint256 a = reg.createProject(keccak256("a"), rootA, 8, 0, 0, "");
+        vm.expectRevert(IProjectRegistry.InvalidProof.selector);
+        reg.proveOverlap(a, a, 555, proofA, proofA);
+        assertEq(uint8(reg.getProject(a).status), uint8(IProjectRegistry.ProjectStatus.Pending));
+    }
+
     function test_set_status_only_oracle_or_governance() public {
         uint256 a = _create(dev1);
         vm.prank(dev1);

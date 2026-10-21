@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class OverlapCheckIn(BaseModel):
     geometry: dict[str, Any]
-    h3_res: int = 8
+    h3_res: int = Field(8, ge=5, le=11)
 
 
 class VerifyPQIn(BaseModel):

@@ -161,3 +161,12 @@ class PQKey(Base):
     pubkey_hash: Mapped[str] = mapped_column(String(66))
     pubkey_uri: Mapped[str | None] = mapped_column(Text)
     active: Mapped[bool] = mapped_column(default=True)
+
+
+class ProcessedLog(Base):
+    """Every applied event, keyed by (tx_hash, log_index): makes re-scans and restarts idempotent."""
+
+    __tablename__ = "processed_logs"
+    tx_hash: Mapped[str] = mapped_column(String(66), primary_key=True)
+    log_index: Mapped[int] = mapped_column(Integer, primary_key=True)
+    block_number: Mapped[int] = mapped_column(BigInteger)

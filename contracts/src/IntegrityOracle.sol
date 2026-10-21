@@ -148,6 +148,15 @@ contract IntegrityOracle is AccessControl, Pausable, ReentrancyGuard, IIntegrity
         Submission storage s = _sub(submissionId);
         if (s.status != SubStatus.Pending) revert SubmissionNotPending();
         if (block.timestamp < s.windowEnd) revert WindowNotOver();
+        if (s.period <= _lastFinalized[s.projectId]) {
+            // A newer period finalised first (e.g. after a rejected challenge delayed this one): never roll back.
+            s.status = SubStatus.Voided;
+            delete _pendingFor[s.projectId][s.period];
+            _pending[s.oracle] += s.stake;
+            emit SubmissionStatusChanged(submissionId, SubStatus.Voided);
+            emit SubmissionVoided(submissionId);
+            return;
+        }
         s.status = SubStatus.Finalized;
         _lastFinalized[s.projectId] = s.period;
         delete _pendingFor[s.projectId][s.period];

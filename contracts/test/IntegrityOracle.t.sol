@@ -140,6 +140,24 @@ contract IntegrityOracleTest is BaseTest {
         assertEq(uint8(reg.getProject(pid).status), uint8(IProjectRegistry.ProjectStatus.Active));
     }
 
+    function test_finalize_out_of_order_voids_and_refunds() public {
+        uint256 s24 = _submit(2024, 115, 0);
+        uint256 s25 = _submit(2025, 50, 0);
+        skip(5 minutes);
+        oracle.finalize(s25);
+        assertEq(credit.integrityOf(pid).scoreBps, 3906);
+        // the older 2024 submission must not roll the score back
+        oracle.finalize(s24);
+        assertEq(uint8(oracle.getSubmission(s24).status), uint8(IIntegrityOracle.SubStatus.Voided));
+        assertEq(credit.integrityOf(pid).scoreBps, 3906);
+        assertEq(oracle.lastFinalizedPeriod(pid), 2025);
+        assertEq(oracle.pendingWithdrawals(oracleEoa), 2 * STAKE); // both stakes returned
+        // 2025 cannot be resubmitted (reversal cannot be applied twice)
+        vm.prank(oracleEoa);
+        vm.expectRevert(IIntegrityOracle.PeriodNotMonotonic.selector);
+        oracle.submitScore{value: STAKE}(pid, 2025, modelHash, 0, bytes32(0), "", pqKeyId, "", _instances(100));
+    }
+
     function test_pause_blocks_submissions() public {
         vm.prank(gov);
         oracle.pause();

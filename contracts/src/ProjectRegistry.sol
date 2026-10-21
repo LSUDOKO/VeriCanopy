@@ -82,6 +82,7 @@ contract ProjectRegistry is AccessControl, IProjectRegistry {
     function proveOverlap(uint256 a, uint256 b, uint64 cell, bytes32[] calldata proofA, bytes32[] calldata proofB)
         external
     {
+        if (a == b) revert InvalidProof();
         Project storage pa = _project(a);
         Project storage pb = _project(b);
         bytes32 leaf = keccak256(abi.encodePacked(cell));

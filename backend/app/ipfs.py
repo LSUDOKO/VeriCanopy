@@ -47,15 +47,26 @@ def put_json(obj: Any) -> str:
     return put_bytes(json.dumps(obj, indent=1, ensure_ascii=False, sort_keys=False).encode("utf-8"))
 
 
+def is_cid(cid: str) -> bool:
+    """True for a syntactically valid CID (rejects path traversal and junk before any filesystem access)."""
+    try:
+        CID.decode(cid.removeprefix("ipfs://"))
+        return True
+    except Exception:
+        return False
+
+
 def get_bytes(cid: str) -> bytes | None:
     cid = cid.removeprefix("ipfs://")
+    if not is_cid(cid):
+        return None
     p = _dir() / cid
     if p.exists():
         return p.read_bytes()
     try:
         r = httpx.get(settings.ipfs_gateway.rstrip("/") + "/" + cid, timeout=20)
-        if r.status_code == 200:
-            return r.content
+        if r.status_code == 200 and (cid_for(r.content) == cid or not cid.startswith("bafkrei")):
+            return r.content  # content from a gateway must hash to the CID we asked for
     except Exception:
         return None
     return None

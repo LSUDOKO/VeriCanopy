@@ -14,6 +14,13 @@ from app import ipfs
 from app.models import PQKey, Submission
 
 
+def _demo_id(db: Session, project_id: int) -> str | None:
+    from app.models import Project
+
+    p = db.get(Project, project_id)
+    return p.demo_id if p else None
+
+
 def verify_pq(db: Session, manifest: dict[str, Any] | None = None, manifest_cid: str | None = None) -> dict:
     details: dict[str, Any] = {}
     if manifest is None and manifest_cid:
@@ -41,8 +48,14 @@ def verify_pq(db: Session, manifest: dict[str, Any] | None = None, manifest_cid:
     details["chain_manifest_hash"] = sub.manifest_hash if sub else None
 
     key = db.get(PQKey, key_id) if key_id else None
-    key_registered = bool(key and key.algorithm == ALG)
+    # The key must be the one recorded in the on-chain submission, owned by the submitting oracle, and active:
+    # anyone can register a key, so a signature by *some* registered key proves nothing.
+    bound = bool(sub and key and sub.pq_key_id and key_id and sub.pq_key_id.lower() == key_id.lower())
+    owned = bool(sub and key and sub.oracle and key.owner and key.owner.lower() == sub.oracle.lower())
+    key_registered = bool(key and key.algorithm == ALG and key.active and bound and owned)
     details["key_active"] = bool(key and key.active)
+    details["key_bound_to_submission"] = bound
+    details["key_owned_by_oracle"] = owned
     details["key_owner"] = key.owner if key else None
     pk = None
     if key and key.pubkey_uri:
@@ -52,13 +65,23 @@ def verify_pq(db: Session, manifest: dict[str, Any] | None = None, manifest_cid:
             key_registered = key_registered and details["pubkey_sha256_matches"]
     sig_valid = bool(pk is not None and verify_manifest(manifest, pk))
     proof_mode = sub.proof_mode if sub else None
-    zk_verified = (
-        bool(sub and sub.tx_hash) if proof_mode == "onchain" else bool(sub and sub.status != "Rejected")
+    # Only an on-chain verification counts; with a mock verifier (proof_mode "none") there is no proof at all.
+    zk_verified = bool(sub and sub.tx_hash and proof_mode == "onchain")
+    manifest_matches = bool(
+        sub
+        and str(manifest.get("period")) == str(sub.period)
+        and (
+            str(manifest.get("project_id")) == str(sub.project_id)
+            or str(manifest.get("project_id")) == str(_demo_id(db, sub.project_id))
+        )
     )
     details["tx_hash"] = sub.tx_hash if sub else None
+    details["submission_project_id"] = sub.project_id if sub else None
+    details["submission_period"] = sub.period if sub else None
     return {
-        "ok": chain_match and key_registered and sig_valid,
+        "ok": chain_match and key_registered and sig_valid and manifest_matches,
         "manifest_hash_matches_chain": chain_match,
+        "manifest_matches_submission": manifest_matches,
         "key_registered": key_registered,
         "signature_valid": sig_valid,
         "zk_proof_verified": zk_verified,

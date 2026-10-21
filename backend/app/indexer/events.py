@@ -8,7 +8,6 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app import ipfs
-from app.config import settings
 from app.models import (
     Challenge,
     ModelVersion,
@@ -153,7 +152,7 @@ def ScoreSubmitted(db: Session, log, ctx):
             status="Pending",
             window_end=int(a["windowEnd"]),
             tx_hash=_tx(log),
-            proof_mode="offchain" if ctx.get("mock_verifier") else settings.zk_mode,
+            proof_mode="none" if ctx.get("mock_verifier") else "onchain",
             block_number=int(log["blockNumber"]),
         )
     )
@@ -288,12 +287,21 @@ def _move(db: Session, frm: str, to: str, tid: int, val: int):
     for addr, sign in ((frm, -1), (to, +1)):
         if addr.lower() == zero:
             continue
+        if addr.lower() == str(ctx_pool()).lower():
+            continue  # the buffer pool's holdings are tracked in `vintages.buffer`, not as a buyer
         h = db.get(Holding, (addr.lower(), str(tid))) or Holding(
             holder=addr.lower(), token_id=str(tid), amount=0
         )
         h.amount = (h.amount or 0) + sign * val
         db.merge(h)
         db.flush()
+
+
+_POOL_ADDR: list[str] = [""]
+
+
+def ctx_pool() -> str:
+    return _POOL_ADDR[0]
 
 
 def Retired(db: Session, log, ctx):

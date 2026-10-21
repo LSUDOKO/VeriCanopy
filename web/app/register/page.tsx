@@ -78,7 +78,9 @@ export default function Register() {
     try {
       const meta = { name, geometry: geom, start_date: start, claimed_baseline_rate: Number(baseline) / 100, h3_res: 8, cell_count: overlap.cell_count };
       const metaRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000"}/api/v1/evidence`, { method: "POST", body: (() => { const fd = new FormData(); fd.append("file", new Blob([JSON.stringify(meta)], { type: "application/json" }), "metadata.json"); return fd; })() });
+      if (!metaRes.ok) throw new Error(`metadata upload failed (${metaRes.status})`);
       const { cid } = await metaRes.json();
+      if (!cid) throw new Error("metadata upload returned no CID");
       const geometryHash = overlap.geometry_sha256 as `0x${string}`;
       const startTs = BigInt(Math.floor(new Date(start).getTime() / 1000));
       const h1 = await writeContractAsync({ ...reg, functionName: "createProject", args: [geometryHash, keccak256(stringToHex("fine-root-not-computed-in-browser")), 8, startTs, Math.round(Number(baseline) * 100), `ipfs://${cid}`] });

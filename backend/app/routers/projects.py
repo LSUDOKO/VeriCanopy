@@ -109,10 +109,14 @@ def list_projects(
 
 @router.post("/overlap-check")
 def overlap(body: OverlapCheckIn, db: Session = Depends(get_db)):
+    from app.services.overlap import TooManyCells
+
     try:
         return overlap_check(db, body.geometry, body.h3_res)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e)) from e
+    except TooManyCells as e:
+        raise HTTPException(status_code=413, detail=str(e)) from e
+    except (ValueError, KeyError, TypeError) as e:
+        raise HTTPException(status_code=400, detail=f"invalid geometry: {e}") from e
 
 
 @router.get("/{pid}")

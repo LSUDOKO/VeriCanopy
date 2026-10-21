@@ -99,6 +99,7 @@ contract VeriCredit is ERC1155, AccessControl, Pausable, IVeriCredit {
         Integrity memory s = _integrity[projectId];
         if (s.status == IntegrityStatus.Frozen) revert ProjectFrozen();
         if (s.scoreBps < minIssueScoreBps) revert ScoreTooLow();
+        if (IBufferPool(bufferPool).shortfallOf(projectId) > 0) revert OutstandingShortfall();
         uint256 tokenId = tokenIdFor(projectId, vintage);
         uint256 bufferTonnes = (tonnes * bufferBps) / 10_000;
         _issued[tokenId] += tonnes + bufferTonnes;
@@ -116,6 +117,7 @@ contract VeriCredit is ERC1155, AccessControl, Pausable, IVeriCredit {
     function setIntegrity(uint256 projectId, uint16 scoreBps, uint16 period) public {
         if (msg.sender != oracle) revert NotOracle();
         Integrity storage s = _integrity[projectId];
+        if (period < s.lastPeriod) revert PeriodNotMonotonic();
         s.scoreBps = scoreBps;
         s.lastPeriod = period;
         if (s.status != IntegrityStatus.Frozen) {

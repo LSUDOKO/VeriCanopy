@@ -13,7 +13,10 @@ router = APIRouter(tags=["metadata"])
 @router.get("/metadata/{token_id}")
 def metadata(token_id: str, db: Session = Depends(get_db)):
     """ERC-1155 metadata with live integrity. Accepts decimal or 64-hex (ERC-1155 {id} substitution)."""
-    tid = int(token_id, 16) if len(token_id) == 64 else int(token_id)
+    try:
+        tid = int(token_id, 16) if len(token_id) == 64 else int(token_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail="token id must be decimal or 64-hex") from e
     pid, vintage = tid >> 16, tid & 0xFFFF
     p = db.get(Project, pid)
     if not p:

@@ -7,6 +7,7 @@ export type VerifyResult = {
   ok: boolean;
   error?: string;
   manifest_hash_matches_chain?: boolean;
+  manifest_matches_submission?: boolean;
   key_registered?: boolean;
   signature_valid?: boolean;
   zk_proof_verified?: boolean;
@@ -17,9 +18,10 @@ export type VerifyResult = {
 export function VerifyChecklist({ r }: { r: VerifyResult }) {
   const rows: [string, boolean | undefined, string][] = [
     ["Manifest hash matches the on-chain submission", r.manifest_hash_matches_chain, "sha256 of the canonical manifest equals `manifestHash` stored by IntegrityOracle"],
-    ["ML-DSA-65 public key registered on-chain", r.key_registered, "PQKeyRegistry holds sha256(pubKey) for this key id and the key bytes match"],
+    ["Manifest project and period match the submission", r.manifest_matches_submission, "Prevents a valid manifest from being presented for another project or period"],
+    ["ML-DSA-65 key is the submitting oracle's registered, active key", r.key_registered, "PQKeyRegistry holds sha256(pubKey) for the key id recorded in the on-chain submission, owned by the oracle and not revoked"],
     ["ML-DSA-65 signature valid", r.signature_valid, "FIPS 204 signature over the canonical manifest verifies with the registered key"],
-    [r.proof_mode === "offchain" ? "zk proof verified off-chain (fallback)" : "zk proof verified on-chain", r.zk_proof_verified, r.proof_mode === "offchain" ? "Proof hash anchored on-chain; verification ran in the oracle backend" : "Halo2Verifier accepted the proof in the submitScore transaction"],
+    [r.proof_mode === "onchain" ? "zk proof verified on-chain" : "zk proof (none: mock verifier fallback)", r.zk_proof_verified, r.proof_mode === "onchain" ? "Halo2Verifier accepted the proof in the submitScore transaction" : "No zk proof exists for this submission; the deployment used the MockVerifier (see docs/LIMITATIONS.md)"],
   ];
   return (
     <div className="flex flex-col gap-2 text-sm">

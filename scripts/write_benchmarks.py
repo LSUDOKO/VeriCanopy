@@ -33,8 +33,24 @@ def gas_rows() -> list[str]:
     rows = []
     for line in p.read_text().splitlines():
         m = re.match(r"\| (\w+)\s+\| (\d+)\s+\| (\d+)\s+\| (\d+)\s+\| (\d+)\s+\| (\d+)\s+\|", line)
-        if m and m.group(1) in {"submitScore", "finalize", "addCells", "createProject", "openChallenge", "vote", "mintVintage", "retire", "handleReversal", "proveOverlap", "withdraw", "registerKey", "verifyProof"}:
-            rows.append(f"| `{m.group(1)}` | {int(m.group(2)):,} | {int(m.group(4)):,} | {int(m.group(5)):,} |")
+        if m and m.group(1) in {
+            "submitScore",
+            "finalize",
+            "addCells",
+            "createProject",
+            "openChallenge",
+            "vote",
+            "mintVintage",
+            "retire",
+            "handleReversal",
+            "proveOverlap",
+            "withdraw",
+            "registerKey",
+            "verifyProof",
+        }:
+            rows.append(
+                f"| `{m.group(1)}` | {int(m.group(2)):,} | {int(m.group(4)):,} | {int(m.group(5)):,} |"
+            )
     return rows or ["| — | — | — | — |"]
 
 

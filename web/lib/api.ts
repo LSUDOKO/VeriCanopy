@@ -59,7 +59,7 @@ export type Submission = {
   window_end: number | null;
   tx_hash: string | null;
   finalized_tx: string | null;
-  proof_mode: "onchain" | "offchain";
+  proof_mode: "onchain" | "offchain" | "none";
   manifest?: Record<string, unknown> | null;
   manifest_url?: string | null;
 };

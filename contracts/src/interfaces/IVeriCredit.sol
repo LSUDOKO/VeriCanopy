@@ -23,6 +23,8 @@ interface IVeriCredit {
     error NotOracle();
     error NotBufferPool();
     error ZeroAmount();
+    error PeriodNotMonotonic();
+    error OutstandingShortfall();
 
     event VintageMinted(
         uint256 indexed projectId, uint16 indexed vintage, address indexed to, uint256 tonnes, uint256 bufferTonnes

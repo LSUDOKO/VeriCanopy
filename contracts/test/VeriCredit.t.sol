@@ -75,6 +75,15 @@ contract VeriCreditTest is Test {
         assertEq(uint8(credit.integrityOf(pid).status), uint8(IVeriCredit.IntegrityStatus.Active));
     }
 
+    function test_set_integrity_rejects_old_period() public {
+        vm.prank(oracle);
+        credit.setIntegrity(pid, 9000, 2025);
+        vm.prank(oracle);
+        vm.expectRevert(IVeriCredit.PeriodNotMonotonic.selector);
+        credit.setIntegrity(pid, 1000, 2024);
+        assertEq(credit.integrityOf(pid).scoreBps, 9000);
+    }
+
     function test_only_oracle_sets_integrity() public {
         vm.prank(buyer);
         vm.expectRevert(IVeriCredit.NotOracle.selector);

@@ -2,7 +2,7 @@
 
 > **Carbon credits that prove themselves.**
 
-Satellite AI scores every forest carbon credit against matched "twin" forest, a zkML proof verified **on-chain** shows the registered model produced the score, an H3 geospatial registry blocks double-registration of land, credits update themselves and burn their buffer when forests are lost, anyone can challenge the inputs with a stake, and every attestation is signed with a NIST post-quantum signature (ML-DSA-65) so decades-long credit records stay unforgeable.
+Satellite AI scores every forest carbon credit against matched "twin" forest, a zkML proof verified **on-chain** shows the registered model produced the score, an H3 geospatial registry blocks double-registration of land, credits update themselves and burn their buffer when forests are lost, anyone can challenge the inputs with a stake, and every manifest attestation is signed with a NIST post-quantum signature (ML-DSA-65) so those records stay verifiable for decades (the zk proofs and Ethereum signatures themselves are not post-quantum; see the honesty table).
 
 **Track:** Carbon Markets & Emissions Transparency (IEEE ClimateChain Global Hackathon 2026) — blockchain-based credit verification, double-counting prevention, continuous impact tracking.
 

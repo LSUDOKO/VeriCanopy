@@ -83,6 +83,20 @@ contract BufferPoolTest is Test {
         assertEq(uint8(credit.integrityOf(p2).status), uint8(IVeriCredit.IntegrityStatus.Active));
     }
 
+    function test_outstanding_shortfall_blocks_minting() public {
+        vm.prank(dev1);
+        uint256 p2 = reg.createProject(keccak256("g2"), bytes32(0), 8, 0, 0, "");
+        vm.prank(issuer);
+        reg.activate(p2);
+        vm.prank(oracle);
+        credit.setIntegrity(p2, 9000);
+        vm.prank(oracle);
+        pool.handleReversal(p2, 123, 1);
+        vm.prank(issuer);
+        vm.expectRevert(IVeriCredit.OutstandingShortfall.selector);
+        credit.mintVintage(p2, 2024, buyer, 1000);
+    }
+
     function test_only_oracle_handles_reversal() public {
         vm.prank(buyer);
         vm.expectRevert(IBufferPool.NotOracle.selector);

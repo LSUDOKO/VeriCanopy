@@ -15,9 +15,22 @@ from app.chain import w3 as _w3
 from app.config import settings
 from app.db import SessionLocal, init_db
 from app.indexer.events import HANDLERS
-from app.models import IndexerState
+from app.models import IndexerState, ProcessedLog
 
 log = logging.getLogger("indexer")
+
+
+def apply_log(db: Session, handler, lg, ctx) -> bool:
+    """Apply one event once. Returns False when (tx_hash, log_index) was already processed."""
+    tx = lg["transactionHash"]
+    tx = "0x" + bytes(tx).hex() if not isinstance(tx, str) else tx
+    idx = int(lg["logIndex"])
+    if db.get(ProcessedLog, (tx, idx)) is not None:
+        return False
+    handler(db, lg, ctx)
+    db.add(ProcessedLog(tx_hash=tx, log_index=idx, block_number=int(lg["blockNumber"])))
+    db.flush()
+    return True
 
 
 def index_once(
@@ -40,10 +53,14 @@ def index_once(
         target = latest - confirmations
         if target < 0:
             return st.last_block
-        # re-scan the confirmation window to survive small reorgs; handlers are idempotent (merge/upsert)
-        start = max(st.last_block - confirmations, 0) if st.last_block else 0
+        # Only blocks at depth >= confirmations are indexed, so a shallow reorg never reaches them; every applied
+        # event is recorded in processed_logs, so a restart or overlapping scan cannot double-apply.
+        start = st.last_block + 1 if st.last_block else 0
         cs = contracts(dep)
         ctx = {"w3": web3, "contracts": cs, "mock_verifier": dep.get("params", {}).get("mockVerifier", False)}
+        from app.indexer import events as _ev
+
+        _ev._POOL_ADDR[0] = dep["contracts"].get("BufferPool", "")
         frm = start
         while frm <= target:
             to = min(frm + chunk - 1, target)
@@ -56,7 +73,7 @@ def index_once(
                         logs.append((int(lg["blockNumber"]), int(lg["logIndex"]), h, lg))
             logs.sort(key=lambda x: (x[0], x[1]))
             for _, _, h, lg in logs:
-                h(db, lg, ctx)
+                apply_log(db, h, lg, ctx)
             frm = to + 1
         st.last_block = target
         db.merge(st)
