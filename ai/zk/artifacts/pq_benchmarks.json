@@ -1,0 +1,21 @@
+{
+ "machine": "Linux-7.1.11-arch1-1-x86_64-with-glibc2.44",
+ "iterations": 20,
+ "ml_dsa_65": {
+  "backend": "dilithium-py",
+  "public_key_bytes": 1952,
+  "secret_key_bytes": 4032,
+  "signature_bytes": 3309,
+  "keygen_ms": 17.41,
+  "sign_ms": 118.27,
+  "verify_ms": 18.94,
+  "pubkey_hash_example": "0xe85be32aaaf2f91eddd86f87df67158452817e915c185498447fdcd549ba3dbf"
+ },
+ "ecdsa_secp256k1": {
+  "backend": "eth-account",
+  "public_key_bytes": 64,
+  "signature_bytes": 65,
+  "sign_ms": 6.889,
+  "verify_ms": 10.802
+ }
+}
