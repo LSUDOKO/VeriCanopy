@@ -170,6 +170,7 @@ export default function Register() {
             <>
               <div>Wallet: <span className="mono">{address ?? "not connected"}</span></div>
               <div className="text-xs" style={{ color: "var(--fg-muted)" }}>createProject → addCells ×{Math.ceil((overlap?.cell_count ?? 0) / BATCH)} batches. Each new cell is one cold storage write.</div>
+              <div className="text-xs" style={{ color: "var(--amber)" }}>Note: browser registration commits the res-8 cells (Tier-1 lock). The res-11 fine-cell Merkle root used for sliver fraud proofs is computed server-side when available; otherwise a placeholder root is stored and Tier-2 proofs are not possible for this project.</div>
               <button className="btn btn-primary" disabled={!isConnected || !reg} onClick={submit}>Send transactions</button>
               <ul className="mono text-xs flex flex-col gap-1">{progress.map((p, i) => <li key={i}>{p}</li>)}</ul>
             </>

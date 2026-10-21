@@ -31,6 +31,12 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const [challenge, setChallenge] = useState<Submission | null>(null);
   const [retire, setRetire] = useState<{ tokenId: bigint; max: bigint } | null>(null);
   const { address } = useAccount();
+  const [pendingRetire, setPendingRetire] = useState<bigint | null>(null);
+  const bal = useReadContract({ ...(credit ?? { abi: [], address: undefined }), functionName: "balanceOf", args: [address ?? "0x0000000000000000000000000000000000000000", pendingRetire ?? 0n], query: { enabled: !!credit && !!address && pendingRetire !== null } });
+  if (pendingRetire !== null && bal.data !== undefined && retire === null) {
+    setRetire({ tokenId: pendingRetire, max: bal.data as bigint });
+    setPendingRetire(null);
+  }
 
   if (q.isLoading) return <div className="mx-auto max-w-6xl p-6"><Skeleton className="h-40" /></div>;
   if (q.error || !q.data) return <div className="mx-auto max-w-6xl p-6"><ErrorState error={q.error ?? "not found"} onRetry={() => q.refetch()} /></div>;
@@ -161,7 +167,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                       <td className="mono">{fmt(v.buffer)}</td>
                       <td className="mono">{fmt(v.burned)}</td>
                       <td className="mono">{fmt(v.retired)}</td>
-                      <td><button className="btn btn-ghost" disabled={!address || status === "Frozen"} onClick={() => setRetire({ tokenId: BigInt(v.token_id), max: BigInt(v.issued - v.buffer - v.retired) })}>Retire…</button></td>
+                      <td><button className="btn btn-ghost" disabled={!address || status === "Frozen"} onClick={() => setPendingRetire(BigInt(v.token_id))}>Retire…</button></td>
                     </tr>
                   ))}
                 </tbody>
