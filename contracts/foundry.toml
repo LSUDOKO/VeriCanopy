@@ -11,3 +11,7 @@ gas_reports = ["*"]
 
 [fmt]
 line_length = 120
+
+[invariant]
+runs = 64
+depth = 100
