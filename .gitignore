@@ -19,7 +19,7 @@ contracts/broadcast/
 secrets/
 # zk large artifacts
 ai/zk/artifacts/*.compiled
-ai/zk/artifacts/*.key
+ai/zk/artifacts/pk.key
 ai/zk/artifacts/*.srs
 ai/zk/artifacts/kzg*.srs
 ai/zk/artifacts/witness*.json
