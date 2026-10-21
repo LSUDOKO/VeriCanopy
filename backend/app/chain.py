@@ -24,6 +24,12 @@ CONTRACT_NAMES = [
 
 
 def load_deployments(path: str | None = None) -> dict:
+    """Deployment addresses: `DEPLOYMENTS_JSON` env (inline JSON, for hosted services) wins over the file."""
+    import os
+
+    inline = os.environ.get("DEPLOYMENTS_JSON")
+    if inline and not path:
+        return json.loads(inline)
     p = Path(path or settings.deployments_file)
     if not p.is_absolute():
         p = REPO_ROOT / p
