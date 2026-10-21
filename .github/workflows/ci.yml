@@ -9,7 +9,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: foundry-rs/foundry-toolchain@v1
         with: { version: stable }
-      - run: cd contracts && forge install OpenZeppelin/openzeppelin-contracts@v5.1.0 --no-git && forge install foundry-rs/forge-std --no-git
       - run: cd contracts && forge fmt --check
       - run: cd contracts && forge build --sizes
       - run: cd contracts && forge test -vv
