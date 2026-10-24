@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120" role="img" aria-label="VeriCanopy">
-<g transform="translate(0 0)">
-<polygon fill="#012c19" points="60,6 86,20 86,46 60,60 34,46 34,20"/>
-<polygon fill="#012c19" points="8,38 30,26 30,64 19,78 8,72"/>
-<polygon fill="#012c19" points="112,38 90,26 90,64 101,78 112,72"/>
-<polygon fill="#7ad101" points="36,60 60,74 84,60 84,76 60,92 36,76"/>
-<path fill="#7ad101" d="M98 4h8v8h8v8h-8v8h-8v-8h-8v-8h8z"/>
-</g>
-<text x="138" y="80" font-family="Geist, Inter, -apple-system, 'Segoe UI', system-ui, sans-serif" font-weight="700" font-size="64" letter-spacing="-2.5" fill="#012c19">Veri<tspan fill="#7ad101">Canopy</tspan></text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 90" role="img" aria-label="VeriCanopy"><g transform="translate(3 3) scale(1.3)"><defs><mask id="c" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff"/><path d="M23 31l6 6 13-13" stroke="#000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask></defs><g mask="url(#c)" fill="#b6fe00"><circle cx="22" cy="31" r="10"/><circle cx="42" cy="31" r="10"/><circle cx="32" cy="23" r="11"/><rect x="20" y="30" width="24" height="10"/><path d="M30 40h4v10h-4z"/></g><path d="M24 50h16" stroke="#b6fe00" stroke-width="3" stroke-linecap="round"/></g><text x="100" y="56" font-family="Anton, Impact, 'Arial Narrow', sans-serif" font-size="46" fill="#b6fe00" letter-spacing="0.5">VERICANOPY</text><text x="101" y="76" font-family="'Inter Tight', system-ui, sans-serif" font-size="11.5" font-weight="600" fill="#b6fe00" letter-spacing="1.9">CREDITS THAT PROVE THEMSELVES</text></svg>

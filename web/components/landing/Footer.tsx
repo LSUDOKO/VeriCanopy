@@ -9,7 +9,7 @@ export function Footer() {
         {links.map(([h, l]) => <Link key={l} href={h} className="hover:underline">{l}</Link>)}
       </nav>
       <div className="relative mt-10 text-center">
-        <div className="mx-auto mb-8 w-max"><Logo size={260} ink="#b6fe00" leaf="#013900" text="#b6fe00" /></div>
+        <div className="mx-auto mb-8 w-max"><Logo size={260} /></div>
         <div className="display" style={{ fontSize: "clamp(4rem, 18vw, 20rem)", lineHeight: 0.8 }}>Prove<br />it stuck</div>
       </div>
       <div className="mx-auto mt-10 flex max-w-6xl flex-wrap items-center justify-between gap-3 text-xs" style={{ color: "var(--cream)" }}>
