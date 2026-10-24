@@ -9,8 +9,8 @@ export function Footer() {
         {links.map(([h, l]) => <Link key={l} href={h} className="hover:underline">{l}</Link>)}
       </nav>
       <div className="relative mt-10 text-center">
-        <div className="mx-auto w-max"><Logo size={120} /></div>
-        <div className="display mt-2" style={{ fontSize: "clamp(4rem, 18vw, 20rem)", lineHeight: 0.8 }}>Prove<br />it stuck</div>
+        <div className="mx-auto mb-8 w-max"><Logo size={120} /></div>
+        <div className="display" style={{ fontSize: "clamp(4rem, 18vw, 20rem)", lineHeight: 0.8 }}>Prove<br />it stuck</div>
       </div>
       <div className="mx-auto mt-10 flex max-w-6xl flex-wrap items-center justify-between gap-3 text-xs" style={{ color: "var(--cream)" }}>
         <span>© 2026 VeriCanopy · IEEE ClimateChain hackathon build · demo polygons are not real carbon projects</span>
