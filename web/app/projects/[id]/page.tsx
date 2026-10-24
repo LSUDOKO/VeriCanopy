@@ -65,10 +65,10 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const diag = (ev.data?.manifest as { diagnostics?: Record<string, number> } | undefined)?.diagnostics;
 
   return (
-    <div className="wrap py-8">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="display text-4xl sm:text-5xl">{p.name ?? `Project #${pid}`}</h1>
+          <h1 className="display text-5xl sm:text-6xl" style={{ color: "var(--forest)" }}>{p.name ?? `Project #${pid}`}</h1>
           <div className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>
             #{pid} · {p.country ?? "—"} · developer <span className="mono">{p.developer}</span> · start {p.start_date ?? "—"} · {p.cell_count} H3 cells (res {p.h3_res}) · registry status {p.status}
           </div>
@@ -84,7 +84,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
       <nav className="mt-5 flex gap-1 overflow-x-auto border-b" style={{ borderColor: "var(--border)" }} aria-label="Project tabs">
         {TABS.map((t) => (
-          <button key={t} className="tab" onClick={() => setTab(t)} aria-selected={tab === t} role="tab">
+          <button key={t} className="display whitespace-nowrap px-3 py-2 text-base tracking-wide" style={tab === t ? { background: "var(--lime)", color: "var(--forest)", borderRadius: 6 } : undefined} onClick={() => setTab(t)} aria-selected={tab === t} role="tab">
             {t}
           </button>
         ))}
@@ -104,7 +104,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
               <RingLegend ring={ring.data} />
               <YearSlider projectId={pid} />
             </div>
-            <div className="card p-5">
+            <div className="card p-4">
               <div className="label">Forest cover: project vs matched twins</div>
               {ev.isLoading && <Skeleton className="h-64 mt-2" />}
               {ev.data && !ev.data.available && <EmptyState title="No evidence yet" hint={ev.data.reason} />}
@@ -128,7 +128,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                           {t?.unavailable ?? (tiles.data?.pending ? "Rendering Sentinel-2 composite…" : "Loading…")}
                         </div>
                       )}
-                      <figcaption className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs font-semibold" style={{ background: "rgba(1,44,25,.8)", color: "#fff" }}>
+                      <figcaption className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs font-semibold" style={{ background: "rgba(1,57,0,.78)", color: "var(--lime)" }}>
                         {slot === "before" ? "Before" : "After"} · {t?.year ?? "—"} · Sentinel-2
                       </figcaption>
                     </figure>
@@ -140,7 +140,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
         )}
 
         {tab === "Integrity history" && (
-          <div className="card p-5">
+          <div className="card p-4">
             {finalized.length === 0 ? <EmptyState title="No finalised scores yet" /> : <ScoreHistoryChart points={finalized} />}
             <table className="mt-4 w-full text-sm">
               <thead>
@@ -150,7 +150,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
               </thead>
               <tbody>
                 {subs.map((s) => (
-                  <tr key={s.id}>
+                  <tr key={s.id} className="border-t" style={{ borderColor: "var(--border)" }}>
                     <td className="py-1 mono">{s.period}</td>
                     <td className="mono">{bpsToScore(s.score_bps)}</td>
                     <td className="mono">{fmt(s.reversal_tonnes)} t</td>
@@ -193,15 +193,15 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
         )}
 
         {tab === "Credits" && (
-          <div className="card p-5">
+          <div className="card p-4">
             {p.vintages.length === 0 ? (
               <EmptyState title="No vintages issued" hint="Issuance requires a finalised integrity score ≥ 70." />
             ) : (
               <table className="w-full text-sm">
-                <thead><tr><th>Vintage</th><th>Token id</th><th>Issued</th><th>Buffer</th><th>Burned</th><th>Retired</th><th></th></tr></thead>
+                <thead><tr className="label text-left"><th>Vintage</th><th>Token id</th><th>Issued</th><th>Buffer</th><th>Burned</th><th>Retired</th><th></th></tr></thead>
                 <tbody>
                   {p.vintages.map((v) => (
-                    <tr key={v.token_id}>
+                    <tr key={v.token_id} className="border-t" style={{ borderColor: "var(--border)" }}>
                       <td className="py-1 mono">{v.vintage}</td>
                       <td className="mono">{v.token_id}</td>
                       <td className="mono">{fmt(v.issued)}</td>

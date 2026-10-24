@@ -1,24 +1,23 @@
-import { CTA } from "@/components/landing/CTA";
+import { Band } from "@/components/landing/Band";
 import { Footer } from "@/components/landing/Footer";
+import { Giant } from "@/components/landing/Giant";
 import { Hero } from "@/components/landing/Hero";
-import { MarketTeaser } from "@/components/landing/MarketTeaser";
-import { Problem } from "@/components/landing/Problem";
-import { Proof } from "@/components/landing/Proof";
-import { Proves } from "@/components/landing/Proves";
+import { MakeItStick } from "@/components/landing/MakeItStick";
+import { Preloader } from "@/components/landing/Preloader";
+import { Showcase } from "@/components/landing/Showcase";
 import { Trust } from "@/components/landing/Trust";
-import { Reveal } from "@/components/Reveal";
 
 export default function Landing() {
   return (
-    <div className="block">
-      <Reveal />
+    <div className="flex flex-col">
+      <Preloader />
       <Hero />
-      <Problem />
-      <Proves />
-      <Proof />
-      <MarketTeaser />
+      <Band text="When forests get messy, something has to hold" />
+      <Showcase />
+      <Giant />
+      <Band text="Scored · proven · signed · watched" tone="orange" tilt={2} />
       <Trust />
-      <CTA />
+      <MakeItStick />
       <Footer />
     </div>
   );

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120" role="img" aria-label="VeriCanopy">
+<g transform="translate(0 0)">
+<polygon fill="#012c19" points="60,6 86,20 86,46 60,60 34,46 34,20"/>
+<polygon fill="#012c19" points="8,38 30,26 30,64 19,78 8,72"/>
+<polygon fill="#012c19" points="112,38 90,26 90,64 101,78 112,72"/>
+<polygon fill="#7ad101" points="36,60 60,74 84,60 84,76 60,92 36,76"/>
+<path fill="#7ad101" d="M98 4h8v8h8v8h-8v8h-8v-8h-8v-8h8z"/>
+</g>
+<text x="138" y="80" font-family="Geist, Inter, -apple-system, 'Segoe UI', system-ui, sans-serif" font-weight="700" font-size="64" letter-spacing="-2.5" fill="#012c19">Veri<tspan fill="#7ad101">Canopy</tspan></text>
+</svg>

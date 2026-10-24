@@ -108,7 +108,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-1 flex-col"><PageHero eyebrow="Developers" title="Register a project" lede="Paste or upload the boundary. We lock its H3 cells on-chain so the same land can never be registered twice, then the oracle starts scoring it every monitoring period." /><div className="wrap py-8">
+    <div className="flex flex-1 flex-col"><PageHero title="Register a project" lede="Paste or upload the boundary. We lock its H3 cells on-chain so the same land can never be registered twice, then the oracle starts scoring it every monitoring period." /><div className="mx-auto w-full max-w-6xl px-4 pb-6">
       <ol className="mt-3 flex flex-wrap gap-2 text-sm" aria-label="Steps">
         {["Polygon", "Overlap pre-check", "Metadata", "Transactions", "Done"].map((s, i) => (
           <li key={s} className="rounded-full border px-3 py-1" style={{ borderColor: step === i + 1 ? "var(--canopy)" : "var(--border)", fontWeight: step === i + 1 ? 600 : 400 }}>
