@@ -44,6 +44,9 @@ def index_once(
     web3 = web3 or _w3()
     dep = dep or load_deployments()
     confirmations = settings.indexer_confirmations if confirmations is None else confirmations
+    chunk = (
+        chunk or settings.indexer_chunk
+    )  # public RPCs cap eth_getLogs ranges (Base Sepolia publicnode: 500)
     own = db is None
     db = db or SessionLocal()
     try:
@@ -55,22 +58,36 @@ def index_once(
             return st.last_block
         # Only blocks at depth >= confirmations are indexed, so a shallow reorg never reaches them; every applied
         # event is recorded in processed_logs, so a restart or overlapping scan cannot double-apply.
-        start = st.last_block + 1 if st.last_block else 0
+        start = st.last_block + 1 if st.last_block else int(dep.get("startBlock", 0))
         cs = contracts(dep)
         ctx = {"w3": web3, "contracts": cs, "mock_verifier": dep.get("params", {}).get("mockVerifier", False)}
         from app.indexer import events as _ev
 
         _ev._POOL_ADDR[0] = dep["contracts"].get("BufferPool", "")
+        # one eth_getLogs per contract per chunk (public RPCs reject many narrow queries / wide ranges)
+        decoders = {}
+        for cname, handlers in HANDLERS.items():
+            c = cs[cname]
+            for h in handlers:
+                ev = getattr(c.events, h.__name__)()
+                decoders[
+                    (
+                        c.address.lower(),
+                        "0x" + web3.keccak(text=ev.abi_element_identifier).hex().removeprefix("0x"),
+                    )
+                ] = (h, ev)
         frm = start
         while frm <= target:
             to = min(frm + chunk - 1, target)
             logs = []
-            for cname, handlers in HANDLERS.items():
-                c = cs[cname]
-                for h in handlers:
-                    ev = getattr(c.events, h.__name__)
-                    for lg in ev().get_logs(from_block=frm, to_block=to):
-                        logs.append((int(lg["blockNumber"]), int(lg["logIndex"]), h, lg))
+            for cname in HANDLERS:
+                addr = cs[cname].address
+                for raw in web3.eth.get_logs({"address": addr, "fromBlock": frm, "toBlock": to}):
+                    key = (addr.lower(), "0x" + bytes(raw["topics"][0]).hex())
+                    if key not in decoders:
+                        continue
+                    h, ev = decoders[key]
+                    logs.append((int(raw["blockNumber"]), int(raw["logIndex"]), h, ev.process_log(raw)))
             logs.sort(key=lambda x: (x[0], x[1]))
             for _, _, h, lg in logs:
                 apply_log(db, h, lg, ctx)

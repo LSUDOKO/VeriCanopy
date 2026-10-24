@@ -66,6 +66,7 @@ contract Deploy is Script {
 
         string memory j = "deploy";
         vm.serializeUint(j, "chainId", block.chainid);
+        vm.serializeUint(j, "startBlock", block.number);
         vm.serializeAddress(j, "deployer", deployer);
         vm.serializeAddress(j, "oracleAddress", oracleEoa);
         string memory c = "contracts";

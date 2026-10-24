@@ -6,7 +6,7 @@
 | API + indexer + finalizer | Render web service `vericanopy-api` (singapore, Docker, free plan — spins down after 15 min idle; upgrade to Starter for always-on indexing), built from `backend/Dockerfile`, auto-deploys from `main` | https://vericanopy-api.onrender.com |
 | Standby | AWS App Runner `vericanopy-api` (ap-south-1), paused; image in ECR `vericanopy-backend` | https://mympbpgymg.ap-south-1.awsapprunner.com |
 | Database | Neon Postgres 17, project `vericanopy` (aws-ap-southeast-1), schema managed by Alembic | `backend/alembic` |
-| Chain | Base Sepolia (84532) via `https://sepolia.base.org` | `contracts/deployments/84532.json` once deployed |
+| Chain | Base Sepolia (84532) via `https://base-sepolia-rpc.publicnode.com` | `contracts/deployments/84532.json` once deployed |
 | Secrets | `secrets/` (git-ignored) on the operator machine; App Runner / Vercel env for hosted services | never committed |
 
 ## Runbook

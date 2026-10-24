@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     pq_public_key_path: str = str(REPO_ROOT / "secrets" / "ml_dsa_65.pk")
     zk_mode: str = "onchain"  # onchain | offchain
     indexer_confirmations: int = 5
+    indexer_chunk: int = 500
     cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
     explorer_url: str = ""  # e.g. https://amoy.polygonscan.com
 

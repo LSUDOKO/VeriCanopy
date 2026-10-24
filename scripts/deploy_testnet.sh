@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 export PATH="$HOME/.config/.foundry/bin:$PATH"
 KEYS=secrets/amoy-keys.json
-export RPC_URL="${RPC_URL:-https://sepolia.base.org}"
+export RPC_URL="${RPC_URL:-https://base-sepolia-rpc.publicnode.com}"
 export CHAIN_ID="${CHAIN_ID:-84532}"
 export DEPLOYER_KEY=$(python3 -c "import json;print(json.load(open('$KEYS'))['deployer']['private_key'])")
 export ORACLE_ADDRESS=$(python3 -c "import json;print(json.load(open('$KEYS'))['oracle']['address'])")

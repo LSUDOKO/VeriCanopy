@@ -1,29 +1,30 @@
 {
-  "chainId": 84532,
-  "contracts": {
-    "BufferPool": "0xa536e7C93c32179747d6eD83fA5138B2b7879700",
-    "ChallengeManager": "0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d",
-    "IntegrityOracle": "0xa3a203519f86DdeeCA51771F43ca0840e51387b6",
-    "ModelRegistry": "0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d",
-    "PQKeyRegistry": "0xd760B9004F5ACF3814Ea833E601a23b060B922c2",
-    "ProjectRegistry": "0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a",
-    "RetirementRegistry": "0x1D042FddCA42542D51CA4c33aB55db1835b010a9",
-    "VeriCredit": "0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f",
-    "Verifier": "0x333c45Cbbb7AB746244767c199551e69A4Fa4965"
-  },
-  "deployer": "0x94A26d8B64dbF046428DE7D237cc0E527Bc6cC8a",
-  "oracleAddress": "0xe94117B8563a46E67154E003c5EE35dbfA2b6290",
-  "params": {
-    "bufferBps": 2000,
-    "challengeWindow": 300,
-    "impairThresholdBps": 5000,
-    "minChallengeBond": 500000000000000,
-    "minIssueScoreBps": 7000,
-    "minOracleStake": 1000000000000000,
-    "mockVerifier": false,
-    "modelHash": "0x9cfcdf677203b7f680f3c35af51a9d5e75999c52c9a8a7001f68440c9db2df5d",
-    "outputScale": 9,
-    "resolutionPeriod": 600,
-    "resolverQuorum": 2
-  }
+ "chainId": 84532,
+ "contracts": {
+  "BufferPool": "0xa536e7C93c32179747d6eD83fA5138B2b7879700",
+  "ChallengeManager": "0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d",
+  "IntegrityOracle": "0xa3a203519f86DdeeCA51771F43ca0840e51387b6",
+  "ModelRegistry": "0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d",
+  "PQKeyRegistry": "0xd760B9004F5ACF3814Ea833E601a23b060B922c2",
+  "ProjectRegistry": "0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a",
+  "RetirementRegistry": "0x1D042FddCA42542D51CA4c33aB55db1835b010a9",
+  "VeriCredit": "0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f",
+  "Verifier": "0x333c45Cbbb7AB746244767c199551e69A4Fa4965"
+ },
+ "deployer": "0x94A26d8B64dbF046428DE7D237cc0E527Bc6cC8a",
+ "oracleAddress": "0xe94117B8563a46E67154E003c5EE35dbfA2b6290",
+ "params": {
+  "bufferBps": 2000,
+  "challengeWindow": 300,
+  "impairThresholdBps": 5000,
+  "minChallengeBond": 500000000000000,
+  "minIssueScoreBps": 7000,
+  "minOracleStake": 1000000000000000,
+  "mockVerifier": false,
+  "modelHash": "0x9cfcdf677203b7f680f3c35af51a9d5e75999c52c9a8a7001f68440c9db2df5d",
+  "outputScale": 9,
+  "resolutionPeriod": 600,
+  "resolverQuorum": 2
+ },
+ "startBlock": 49551164
 }
