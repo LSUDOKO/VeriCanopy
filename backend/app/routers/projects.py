@@ -224,7 +224,12 @@ def manifest(pid: int, period: int, db: Session = Depends(get_db)):
     p = db.get(Project, pid)
     if not p:
         raise HTTPException(status_code=404, detail="project not found")
+    from app import ipfs
+
     f = Path(REPO_ROOT / "data" / "outputs" / (p.demo_id or str(pid)) / str(period) / "manifest.json")
-    if not f.exists():
+    if f.exists():
+        return json.loads(f.read_text())
+    m = ipfs.get_named_json(f"manifest/{pid}/{period}")
+    if m is None:
         raise HTTPException(status_code=404, detail="manifest not found")
-    return json.loads(f.read_text())
+    return m

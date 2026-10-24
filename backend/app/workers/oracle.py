@@ -132,6 +132,8 @@ def run_score_job(
     mh = manifest_sha256(signed)
     cid = ipfs.put_json(signed)
     (out_dir / "manifest.signed.json").write_text(json.dumps(signed, indent=1, ensure_ascii=False))
+    ipfs.put_named(f"evidence/{project_id}/{period}", (out_dir / "evidence.json").read_bytes())
+    ipfs.put_named(f"manifest/{project_id}/{period}", json.dumps(signed, ensure_ascii=False).encode())
     log(f"manifest {mh[:18]}… signed (ML-DSA-65) → ipfs://{cid}")
     result = {
         "project_id": project_id,

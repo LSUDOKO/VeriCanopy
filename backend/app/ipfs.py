@@ -114,3 +114,31 @@ def get_json(cid: str) -> Any | None:
 
 def gateway_url(cid: str) -> str:
     return settings.ipfs_gateway.rstrip("/") + "/" + cid.removeprefix("ipfs://")
+
+
+def put_named(name: str, data: bytes) -> str:
+    from app.db import SessionLocal
+    from app.models import NamedBlob
+
+    cid = put_bytes(data)
+    db = SessionLocal()
+    try:
+        row = db.get(NamedBlob, name) or NamedBlob(name=name, cid=cid)
+        row.cid = cid
+        db.merge(row)
+        db.commit()
+    finally:
+        db.close()
+    return cid
+
+
+def get_named_json(name: str):
+    from app.db import SessionLocal
+    from app.models import NamedBlob
+
+    db = SessionLocal()
+    try:
+        row = db.get(NamedBlob, name)
+    finally:
+        db.close()
+    return get_json(row.cid) if row else None

@@ -194,3 +194,12 @@ class Blob(Base):
     data: Mapped[bytes] = mapped_column(LargeBinary)
     size: Mapped[int] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class NamedBlob(Base):
+    """Mutable name → CID pointer (e.g. evidence/<project>/<period>) so hosted instances find pipeline outputs."""
+
+    __tablename__ = "named_blobs"
+    name: Mapped[str] = mapped_column(String(200), primary_key=True)
+    cid: Mapped[str] = mapped_column(String(128))
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())

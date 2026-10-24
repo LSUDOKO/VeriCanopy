@@ -53,9 +53,24 @@ Copy `.env.example` to `.env`. Without `EE_SERVICE_ACCOUNT_JSON` the pipeline us
 | API + indexer | https://vericanopy-api.onrender.com (Render, Docker, auto-deploy from `main`) | live — `GET /healthz` |
 | Database | Neon Postgres (Alembic-managed schema) | live |
 | Contracts — Local Anvil (31337) | `make deploy` → `contracts/deployments/31337.json` | works |
-| Contracts — Base Sepolia (84532) | `scripts/deploy_testnet.sh` | **pending deployer funding** (deployer `0x94A26d8B64dbF046428DE7D237cc0E527Bc6cC8a`, needs ~0.05 Base Sepolia ETH) |
+| Contracts — Base Sepolia (84532) | `contracts/deployments/84532.json` | live (see table below) |
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the runbook.
+
+## Base Sepolia contracts
+| Contract | Address |
+|---|---|
+| BufferPool | [`0xa536e7C93c32179747d6eD83fA5138B2b7879700`](https://sepolia.basescan.org/address/0xa536e7C93c32179747d6eD83fA5138B2b7879700) |
+| ChallengeManager | [`0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d`](https://sepolia.basescan.org/address/0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d) |
+| IntegrityOracle | [`0xa3a203519f86DdeeCA51771F43ca0840e51387b6`](https://sepolia.basescan.org/address/0xa3a203519f86DdeeCA51771F43ca0840e51387b6) |
+| ModelRegistry | [`0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d`](https://sepolia.basescan.org/address/0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d) |
+| PQKeyRegistry | [`0xd760B9004F5ACF3814Ea833E601a23b060B922c2`](https://sepolia.basescan.org/address/0xd760B9004F5ACF3814Ea833E601a23b060B922c2) |
+| ProjectRegistry | [`0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a`](https://sepolia.basescan.org/address/0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a) |
+| RetirementRegistry | [`0x1D042FddCA42542D51CA4c33aB55db1835b010a9`](https://sepolia.basescan.org/address/0x1D042FddCA42542D51CA4c33aB55db1835b010a9) |
+| VeriCredit | [`0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f`](https://sepolia.basescan.org/address/0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f) |
+| Verifier | [`0x333c45Cbbb7AB746244767c199551e69A4Fa4965`](https://sepolia.basescan.org/address/0x333c45Cbbb7AB746244767c199551e69A4Fa4965) |
+
+First zk-verified submissions: [#1 A/2023](https://sepolia.basescan.org/tx/0xc4f70226e3e782ed347acdc48826fa73be081c44482da12d4ea1ac3876f53487), [#2 C/2019](https://sepolia.basescan.org/tx/0xd94d61e5fbb9bdbf274bb6be88052d63141275a073e631b5f5e0f4e57b3f2028), [#3 B/2024](https://sepolia.basescan.org/tx/0xa973096281ffd3681a0d02e2a7742a2a37d5cb422dd0cdf77beba13f4fbd1a52).
 
 ## Measured numbers
 
