@@ -43,7 +43,7 @@ make e2e                        # or: run the entire scripted scenario (starts i
 make test                       # forge test + pytest (ai, backend) + vitest/lint/build (web)
 ```
 
-Copy `.env.example` to `.env`. Without `EE_SERVICE_ACCOUNT_JSON` the pipeline uses labelled fixture samples (see `docs/LIMITATIONS.md`).
+Copy `.env.example` to `.env`. With `EE_SERVICE_ACCOUNT_JSON` (+ `EE_PROJECT`) scores are computed from live Earth Engine data (Hansen GFC 2025, Sentinel-1/2, GEDI L4B, MODIS MCD64A1, Dynamic World); without it the pipeline uses labelled fixture samples (see `docs/LIMITATIONS.md`).
 
 ## Deployed addresses
 
