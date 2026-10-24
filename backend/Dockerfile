@@ -9,7 +9,7 @@ COPY backend/pyproject.toml /app/backend/pyproject.toml
 # install deps first (cache layer), then sources
 COPY ai /app/ai
 COPY backend /app/backend
-RUN pip install -e /app/ai -e "/app/backend[postgres]"
+RUN pip install -e "/app/ai[ee]" -e "/app/backend[postgres]"
 COPY data/demo /app/data/demo
 COPY contracts/deployments /app/contracts/deployments
 COPY contracts/verifier/Halo2Verifier.json /app/contracts/verifier/Halo2Verifier.json
