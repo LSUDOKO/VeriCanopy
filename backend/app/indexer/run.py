@@ -117,3 +117,43 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+def backfill(
+    contract_name: str,
+    from_block: int,
+    to_block: int | None = None,
+    web3=None,
+    dep: dict | None = None,
+    chunk: int | None = None,
+) -> int:
+    """Re-scan one contract's events over a block range regardless of IndexerState (idempotent via processed_logs).
+    Use after adding a handler for a contract whose events were already passed by the live indexer."""
+    web3 = web3 or _w3()
+    dep = dep or load_deployments()
+    chunk = chunk or settings.indexer_chunk
+    cs = contracts(dep)
+    c = cs[contract_name]
+    ctx = {"w3": web3, "contracts": cs, "mock_verifier": dep.get("params", {}).get("mockVerifier", False)}
+    decoders = {}
+    for h in HANDLERS[contract_name]:
+        ev = getattr(c.events, h.__name__)()
+        decoders["0x" + web3.keccak(text=ev.abi_element_identifier).hex().removeprefix("0x")] = (h, ev)
+    end = to_block if to_block is not None else web3.eth.block_number
+    applied = 0
+    db = SessionLocal()
+    try:
+        frm = from_block
+        while frm <= end:
+            to = min(frm + chunk - 1, end)
+            for raw in web3.eth.get_logs({"address": c.address, "fromBlock": frm, "toBlock": to}):
+                key = "0x" + bytes(raw["topics"][0]).hex()
+                if key in decoders:
+                    h, ev = decoders[key]
+                    if apply_log(db, h, ev.process_log(raw), ctx):
+                        applied += 1
+            frm = to + 1
+        db.commit()
+    finally:
+        db.close()
+    return applied
