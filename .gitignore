@@ -37,3 +37,8 @@ contracts/deployments/31337.json
 data/e2e/
 contracts/verifier/Halo2Verifier.abi.json
 .vercel
+
+# rendered film (large)
+docs/video/film_silent.mp4
+docs/video/VeriCanopy.mp4
+docs/video/mix.m4a

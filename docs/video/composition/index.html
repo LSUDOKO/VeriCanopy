@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>VeriCanopy — launch film</title>
+<style>
+@font-face { font-family: "Anton"; src: url(assets/fonts/Anton.woff2) format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-400.woff2) format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-500.woff2) format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-600.woff2) format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-700.woff2) format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url(assets/fonts/GeistMono-Regular.woff2) format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url(assets/fonts/GeistMono-Medium.woff2) format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Hand"; src: url(assets/fonts/Nothing.woff2) format("woff2"); font-weight: 400; font-display: block; }
+
+:root {
+  --lime: #b6fe00; --lime-2: #9be000; --forest: #013900; --forest-2: #034102; --deep: #012800;
+  --orange: #ff7a1a; --yellow: #ffd23f; --red: #e63946; --cream: #f4f3ef; --ink: #0b1f0a; --muted: #4f5f4b;
+  --surface: #ffffff; --surface-2: #ebeae3; --border: #d8d6cc; --teal: #0f8f5a; --amber: #e3a008; --kraft: #c9a070;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+.scene { position: absolute; inset: 0; visibility: hidden; opacity: 0; overflow: hidden; }
+.light { background: radial-gradient(ellipse 70% 60% at 50% 42%, #ffffff 0%, var(--cream) 55%, #e6e4dc 100%); color: var(--ink); }
+.dark { background: radial-gradient(ellipse 60% 55% at 50% 45%, #034a05 0%, var(--forest) 45%, var(--deep) 100%); color: var(--cream); }
+.dark::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle 420px at 22% 78%, rgba(182,254,0,.10), transparent 70%), radial-gradient(circle 520px at 80% 20%, rgba(182,254,0,.07), transparent 70%); }
+.scene > * { position: relative; z-index: 1; }
+.display { font-family: "Anton", Impact, sans-serif; font-weight: 400; letter-spacing: .005em; line-height: .96; text-transform: none; }
+.mono { font-family: "Geist Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.hand { font-family: "Hand", cursive; }
+.center { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
+.w { display: inline-block; white-space: pre; will-change: transform, filter, opacity; }
+.lime { color: var(--lime); }
+.orange { color: var(--orange); }
+.red { color: var(--red); }
+.muted { color: var(--muted); }
+.dark .muted { color: rgba(244,243,239,.6); }
+.eyebrow { font-size: 22px; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
+.cap { font-size: 24px; font-weight: 500; }
+.sub { font-size: 30px; font-weight: 400; }
+.h1 { font-size: 120px; }
+.h2 { font-size: 84px; }
+.h3 { font-size: 56px; }
+.big { font-size: 300px; line-height: .9; }
+.pill { display: inline-flex; align-items: center; gap: 12px; padding: 12px 24px; border-radius: 999px; font-weight: 600; font-size: 24px; white-space: nowrap; }
+.pill.dark-pill { background: rgba(0,0,0,.35); color: var(--cream); border: 1px solid rgba(182,254,0,.25); }
+.pill.lime-pill { background: var(--lime); color: var(--forest); }
+.pill.cream-pill { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
+.pill.red-pill { background: var(--red); color: #fff; }
+.sticker { background: var(--yellow); color: #5a3a12; padding: 10px 18px; border-radius: 10px; font-family: "Hand", cursive; font-size: 30px; transform: rotate(-4deg); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+.tape { position: absolute; width: 150px; height: 34px; background: rgba(255,210,63,.75); transform: rotate(-6deg); }
+.img-fill { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.veil { position: absolute; inset: 0; }
+.row { display: flex; align-items: center; gap: 22px; padding: 16px 26px; border-radius: 16px; background: rgba(0,0,0,.32); border: 1px solid rgba(182,254,0,.14); font-size: 28px; font-weight: 500; width: 760px; }
+.row .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 14px rgba(182,254,0,.8); margin-left: auto; flex: none; }
+.row .meta { font-family: "Geist Mono", monospace; font-size: 18px; color: rgba(244,243,239,.55); }
+.row .ico { width: 44px; height: 44px; border-radius: 10px; background: rgba(255,255,255,.08); display: grid; place-items: center; font-family: "Geist Mono", monospace; font-size: 16px; color: var(--lime); flex: none; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; box-shadow: 0 24px 70px rgba(0,0,0,.18); }
+.dark .card { background: #0a3a0a; border-color: rgba(182,254,0,.18); color: var(--cream); box-shadow: 0 30px 90px rgba(0,0,0,.45); }
+.term { width: 1180px; border-radius: 22px; background: #061e06; border: 1px solid rgba(182,254,0,.22); box-shadow: 0 40px 120px rgba(0,0,0,.5); overflow: hidden; }
+.term .bar { height: 46px; display: flex; align-items: center; gap: 10px; padding: 0 20px; background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.06); }
+.term .bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(255,255,255,.18); display: inline-block; }
+.term .body { padding: 30px 36px; font-family: "Geist Mono", monospace; font-size: 27px; line-height: 1.6; color: #d9f5c7; min-height: 300px; white-space: pre-wrap; }
+.term .ln { opacity: 0; }
+.caret { display: inline-block; width: 14px; height: 32px; background: var(--lime); vertical-align: -5px; margin-left: 2px; }
+.chip { display: inline-flex; flex-direction: column; gap: 2px; padding: 12px 18px; border-radius: 12px; background: rgba(0,0,0,.35); border: 1px solid rgba(182,254,0,.14); font-family: "Geist Mono", monospace; font-size: 19px; color: var(--cream); min-width: 230px; }
+.chip small { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: rgba(244,243,239,.5); font-family: "Inter Tight", sans-serif; }
+.shot { position: absolute; left: 50%; top: 50%; width: 1560px; height: 975px; transform: translate(-50%, -50%); border-radius: 22px; overflow: hidden; box-shadow: 0 40px 120px rgba(0,0,0,.35); border: 1px solid rgba(0,0,0,.08); background: #fff; }
+.shot img { position: absolute; left: 0; top: 0; width: 1560px; height: auto; }
+.shot .cam { position: absolute; inset: 0; transform-origin: 50% 50%; }
+.shot .cam img { position: absolute; left: 0; top: 0; width: 1560px; height: auto; }
+.label { position: absolute; left: 50%; bottom: 60px; transform: translateX(-50%); }
+.dim { position: absolute; inset: 0; background: rgba(1,40,0,.0); }
+.stamp { display: inline-block; padding: 14px 30px; border: 6px solid var(--red); color: var(--red); border-radius: 14px; font-family: "Anton", sans-serif; font-size: 64px; letter-spacing: .06em; transform: rotate(-8deg); mix-blend-mode: multiply; }
+.bar-track { width: 520px; height: 18px; border-radius: 999px; background: rgba(255,255,255,.12); overflow: hidden; }
+.bar-fill { height: 100%; width: 100%; background: var(--lime); border-radius: 999px; transform-origin: 0 50%; }
+.morph { position: absolute; left: 50%; top: 50%; width: 200px; height: 200px; border-radius: 56px; background: var(--forest); transform: translate(-50%, -50%) scale(0); z-index: 50; }
+.morph-light { background: var(--cream); }
+.fade { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 60; }
+.grain { position: absolute; inset: 0; z-index: 40; pointer-events: none; opacity: .05; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.9'/></svg>"); }
+svg text { font-family: "Inter Tight", sans-serif; }
+</style>
+</head>
+<body>
+<div id="stage"><div class="grain"></div><div class="fade" id="fade"></div></div>
+<script src="gsap.min.js"></script>
+<script src="data.js"></script>
+<script src="film.js"></script>
+</body>
+</html>

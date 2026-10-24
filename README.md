@@ -1,87 +1,166 @@
-# VeriCanopy
+<p align="center">
+  <img src="brand/logo-original.png" alt="VeriCanopy" width="200" />
+</p>
 
-> **Carbon credits that prove themselves.**
+<h1 align="center">VeriCanopy</h1>
 
-Satellite AI scores every forest carbon credit against matched "twin" forest, a zkML proof verified **on-chain** shows the registered model produced the score, an H3 geospatial registry blocks double-registration of land, credits update themselves and burn their buffer when forests are lost, anyone can challenge the inputs with a stake, and every manifest attestation is signed with a NIST post-quantum signature (ML-DSA-65) so those records stay verifiable for decades (the zk proofs and Ethereum signatures themselves are not post-quantum; see the honesty table).
+<p align="center"><strong>Carbon credits that prove themselves.</strong><br/>
+Satellite evidence → integrity score → zero-knowledge proof on-chain → a credit that keeps watching the forest.</p>
 
-**Track:** Carbon Markets & Emissions Transparency (IEEE ClimateChain Global Hackathon 2026) — blockchain-based credit verification, double-counting prevention, continuous impact tracking.
+<p align="center">
+  <a href="https://vericanopy.vercel.app"><img alt="Live app" src="https://img.shields.io/badge/app-vericanopy.vercel.app-013900?style=flat-square&labelColor=b6fe00" /></a>
+  <a href="https://vericanopy-api.onrender.com/api/v1/status"><img alt="API status" src="https://img.shields.io/badge/api-status-013900?style=flat-square&labelColor=b6fe00" /></a>
+  <a href="https://sepolia.basescan.org/address/0xa3a203519f86DdeeCA51771F43ca0840e51387b6"><img alt="Base Sepolia" src="https://img.shields.io/badge/chain-Base%20Sepolia%2084532-013900?style=flat-square&labelColor=b6fe00" /></a>
+  <a href="https://github.com/LSUDOKO/VeriCanopy/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/LSUDOKO/VeriCanopy/actions/workflows/ci.yml/badge.svg" /></a>
+  <a href="https://github.com/LSUDOKO/VeriCanopy/releases"><img alt="Release" src="https://img.shields.io/github/v/release/LSUDOKO/VeriCanopy?style=flat-square&color=013900" /></a>
+  <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-013900?style=flat-square" /></a>
+</p>
 
-## Three trust gaps, one system
+<p align="center">
+  <a href="https://vericanopy.vercel.app">Live app</a> ·
+  <a href="https://vericanopy-api.onrender.com/docs">API docs</a> ·
+  <a href="docs/MCP.md">MCP server</a> ·
+  <a href="docs/ARCHITECTURE.md">Architecture</a> ·
+  <a href="docs/BENCHMARKS.md">Benchmarks</a> ·
+  <a href="docs/LIMITATIONS.md">Limitations</a> ·
+  <a href="docs/video/SCRIPT.md">Film script</a>
+</p>
+
+<p align="center"><img src="docs/media/landing.gif" alt="VeriCanopy landing page" width="900" /></p>
+
+---
+
+## The problem
+
+Forest carbon credits are verified once, by someone you have to trust, against a baseline the developer chose. Nobody re-derives that baseline from pixels, nothing re-scores the forest after issuance, and the ratings that exist come from private models you cannot check. Independent studies keep finding that most claimed reductions never happened.
+
+**VeriCanopy closes three trust gaps with one system:**
 
 | Gap | Question | Mechanism |
 |---|---|---|
-| **Computation** | Did the AI really run the registered model? | EZKL/Halo2 proof verified on-chain by `Halo2Verifier`; score decoded from the proof's public instances, never trusted from the oracle |
-| **Input** | Was the right land and data used? Is this land sold twice? | Reproducible manifest (datasets, dates, seeds, geometry hash, code commit), open staked challenge game, H3 cell exclusivity in `ProjectRegistry` |
-| **Time** | Is the credit still true today, and will the record survive decades? | Living integrity score per project, automatic buffer burns, holder/retiree notifications, ML-DSA-65 signed manifests anchored on-chain |
+| **Computation** | Did the AI really run the registered model? | EZKL/Halo2 proof verified on-chain by `Halo2Verifier`; the score is decoded from the proof's public instances, never trusted from the oracle |
+| **Input** | Was the right land and data used? Is this land sold twice? | Reproducible, ML-DSA-65-signed manifest (datasets, dates, geometry hash, code commit); staked challenge game; H3 cell exclusivity in `ProjectRegistry` |
+| **Time** | Is the credit still true today? | Living integrity score per project, automatic buffer burns, project freeze on shortfall, holder notifications |
 
-## What works today (all measured, all tested)
+## How it works
 
-- **Contracts** (Solidity 0.8.26, OpenZeppelin v5, Foundry): `ProjectRegistry` (H3 lock + Merkle sliver fraud proof), `ModelRegistry`, `PQKeyRegistry`, `IntegrityOracle`, `ChallengeManager`, `VeriCredit` (ERC-1155 living credits), `BufferPool`, `RetirementRegistry`, `Marketplace` (escrowed fixed-price trading; frozen projects cannot trade). 43 tests including a **real EZKL proof fixture verified by the generated `Halo2Verifier`** (19.8 KB deployed, under the EIP-170 limit) and fuzz/invariant tests for supply accounting and frozen-token immobility.
-- **AI pipeline** (Python 3.11): Earth Engine extraction (needs credentials) or deterministic labelled fixture samples → Mahalanobis/caliper matching with bootstrap CI → 16-feature `fv1` vector → distilled MLP (417 params, MAE 0.0125 vs the transparent expert rule) → `vc-manifest/1`.
-- **zkML**: EZKL circuit (hashed inputs, fixed params, public output, log-rows 16), ≈6 s proofs, 4,416-byte proofs, on-chain verification ≈1.08 M gas including the submission.
-- **Post-quantum**: ML-DSA-65 (FIPS 204) signing of every manifest, on-chain key registry, Verify page that re-checks hash ↔ chain, key ↔ registry, signature, proof mode.
-- **Backend** (FastAPI): REST API, chain indexer with reorg re-scan, oracle worker (pipeline → prove → sign → store → `submitScore`), finalizer, resolver CLI, buyer notifications.
-- **Web** (Next.js 16, wagmi/viem, RainbowKit, MapLibre, GSAP + Lenis): brand landing, Registry map, project pages (live Sentinel-2 before/after, twin-forest chart, integrity history, claim vs reality, credits, proofs & signatures, challenges), **Market** (escrowed fixed-price listings, buy/sell/withdraw), Register wizard with live overlap pre-check and decoded `OverlapDetected` revert, Portfolio with sell/retire, certificates and impact inbox, Challenges, Verify, Security, How it works.
-- **End-to-end**: `make e2e` runs the whole story on a local Anvil chain and asserts every step (seed + rejected overlap → score/prove/sign/submit → finalise → mint → retire → covered reversal + notice → fire-year shortfall → Frozen → upheld challenge + slashing).
+```mermaid
+flowchart LR
+  A[Sentinel-1/2 · Hansen GFC · GEDI L4B · MODIS burned area · Dynamic World] --> B[Twin-forest matching<br/>776 project px vs 2,396 twin px]
+  B --> C[16-feature vector fv1]
+  C --> D[417-parameter MLP<br/>integrity score 0–100]
+  D --> E[EZKL Halo2 proof<br/>4,416 B · ~6 s]
+  E --> F[IntegrityOracle.submitScore<br/>Halo2Verifier on Base Sepolia]
+  C --> G[Manifest signed with ML-DSA-65]
+  G --> F
+  F --> H[VeriCredit ERC-1155<br/>buffer pool · freeze · challenges · marketplace]
+```
 
+1. **Evidence.** Every monitoring period the oracle pulls Sentinel-2 and Sentinel-1 composites, Hansen tree-cover loss, GEDI L4B biomass, MODIS burned area and Dynamic World for the project polygon *and* for a matched twin forest nearby. The twin is the counterfactual, not a spreadsheet.
+2. **Score.** Sixteen features go into a small, audited neural network (417 parameters, MAE 0.0125 against the transparent expert rule, zero monotonicity violations). Tapajós scored 71.9 in 2023; after 8,080 t of detected loss it scores 3.9.
+3. **Proof.** Inference runs inside a Halo2 circuit (EZKL 23.0.5). The deployed verifier checks the proof before the score is stored; a wrong proof reverts the transaction. The evidence manifest is signed with ML-DSA-65 (FIPS 204) and the key is registered on-chain.
+4. **A living credit.** Credits carry the live score. Detected loss burns buffer credits first; a shortfall freezes the project, blocks transfers and notifies every holder. Anyone can challenge a score with a bond; two of three independent resolvers recompute it.
 
-## Pilot areas and data provenance (read this before judging)
+## What you can do today (Base Sepolia)
+
+| | |
+|---|---|
+| <img src="docs/media/registry.gif" width="440" /> | **Registry** — every project on a map with its live integrity status, H3 cells, and the credits, reversals and buffer coverage behind it. |
+| <img src="docs/media/project.gif" width="440" /> | **Project page** — real Sentinel-2 before/after, the twin-forest chart with the fire year, integrity history, claim vs reality, proofs & signatures, ML-DSA-signed auditor report, FIRMS fire badge, 10 km leakage ring and a year slider over the satellite tiles. |
+| <img src="docs/media/market.gif" width="440" /> | **Market** — escrowed fixed-price listings with the integrity score on the price tag, a price guide by integrity band, and portfolio retire → printable certificate. Frozen projects cannot trade. |
+| <img src="docs/media/ask.gif" width="440" /> | **Ask** — deterministic, model-faithful explanation of any score (per-feature attribution, data sources, proof and signature status). No language model in the loop. |
+| <img src="docs/media/status.gif" width="440" /> | **Status** — database, RPC head, indexer lag, Earth Engine, signer, keeper balance and all ten contracts, refreshed every 30 s. |
+
+Also: **Register** wizard with live H3 overlap pre-check and decoded `OverlapDetected` reverts · **Challenges** with bonds and 2-of-3 resolver votes · **Verify** page that re-checks hash ↔ chain, key ↔ registry, signature and proof mode · **Alerts** feed as JSON and RSS · **Model registry** page that compares the on-chain model hash with the published ONNX artifact.
+
+### For agents: MCP server
+
+Any Model Context Protocol client can read the registry, explain a score, verify a manifest and prepare **unsigned** marketplace or retirement transactions (your wallet signs; the server holds no keys).
+
+```sh
+claude mcp add --transport http vericanopy https://vericanopy-api.onrender.com/mcp
+```
+
+Ten tools, two resources — see [`docs/MCP.md`](docs/MCP.md).
+
+## Measured, not promised
+
+Every number is produced by code in this repository (`scripts/write_benchmarks.py`, `forge test --gas-report`, `pytest`). Full table in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
+
+| Metric | Value |
+|---|---|
+| Contract tests (incl. a real EZKL proof verified by the deployed `Halo2Verifier`, fuzz + invariants) | 55 |
+| Backend tests (indexer idempotency, verify binding, market, feeds, MCP, reports) | 31 |
+| Web smoke tests against production | 11 |
+| Proof size / proving time (mean of 20) | 4,416 B / 6.02 s |
+| `Halo2Verifier` deployed bytecode | 19,817 B (limit 24,576) |
+| On-chain verify inside `submitScore` | ≈1.08 M gas |
+| Model | 16-16-8-1 MLP, 417 params, MAE 0.0125, 0 monotonicity violations |
+| ML-DSA-65 sign / verify (pure Python) | ≈118 ms / ≈19 ms |
+| Satellite datasets via Earth Engine | 10 |
+
+## Pilot areas and data provenance
+
 Two kinds of results exist on purpose:
-- **Live submissions on Base Sepolia** (`provider: earthengine` in the manifest): features extracted from real Hansen GFC 2025, Sentinel-1/2, GEDI L4B, MODIS burned-area and Dynamic World pixels for the demo polygons, proven with EZKL and verified on-chain. The pilot polygons were drawn by us over Pará, Loreto and Antalya and are not real carbon projects, so their real-data scores are low (Tapajós/2024 = 3.9, Manavgat/2021 = 0.2 with 1.2 MtCO2e of real 2021 loss, Loreto/2025 = 4.5). That is the system working as intended.
-- The first three submissions (`provider: fixture`) were made before Earth Engine access existed and use deterministic fixture samples; they remain on-chain, labelled. The three pilot areas (Tapajós block, Loreto floodplain, Manavgat pine forest) are polygons the VeriCanopy team registered on Base Sepolia for monitoring; they are not issued carbon projects.
+
+- **Live submissions on Base Sepolia** (`provider: earthengine` in the manifest): features extracted from real Hansen GFC 2025, Sentinel-1/2, GEDI L4B, MODIS burned-area and Dynamic World pixels for the pilot polygons, proven with EZKL and verified on-chain. The pilot polygons (Tapajós riverine block, Loreto Marañón floodplain, Manavgat pine forest) were drawn by us for monitoring; they are **not** issued carbon projects, so their real-data scores are low (Tapajós/2025 = 3.9, Manavgat/2021 = 0.2 with 1.2 MtCO2e of real 2021 loss). That is the system working as intended.
+- The first three submissions (`provider: fixture`) were made before Earth Engine access existed and use deterministic labelled fixture samples; they remain on-chain, labelled as such.
+
+## Deployed addresses
+
+| Component | Where |
+|---|---|
+| Web app | https://vericanopy.vercel.app (Vercel) |
+| API, indexer, workers, MCP | https://vericanopy-api.onrender.com (Render, Docker, `GET /api/v1/status`) |
+| Database | Neon Postgres (Alembic-managed) |
+| Contracts | Base Sepolia (84532), `contracts/deployments/84532.json` |
+
+| Contract | Address |
+|---|---|
+| ProjectRegistry | [`0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a`](https://sepolia.basescan.org/address/0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a) |
+| ModelRegistry | [`0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d`](https://sepolia.basescan.org/address/0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d) |
+| PQKeyRegistry | [`0xd760B9004F5ACF3814Ea833E601a23b060B922c2`](https://sepolia.basescan.org/address/0xd760B9004F5ACF3814Ea833E601a23b060B922c2) |
+| IntegrityOracle | [`0xa3a203519f86DdeeCA51771F43ca0840e51387b6`](https://sepolia.basescan.org/address/0xa3a203519f86DdeeCA51771F43ca0840e51387b6) |
+| Halo2Verifier | [`0x333c45Cbbb7AB746244767c199551e69A4Fa4965`](https://sepolia.basescan.org/address/0x333c45Cbbb7AB746244767c199551e69A4Fa4965) |
+| ChallengeManager | [`0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d`](https://sepolia.basescan.org/address/0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d) |
+| VeriCredit (ERC-1155) | [`0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f`](https://sepolia.basescan.org/address/0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f) |
+| BufferPool | [`0xa536e7C93c32179747d6eD83fA5138B2b7879700`](https://sepolia.basescan.org/address/0xa536e7C93c32179747d6eD83fA5138B2b7879700) |
+| RetirementRegistry | [`0x1D042FddCA42542D51CA4c33aB55db1835b010a9`](https://sepolia.basescan.org/address/0x1D042FddCA42542D51CA4c33aB55db1835b010a9) |
+| Marketplace | [`0x305a35aAf5347c98C02930d35854e9a9B1c2e481`](https://sepolia.basescan.org/address/0x305a35aAf5347c98C02930d35854e9a9B1c2e481) |
+
+First zk-verified submissions: [#1](https://sepolia.basescan.org/tx/0xc4f70226e3e782ed347acdc48826fa73be081c44482da12d4ea1ac3876f53487), [#2](https://sepolia.basescan.org/tx/0xd94d61e5fbb9bdbf274bb6be88052d63141275a073e631b5f5e0f4e57b3f2028), [#3](https://sepolia.basescan.org/tx/0xa973096281ffd3681a0d02e2a7742a2a37d5cb422dd0cdf77beba13f4fbd1a52).
+
+## Architecture
+
+| Layer | Stack | Lives in |
+|---|---|---|
+| Contracts | Solidity 0.8.26, OpenZeppelin v5, Foundry; EZKL-generated `Halo2Verifier` | `contracts/` |
+| AI pipeline | Python 3.11, Earth Engine, numpy, ONNX, EZKL 23.0.5, dilithium-py (ML-DSA-65) | `ai/` |
+| Backend | FastAPI, SQLAlchemy + Alembic (Neon Postgres), web3.py indexer, oracle + finalizer workers, content-addressed blob store, webhooks, MCP (FastMCP) | `backend/` |
+| Web | Next.js 16, wagmi/viem, RainbowKit, MapLibre, GSAP + Lenis | `web/` |
+| Ops | Vercel, Render (Docker), Neon, GitHub Actions CI + release workflow, ghcr.io image | `.github/`, `render.yaml` |
+
+Details: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · feeds, certificates and monitoring: [`docs/FEATURES.md`](docs/FEATURES.md) · runbook: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
 ## Quick start
 
 ```bash
 # prerequisites: foundry, uv, node 22 + pnpm, python 3.11 (uv downloads it)
-make setup                      # venv + forge deps + pnpm install
-make zk-setup                   # build the EZKL circuit, keys, SRS, Solidity verifier (one-off, ~1 min + SRS download)
-make chain                      # terminal 1: anvil
-make deploy                     # terminal 2: Halo2Verifier + full stack → contracts/deployments/31337.json
-make seed                       # register Demo Projects A, B, C (D is rejected on purpose)
-make demo-data                  # precompute 2018–2025 pipeline outputs for Demo Mode
-cd backend && ../.venv/bin/uvicorn app.main:app --reload &        # API on :8000
-cd backend && ../.venv/bin/python -m app.indexer.run &            # indexer
-cd backend && ../.venv/bin/python -m app.workers.scheduler &      # finalizer loop
-cd web && pnpm dev                                                # http://localhost:3000
-make submit P=1 Y=2023          # oracle: pipeline → proof → ML-DSA sign → submitScore for project 1, period 2023
-make e2e                        # or: run the entire scripted scenario (starts its own anvil)
-make test                       # forge test + pytest (ai, backend) + vitest/lint/build (web)
+make setup          # venv + forge deps + pnpm install
+make zk-setup       # EZKL circuit, keys, SRS, Solidity verifier (one-off, ~1 min + SRS download)
+make chain          # terminal 1: anvil
+make deploy         # terminal 2: Halo2Verifier + full stack → contracts/deployments/31337.json
+make seed           # register the pilot areas (one overlapping parcel is rejected on purpose)
+cd backend && ../.venv/bin/uvicorn app.main:app --reload &     # API + MCP on :8000
+cd backend && ../.venv/bin/python -m app.indexer.run &         # indexer
+cd backend && ../.venv/bin/python -m app.workers.scheduler &   # finalizer loop
+cd web && pnpm dev                                             # http://localhost:3000
+make submit P=1 Y=2025   # oracle: pipeline → proof → ML-DSA sign → submitScore
+make e2e                 # the whole story on a local chain, every step asserted
+make test                # forge test + pytest (ai, backend) + vitest/lint/build (web)
 ```
 
-Copy `.env.example` to `.env`. With `EE_SERVICE_ACCOUNT_JSON` (+ `EE_PROJECT`) scores are computed from live Earth Engine data (Hansen GFC 2025, Sentinel-1/2, GEDI L4B, MODIS MCD64A1, Dynamic World); without it the pipeline uses labelled fixture samples (see `docs/LIMITATIONS.md`).
-
-## Deployed addresses
-
-| Component | Where | Status |
-|---|---|---|
-| Web app | https://vericanopy.vercel.app (Vercel) | live |
-| API + indexer | https://vericanopy-api.onrender.com (Render, Docker, auto-deploy from `main`) | live — `GET /healthz` |
-| Database | Neon Postgres (Alembic-managed schema) | live |
-| Contracts — Local Anvil (31337) | `make deploy` → `contracts/deployments/31337.json` | works |
-| Contracts — Base Sepolia (84532) | `contracts/deployments/84532.json` | live (see table below) |
-
-See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the runbook.
-
-## Base Sepolia contracts
-| Contract | Address |
-|---|---|
-| BufferPool | [`0xa536e7C93c32179747d6eD83fA5138B2b7879700`](https://sepolia.basescan.org/address/0xa536e7C93c32179747d6eD83fA5138B2b7879700) |
-| ChallengeManager | [`0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d`](https://sepolia.basescan.org/address/0x1AA138691E23a3d35FDfB09CA7ABf7065987a14d) |
-| IntegrityOracle | [`0xa3a203519f86DdeeCA51771F43ca0840e51387b6`](https://sepolia.basescan.org/address/0xa3a203519f86DdeeCA51771F43ca0840e51387b6) |
-| ModelRegistry | [`0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d`](https://sepolia.basescan.org/address/0x36691AdE60cEc5A02B32690B159AC92C4Ec5ac9d) |
-| PQKeyRegistry | [`0xd760B9004F5ACF3814Ea833E601a23b060B922c2`](https://sepolia.basescan.org/address/0xd760B9004F5ACF3814Ea833E601a23b060B922c2) |
-| ProjectRegistry | [`0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a`](https://sepolia.basescan.org/address/0x40Fc737bc985f8f75689a4B4E95D625a1c701e4a) |
-| RetirementRegistry | [`0x1D042FddCA42542D51CA4c33aB55db1835b010a9`](https://sepolia.basescan.org/address/0x1D042FddCA42542D51CA4c33aB55db1835b010a9) |
-| VeriCredit | [`0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f`](https://sepolia.basescan.org/address/0x69DEfd5a594542D4d1e514d4CD9d8CE1a448cE3f) |
-| Marketplace | [`0x305a35aAf5347c98C02930d35854e9a9B1c2e481`](https://sepolia.basescan.org/address/0x305a35aAf5347c98C02930d35854e9a9B1c2e481) |
-| Verifier | [`0x333c45Cbbb7AB746244767c199551e69A4Fa4965`](https://sepolia.basescan.org/address/0x333c45Cbbb7AB746244767c199551e69A4Fa4965) |
-
-First zk-verified submissions: [#1 A/2023](https://sepolia.basescan.org/tx/0xc4f70226e3e782ed347acdc48826fa73be081c44482da12d4ea1ac3876f53487), [#2 C/2019](https://sepolia.basescan.org/tx/0xd94d61e5fbb9bdbf274bb6be88052d63141275a073e631b5f5e0f4e57b3f2028), [#3 B/2024](https://sepolia.basescan.org/tx/0xa973096281ffd3681a0d02e2a7742a2a37d5cb422dd0cdf77beba13f4fbd1a52).
-
-## Measured numbers
-
-See [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) (generated from artifacts by `scripts/write_benchmarks.py`; nothing is hand-typed). Headline: proof ≈6 s / 4,416 B on a 16-core laptop, on-chain verify inside `submitScore` ≈1.08 M gas, ML-DSA-65 sign ≈118 ms / verify ≈19 ms (pure Python), model MAE 0.0125.
+Copy `.env.example` to `.env`. With `EE_SERVICE_ACCOUNT_JSON` and `EE_PROJECT` the pipeline uses live Earth Engine data; without them it uses labelled fixture samples (see [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md)).
 
 ## Honesty: what is and is not proven
 
@@ -90,25 +169,31 @@ See [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) (generated from artifacts by `scr
 | The registered model was used, unmodified | zk proof (fixed params; verifier bound to the circuit) + `ModelRegistry` |
 | The score follows from the committed features | zk proof (Poseidon commitment of the 16 features is a public instance) |
 | The features came from the stated satellite data | **not** the zk proof → reproducible manifest + challenge game |
-| The scoring rule is scientifically right | **not** cryptography → open methodology (`docs/spec/04_AI_SATELLITE_PIPELINE.md` §7) + governance |
+| The scoring rule is scientifically right | **not** cryptography → open methodology + governance |
 
 | Element | Quantum-safe? |
 |---|---|
-| Manifest attestations (ML-DSA-65) | ✅ |
+| Manifest attestations and auditor reports (ML-DSA-65) | ✅ |
 | Hash commitments (SHA-256 / keccak256) | ✅ with sufficient output size |
-| Ethereum transaction signatures (ECDSA) | ❌ (roadmap: PQ account abstraction) |
-| zk proofs (Halo2 + KZG) | ❌ pairing-based (roadmap: hash-based STARK proofs) |
+| Ethereum transaction signatures (ECDSA) | ❌ ecosystem dependency (PQ account abstraction) |
+| zk proofs (Halo2 + KZG) | ❌ pairing-based (hash-based STARK proofs on the roadmap) |
 
-The v1 model is distilled from a published, transparent scoring rule; zkML guarantees the published model was used, not that the rule is perfect. Demo projects A–D were drawn by us and are **not** real registered projects; nothing here assesses any real project. Full list: [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
+## Repository
 
-## Documentation
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — components, scoring lifecycle, repo layout
-- [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) — every deviation from the spec and why
-- [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) — measured numbers only
-- [`docs/SUBMISSION.md`](docs/SUBMISSION.md) — Devpost text, demo script, judging map
-- [`docs/spec/`](docs/spec/) — the full specification pack this build implements
+```
+ai/          Earth Engine extraction, matching, fv1 features, MLP, EZKL circuit, ML-DSA-65
+backend/     FastAPI API, indexer, oracle/finalizer workers, MCP server, Alembic migrations
+contracts/   Foundry project, tests, deployment scripts, generated Halo2Verifier
+web/         Next.js app
+scripts/     deploy, seed, e2e, benchmarks, media
+docs/        architecture, benchmarks, limitations, MCP, features, submission kit, launch film
+brand/       logo and brand guide
+```
 
-## References (verified entries from `docs/spec/01_RESEARCH_FOUNDATION.md`)
+Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md) · security: [`SECURITY.md`](SECURITY.md) · changes: [`CHANGELOG.md`](CHANGELOG.md).
+
+## References
+
 - Tropical forest carbon offsets deliver partial gains amid persistent over-crediting — https://pubmed.ncbi.nlm.nih.gov/41066561/
 - Unobserved confounders cannot explain over-crediting in avoided deforestation carbon projects — https://pmc.ncbi.nlm.nih.gov/articles/PMC13253331/
 - Dynamic ex-post baselines for enhancing the credibility of IFM carbon offsets — https://pubmed.ncbi.nlm.nih.gov/41728826/
@@ -117,7 +202,9 @@ The v1 model is distilled from a published, transparent scoring rule; zkML guara
 - Global, robust and comparable digital carbon assets (PACT) — https://arxiv.org/abs/2403.14581
 
 ## Data attributions
-Hansen/UMD Global Forest Change, ESA Copernicus Sentinel-1/2, NASA GEDI L4B, MODIS MCD64A1, SRTM, Oxford MAP accessibility, ESA WorldCover, Google Dynamic World (used only with Earth Engine credentials). Basemap © OpenStreetMap contributors.
+
+Hansen/UMD Global Forest Change, ESA Copernicus Sentinel-1/2, NASA GEDI L4B, NASA FIRMS and MODIS MCD64A1, SRTM, ESA WorldCover, Google Dynamic World (via Earth Engine). Basemap © OpenStreetMap contributors.
 
 ## Licence
-MIT — see `LICENSE`.
+
+MIT — see [`LICENSE`](LICENSE). Built for the IEEE ClimateChain Global Hackathon 2026, Carbon Markets & Emissions Transparency track. Testnet only; nothing here assesses any real carbon project.

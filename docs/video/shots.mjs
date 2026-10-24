@@ -17,7 +17,8 @@ for (const [name, path] of PAGES) {
   if (only.length && !only.includes(name)) continue;
   try {
     await page.goto(BASE + path, { waitUntil: "networkidle", timeout: 60000 });
-    await page.waitForTimeout(name === "explore" || name.startsWith("project") ? 6000 : 2500);
+    await page.waitForTimeout(name === "explore" || name.startsWith("project") ? 6000 : name === "home" ? 7000 : 2500);
+    await page.addStyleTag({ content: ".preloader{display:none!important}" }).catch(() => {});
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(400);
     await page.screenshot({ path: `${OUT}/${name}.png` });

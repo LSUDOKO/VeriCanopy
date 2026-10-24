@@ -1,0 +1,15 @@
+{
+ "act0": "Every forest carbon credit is checked once. By someone you have to trust. Then nobody looks at the forest again.",
+ "act1a": "Three things are broken. First, the baseline. The developer chooses how much forest would have been lost without the project, and nobody re-derives that number from the pixels. Independent studies found that most of these reductions never happened.",
+ "act1b": "Second, time. A credit issued in 2021 says nothing about the fire in 2023. On one of our pilot areas, a single fire year took 1.2 million tonnes of carbon. The registry never noticed.",
+ "act1c": "Third, the score itself. Ratings agencies publish a number and ask you to trust a private model. No proof it ran. No proof of which data it saw.",
+ "act1d": "The market trusts paperwork. The forest does not read it.",
+ "act2": "This is VeriCanopy. Carbon credits that prove themselves.",
+ "act3a": "Step one, evidence. Every monitoring period, the oracle pulls Sentinel-2 and Sentinel-1, Hansen forest loss, GEDI biomass, MODIS burned area and Dynamic World, for the project and for a matched twin forest nearby. Seven hundred and seventy-six project pixels against two thousand four hundred twin pixels. The twin is the counterfactual. Not the developer's spreadsheet.",
+ "act3b": "Step two, the score. Sixteen features go into a small, audited neural network, four hundred and seventeen parameters, and out comes an integrity score. Tapajós scored seventy-one point nine in 2023. After eight thousand tonnes of detected loss, it scores three point nine. The score follows the forest.",
+ "act3c": "Step three, the proof. The inference runs inside a zero-knowledge circuit. Six seconds, a four-kilobyte proof. The Halo2 verifier on Base Sepolia checks it before the score is stored. If the proof fails, the transaction reverts. The oracle cannot invent a number. And every evidence manifest is signed with ML-DSA-65, a post-quantum signature, so the record stays checkable for decades.",
+ "act3d": "Step four, the credit lives. Each token carries the live score. When loss is detected, buffer credits burn first. A shortfall freezes the project, blocks transfers, and notifies every holder. And anyone can challenge a score with a bond; two of three independent resolvers recompute it.",
+ "act4": "It is live today, on Base Sepolia. The registry shows every project on a map with its integrity status. Open a project: real Sentinel-2 before and after, the twin-forest chart, the fire year, and the proof that put the score on-chain. Try to register land that overlaps an existing project, and the contract refuses. The marketplace trades living credits, with the integrity score on the price tag. Retire a tonne and get a signed certificate. And it works for agents too: one line connects VeriCanopy to Claude through an MCP server.",
+ "act5": "Fifty-five contract tests, including a real proof verified by the deployed verifier. Ten satellite datasets. Open source, MIT. Everything on this screen is measured, not promised.",
+ "act6": "Ratings you must trust, or proofs you can check. VeriCanopy."
+}

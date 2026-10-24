@@ -1,14 +1,14 @@
 // Record short page walkthroughs with Playwright and convert them to GIFs for the README.
 // Usage: BASE_URL=http://localhost:3100 node scripts/media/record_gifs.mjs
 // Requires: web/node_modules (playwright) and ffmpeg on PATH.
-import { chromium } from "/home/arpit/Desktop/hackathon_projects/VeriCanopy/web/node_modules/playwright/index.mjs";
+import { chromium } from "/home/arpit/Desktop/hackathon_projects/VeriCanopy/web/node_modules/@playwright/test/index.mjs";
 import { execSync } from "node:child_process";
 import { mkdirSync, readdirSync, renameSync, rmSync } from "node:fs";
 import path from "node:path";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3100";
-const OUT = path.resolve("docs/media");
-const TMP = path.resolve(".gifs-tmp");
+const OUT = "/home/arpit/Desktop/hackathon_projects/VeriCanopy/docs/media";
+const TMP = "/tmp/claude-1000/gifs-tmp";
 mkdirSync(OUT, { recursive: true });
 rmSync(TMP, { recursive: true, force: true });
 mkdirSync(TMP);
@@ -27,6 +27,7 @@ for (const s of SCENES) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 760 }, recordVideo: { dir: TMP, size: { width: 1280, height: 760 } }, deviceScaleFactor: 1 });
   const page = await ctx.newPage();
   await page.goto(BASE + s.url, { waitUntil: "networkidle" }).catch(() => {});
+  await page.addStyleTag({ content: ".preloader{display:none!important}" }).catch(() => {});
   await page.waitForTimeout(1200);
   await s.steps(page);
   await page.waitForTimeout(800);
