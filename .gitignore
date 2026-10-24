@@ -42,3 +42,10 @@ contracts/verifier/Halo2Verifier.abi.json
 docs/video/film_silent.mp4
 docs/video/VeriCanopy.mp4
 docs/video/mix.m4a
+
+# whiteboard film renders and recordings (large)
+docs/video/v2/clips/
+docs/video/v2/film_silent.mp4
+docs/video/v2/VeriCanopy.mp4
+docs/video/v2/mix.m4a
+docs/video/v2/claude/*.gif

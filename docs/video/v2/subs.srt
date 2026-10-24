@@ -1,0 +1,168 @@
+1
+00:00:01,000 --> 00:00:04,444
+Who actually checked this carbon credit?
+
+2
+00:00:04,494 --> 00:00:12,426
+A developer wrote the baseline. An auditor stamped it once. Then everyone moved on.
+
+3
+00:00:13,276 --> 00:00:16,576
+Here is how the industry works today.
+
+4
+00:00:16,626 --> 00:00:21,534
+The developer picks a reference region and a deforestation rate.
+
+5
+00:00:21,584 --> 00:00:28,628
+That one number decides how many credits exist. Nobody re-derives it from pixels.
+
+6
+00:00:28,678 --> 00:00:35,074
+Investigations found that more than ninety percent of some rainforest offsets were phantom.
+
+7
+00:00:35,124 --> 00:00:40,464
+Then the credit is sold, and resold, and nothing watches the forest.
+
+8
+00:00:40,514 --> 00:00:49,910
+On our Manavgat pilot area, one fire year removed one point two million tonnes of carbon. The registry never noticed.
+
+9
+00:00:49,960 --> 00:00:56,668
+And the ratings? A private model, a letter grade, and a request to trust it.
+
+10
+00:00:56,718 --> 00:01:02,226
+Three gaps. The baseline, the time, and the score.
+
+11
+00:01:03,176 --> 00:01:07,892
+VeriCanopy starts from the pixels, not the paperwork.
+
+12
+00:01:07,942 --> 00:01:18,370
+Every period, the oracle pulls Sentinel-2, Sentinel-1, Hansen forest loss, GEDI biomass, MODIS burned area and Dynamic World.
+
+13
+00:01:18,420 --> 00:01:23,136
+For the project, and for a matched twin forest nearby.
+
+14
+00:01:23,186 --> 00:01:29,726
+Seven hundred seventy-six project pixels against two thousand four hundred twin pixels.
+
+15
+00:01:29,776 --> 00:01:37,180
+The twin is the counterfactual. The gap between the two curves is what the credit has to pay for.
+
+16
+00:01:37,930 --> 00:01:44,350
+Sixteen features feed a small, audited network of four hundred seventeen parameters.
+
+17
+00:01:44,400 --> 00:01:53,820
+Tapajós scored seventy-one point nine in 2023. After eight thousand tonnes of detected loss, three point nine.
+
+18
+00:01:54,470 --> 00:02:02,522
+But a score alone is just another number to trust. So the inference runs inside a zero-knowledge circuit.
+
+19
+00:02:02,572 --> 00:02:07,336
+Six seconds. A four-kilobyte proof.
+
+20
+00:02:07,386 --> 00:02:16,134
+The Halo2 verifier on Base Sepolia checks it before the score is stored. A wrong proof reverts the transaction.
+
+21
+00:02:16,184 --> 00:02:22,220
+This is the real transaction on Basescan. Anyone can open it.
+
+22
+00:02:22,270 --> 00:02:31,906
+And the evidence manifest is signed with ML-DSA-65, a post-quantum signature, so the record stays checkable for decades.
+
+23
+00:02:32,756 --> 00:02:36,056
+Now the credit itself changes.
+
+24
+00:02:36,106 --> 00:02:40,198
+When loss is detected, the buffer burns first.
+
+25
+00:02:40,248 --> 00:02:46,380
+A shortfall freezes the project, blocks transfers, and notifies every holder.
+
+26
+00:02:46,430 --> 00:02:53,954
+And anyone can challenge a score with a bond. Two of three independent resolvers recompute it.
+
+27
+00:02:54,904 --> 00:02:59,332
+This is live today. Let me use it.
+
+28
+00:02:59,382 --> 00:03:05,058
+The registry: every project on a map, with its live integrity status.
+
+29
+00:03:05,108 --> 00:03:12,824
+Open Tapajós. Real Sentinel-2 before and after, the twin chart, and the fire year.
+
+30
+00:03:12,874 --> 00:03:17,758
+Scrub the years, check the fire watch, open the leakage ring.
+
+31
+00:03:17,808 --> 00:03:25,884
+Proofs and signatures: the model hash, the manifest, the on-chain transaction, and a signed auditor report.
+
+32
+00:03:25,934 --> 00:03:32,930
+Verify it yourself: hash against chain, key against registry, signature, and proof.
+
+33
+00:03:32,980 --> 00:03:40,096
+Try to register land that overlaps an existing project. The contract refuses.
+
+34
+00:03:40,146 --> 00:03:44,766
+The market sells living credits with the score on the price tag.
+
+35
+00:03:44,816 --> 00:03:50,948
+Ask explains any score, feature by feature, with no language model in the loop.
+
+36
+00:03:50,998 --> 00:03:54,634
+And Status shows the whole stack breathing.
+
+37
+00:03:55,284 --> 00:04:01,656
+Agents can use it too. In Claude, I add the VeriCanopy connector.
+
+38
+00:04:01,706 --> 00:04:04,214
+Then I just ask.
+
+39
+00:04:04,264 --> 00:04:11,236
+Claude reads the registry, explains the score, and prepares a transaction that my wallet signs.
+
+40
+00:04:12,186 --> 00:04:21,582
+Pull back, and the whole picture is there. Pixels, a twin, a score, a proof, a chain, and a credit that keeps watching.
+
+41
+00:04:22,132 --> 00:04:27,160
+Ratings you must trust. Or proofs you can check.
+
+42
+00:04:27,610 --> 00:04:34,222
+VeriCanopy. Live on Base Sepolia. Open source.
+

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>VeriCanopy — whiteboard film</title>
+<style>
+@font-face { font-family: "Anton"; src: url(assets/fonts/Anton.woff2) format("woff2"); font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-400.woff2) format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-500.woff2) format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-600.woff2) format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Inter Tight"; src: url(assets/fonts/InterTight-700.woff2) format("woff2"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url(assets/fonts/GeistMono-Regular.woff2) format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url(assets/fonts/GeistMono-Medium.woff2) format("woff2"); font-weight: 500; font-display: block; }
+@font-face { font-family: "Hand"; src: url(assets/fonts/Nothing.woff2) format("woff2"); font-display: block; }
+:root { --neon: #b6fe00; --neon-2: rgba(182,254,0,.62); --neon-3: rgba(182,254,0,.32); --red: #ff4d5e; --amber: #ffd23f; --bg: #050806; --ink: #0b1f0a; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+body { font-family: "Inter Tight", system-ui, sans-serif; color: var(--neon); -webkit-font-smoothing: antialiased; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+#stage::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(182,254,0,.08) 1px, transparent 1.4px); background-size: 48px 48px; opacity: .55; }
+#world { position: absolute; left: 0; top: 0; width: 7680px; height: 4320px; transform-origin: 0 0; will-change: transform; }
+.w { position: absolute; }
+.display { font-family: "Anton", Impact, sans-serif; letter-spacing: .01em; line-height: .95; }
+.hand { font-family: "Hand", cursive; }
+.mono { font-family: "Geist Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.dim { color: var(--neon-2); }
+.red { color: var(--red); }
+.amber { color: var(--amber); }
+.label { font-family: "Hand", cursive; font-size: 46px; color: var(--neon); white-space: nowrap; line-height: 1.1; }
+.title { font-family: "Anton", sans-serif; font-size: 120px; color: var(--neon); white-space: nowrap; line-height: 1; }
+.note { font-family: "Inter Tight", sans-serif; font-size: 34px; font-weight: 500; color: var(--neon-2); line-height: 1.25; }
+.big { font-family: "Anton", sans-serif; font-size: 300px; color: var(--neon); line-height: .9; white-space: nowrap; }
+svg.sk { position: absolute; overflow: visible; }
+svg.sk path, svg.sk line, svg.sk circle, svg.sk polyline, svg.sk rect { fill: none; stroke: var(--neon); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+svg.sk .thin { stroke-width: 3.5; }
+svg.sk .red { stroke: var(--red); }
+svg.sk .amber { stroke: var(--amber); }
+svg.sk .dim { stroke: var(--neon-2); }
+svg.sk .fillneon { fill: var(--neon); stroke: none; }
+.photo { position: absolute; overflow: hidden; background: #000; }
+.photo img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 18px; font-family: "Geist Mono", monospace; font-size: 22px; color: var(--neon); background: rgba(5,8,6,.78); white-space: nowrap; }
+.clipbox { position: absolute; overflow: hidden; background: #000; border-radius: 10px; }
+.clipbox video, .clipbox img.still { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.browser { position: absolute; background: #0d1410; border-radius: 16px; overflow: hidden; }
+.browser .bar { height: 54px; display: flex; align-items: center; gap: 12px; padding: 0 20px; background: #101a13; }
+.browser .bar i { width: 14px; height: 14px; border-radius: 50%; background: rgba(182,254,0,.35); display: inline-block; }
+.browser .bar span { margin-left: 14px; font-family: "Geist Mono", monospace; font-size: 22px; color: var(--neon-2); }
+.chip { position: absolute; font-family: "Geist Mono", monospace; font-size: 28px; color: var(--neon); padding: 10px 18px; border: 3px solid var(--neon); border-radius: 12px; white-space: nowrap; background: var(--bg); }
+.stamp { position: absolute; font-family: "Anton", sans-serif; font-size: 96px; color: var(--red); border: 8px solid var(--red); padding: 10px 28px; border-radius: 18px; letter-spacing: .06em; white-space: nowrap; transform: rotate(-9deg); }
+#subs { position: absolute; left: 0; right: 0; bottom: 48px; text-align: center; z-index: 10; pointer-events: none; }
+#subs span { display: inline-block; padding: 12px 28px; background: rgba(5,8,6,.82); color: #e9ffb0; font-family: "Inter Tight", sans-serif; font-weight: 500; font-size: 40px; line-height: 1.25; border-radius: 10px; max-width: 1500px; }
+#fade { position: absolute; inset: 0; background: #000; z-index: 20; pointer-events: none; }
+#grain { position: absolute; inset: 0; z-index: 15; pointer-events: none; opacity: .06; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>"); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="world"></div>
+  <div id="subs"></div>
+  <div id="grain"></div>
+  <div id="fade"></div>
+</div>
+<script src="data.js"></script>
+<script src="film.js"></script>
+</body>
+</html>
