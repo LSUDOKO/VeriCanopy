@@ -24,6 +24,12 @@ Satellite AI scores every forest carbon credit against matched "twin" forest, a 
 - **Web** (Next.js 16, wagmi/viem, RainbowKit, MapLibre): Explore map, project detail (evidence twin chart, integrity history, claim vs reality, credits, proofs & signatures, challenges), Register wizard with live overlap pre-check and decoded `OverlapDetected` revert, Portfolio with retirement certificates and impact inbox, Challenges, Verify, Security, guided Demo with time slider and scripted 2021 fire.
 - **End-to-end**: `make e2e` runs the whole story on a local Anvil chain and asserts every step (seed + rejected overlap → score/prove/sign/submit → finalise → mint → retire → covered reversal + notice → fire-year shortfall → Frozen → upheld challenge + slashing).
 
+
+## Live satellite scores vs scripted Demo Mode (read this before judging)
+Two kinds of results exist on purpose:
+- **Live submissions on Base Sepolia** (`provider: earthengine` in the manifest): features extracted from real Hansen GFC 2025, Sentinel-1/2, GEDI L4B, MODIS burned-area and Dynamic World pixels for the demo polygons, proven with EZKL and verified on-chain. The demo polygons are rectangles we drew over the Amazon and Chiapas, not real carbon projects, so their real-data scores are low (A/2024 = 3.8, C/2021 = 0.2 with 1.2 MtCO2e of real 2021 loss, B/2025 = 4.5). That is the system working as intended, not a demo flaw.
+- **Demo Mode** (`/demo`) and the first three submissions (`provider: fixture`): deterministic fixture samples tuned so the narrative (honest project, inflated baseline, wildfire reversal) can be replayed in 4 minutes. Every manifest, API response and UI panel labels which one you are looking at.
+
 ## Quick start
 
 ```bash

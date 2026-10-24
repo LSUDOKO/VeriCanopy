@@ -20,6 +20,9 @@ Deadline: 25 Oct 2026, 7:30 pm IST. Public repo: https://github.com/LSUDOKO/Veri
 
 **What's next.** Polygon Amoy deployment with live Earth Engine data, decentralised resolvers, STARK-based PQ proofs, risk-priced buffers, PDD claim extraction, community witness app, methane module, registry partnerships.
 
+## Live vs scripted data
+Submissions #4–#6 on Base Sepolia use live Earth Engine data (`provider: earthengine`); #1–#3 and Demo Mode use labelled fixture data. Say so on camera; the honest low real-data scores for arbitrary rectangles are a feature.
+
 ## Demo video script (4:30)
 | Time | Scene | Say |
 |---|---|---|
