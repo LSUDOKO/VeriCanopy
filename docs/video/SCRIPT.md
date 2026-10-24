@@ -1,3 +1,9 @@
+# VeriCanopy launch films
+
+Two cuts exist. **v2 (current)** is the whiteboard explainer: see [`v2/STORYBOARD.md`](v2/STORYBOARD.md). v1 below is the earlier agent.md-style cut.
+
+---
+
 # VeriCanopy launch film — script and shot table
 
 Target length 3:55 · 1920×1080 · 30 fps · music + voiceover · English.
