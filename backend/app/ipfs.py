@@ -28,9 +28,38 @@ def _dir() -> Path:
     return d
 
 
+def _db_put(cid: str, data: bytes) -> None:
+    from app.db import SessionLocal
+    from app.models import Blob
+
+    db = SessionLocal()
+    try:
+        if db.get(Blob, cid) is None:
+            db.add(Blob(cid=cid, data=data, size=len(data)))
+            db.commit()
+    finally:
+        db.close()
+
+
+def _db_get(cid: str) -> bytes | None:
+    from app.db import SessionLocal
+    from app.models import Blob
+
+    db = SessionLocal()
+    try:
+        b = db.get(Blob, cid)
+        return bytes(b.data) if b else None
+    finally:
+        db.close()
+
+
 def put_bytes(data: bytes, mirror: bool = True) -> str:
     cid = cid_for(data)
     (_dir() / cid).write_bytes(data)
+    try:
+        _db_put(cid, data)  # durable, shared across instances (Render disk is ephemeral)
+    except Exception:
+        pass
     if mirror and settings.ipfs_api_url:
         try:
             httpx.post(
@@ -63,6 +92,12 @@ def get_bytes(cid: str) -> bytes | None:
     p = _dir() / cid
     if p.exists():
         return p.read_bytes()
+    try:
+        b = _db_get(cid)
+        if b is not None:
+            return b
+    except Exception:
+        pass
     try:
         r = httpx.get(settings.ipfs_gateway.rstrip("/") + "/" + cid, timeout=20)
         if r.status_code == 200 and (cid_for(r.content) == cid or not cid.startswith("bafkrei")):

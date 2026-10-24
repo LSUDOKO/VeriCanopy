@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import JSON, BigInteger, DateTime, Integer, String, Text, func
+from sqlalchemy import JSON, BigInteger, DateTime, Integer, LargeBinary, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
@@ -184,3 +184,13 @@ class Webhook(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     last_status: Mapped[int | None] = mapped_column(Integer)
     last_delivery_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+
+class Blob(Base):
+    """Content-addressed bytes (CIDv1 raw/sha2-256) shared by every service instance; mirrors the local dir."""
+
+    __tablename__ = "blobs"
+    cid: Mapped[str] = mapped_column(String(128), primary_key=True)
+    data: Mapped[bytes] = mapped_column(LargeBinary)
+    size: Mapped[int] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
