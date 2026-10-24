@@ -53,7 +53,7 @@ Copy `.env.example` to `.env`. Without `EE_SERVICE_ACCOUNT_JSON` the pipeline us
 | API + indexer | https://vericanopy-api.onrender.com (Render, Docker, auto-deploy from `main`) | live — `GET /healthz` |
 | Database | Neon Postgres (Alembic-managed schema) | live |
 | Contracts — Local Anvil (31337) | `make deploy` → `contracts/deployments/31337.json` | works |
-| Contracts — Ethereum Sepolia (11155111) | `scripts/deploy_testnet.sh` | **pending deployer funding** (deployer `0x94A26d8B64dbF046428DE7D237cc0E527Bc6cC8a`, needs ~0.1 Sepolia ETH) |
+| Contracts — Base Sepolia (84532) | `scripts/deploy_testnet.sh` | **pending deployer funding** (deployer `0x94A26d8B64dbF046428DE7D237cc0E527Bc6cC8a`, needs ~0.05 Base Sepolia ETH) |
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the runbook.
 

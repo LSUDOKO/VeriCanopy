@@ -45,6 +45,9 @@ def main() -> None:
         key,
         "--broadcast",
         "-q",
+        # Sepolia's eth_estimateGas under-reports CREATE cost (post-Pectra); local simulation OOGs on-chain at 1x.
+        "--gas-estimate-multiplier",
+        env.get("GAS_ESTIMATE_MULTIPLIER", "300"),
     ]
     if env.get("VERIFY_CONTRACTS") == "true":
         cmd += ["--verify"]

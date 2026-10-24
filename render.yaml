@@ -12,11 +12,11 @@ services:
     autoDeploy: true
     envVars:
       - key: CHAIN_ID
-        value: "11155111"
+        value: "84532"
       - key: RPC_URL
-        value: https://ethereum-sepolia-rpc.publicnode.com
+        value: https://sepolia.base.org
       - key: EXPLORER_URL
-        value: https://sepolia.etherscan.io
+        value: https://sepolia.basescan.org
       - key: CORS_ORIGINS
         value: https://vericanopy.vercel.app,http://localhost:3000
       - key: ZK_MODE
