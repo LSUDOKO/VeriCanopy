@@ -70,9 +70,9 @@ export default function ChallengesPage() {
       {q.data && (
         <>
           <h2 className="mt-5 font-medium">Open ({open.length})</h2>
-          {open.length === 0 ? <EmptyState title="No open challenges" /> : <ul className="mt-2 flex flex-col gap-2">{open.map((c) => <Row key={c.id} c={c} />)}</ul>}
+          {open.length === 0 ? <EmptyState title="No open challenges" hint="Every pending score can be disputed during its window. Open one from a project's Challenges tab." action={{ href: "/explore", label: "Find a project" }} /> : <ul className="mt-2 flex flex-col gap-2">{open.map((c) => <Row key={c.id} c={c} />)}</ul>}
           <h2 className="mt-5 font-medium">History ({done.length})</h2>
-          {done.length === 0 ? <EmptyState title="No resolved challenges yet" /> : <ul className="mt-2 flex flex-col gap-2">{done.map((c) => <Row key={c.id} c={c} />)}</ul>}
+          {done.length === 0 ? <EmptyState title="No resolved challenges yet" hint="Resolved disputes and their outcomes will be listed here." /> : <ul className="mt-2 flex flex-col gap-2">{done.map((c) => <Row key={c.id} c={c} />)}</ul>}
         </>
       )}
     </div>
