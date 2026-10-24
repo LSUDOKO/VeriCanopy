@@ -185,7 +185,12 @@ def history(pid: int, db: Session = Depends(get_db)):
 
 @router.get("/{pid}/evidence")
 def evidence(pid: int, period: int | None = None, db: Session = Depends(get_db)):
-    """Twin-chart series from the pipeline output of the latest (or given) period."""
+    """Twin-chart series from the pipeline output of the latest (or given) period.
+
+    Reads the local pipeline directory when present (operator machine), else the shared content store
+    (`evidence/<pid>/<period>` named blobs published by the oracle worker)."""
+    from app import ipfs
+
     p = db.get(Project, pid)
     if not p:
         raise HTTPException(status_code=404, detail="project not found")
@@ -198,14 +203,19 @@ def evidence(pid: int, period: int | None = None, db: Session = Depends(get_db))
             else []
         )
         if not periods:
+            periods = sorted(
+                set(db.execute(select(Submission.period).where(Submission.project_id == pid)).scalars().all())
+            )
+        if not periods:
             return {"available": False, "reason": "no pipeline output for this project yet"}
         period = periods[-1]
     d = base / str(period)
     ev = d / "evidence.json"
-    if not ev.exists():
+    data = json.loads(ev.read_text()) if ev.exists() else ipfs.get_named_json(f"evidence/{pid}/{period}")
+    if data is None:
         return {"available": False, "reason": f"no pipeline output for period {period}"}
-    data = json.loads(ev.read_text())
-    manifest = json.loads((d / "manifest.json").read_text()) if (d / "manifest.json").exists() else None
+    mf = d / "manifest.json"
+    manifest = json.loads(mf.read_text()) if mf.exists() else ipfs.get_named_json(f"manifest/{pid}/{period}")
     data.update(
         {
             "available": True,
