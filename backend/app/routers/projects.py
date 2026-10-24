@@ -76,6 +76,7 @@ def _proj(db: Session, p: Project) -> dict:
         "metadata_uri": p.metadata_uri,
         "demo_id": p.demo_id,
         "cell_count": p.cell_count,
+        "integrity_status": p.integrity_status,
         "created_tx": p.created_tx,
         "integrity": _integrity(db, p.id),
         "vintages": [

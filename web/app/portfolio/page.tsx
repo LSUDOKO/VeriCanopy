@@ -35,7 +35,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6">
-      <h1 className="text-2xl font-semibold">Portfolio</h1>
+      <h1 className="display text-5xl sm:text-6xl">Portfolio</h1>
       {!address && (
         <div className="mt-3 text-sm">
           Connect a wallet, or look up an address: <input className="input mono mt-1" placeholder="0x…" value={manual} onChange={(e) => setManual(e.target.value)} />

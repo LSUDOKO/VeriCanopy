@@ -13,7 +13,7 @@ export function ProjectList({ projects, selected, onSelect }: { projects: Projec
   const rows = useMemo(
     () =>
       projects.filter((p) => {
-        const s = integrityStatus(p.integrity.score_bps, p.status);
+        const s = integrityStatus(p.integrity.score_bps, p.status, 5000, p.integrity_status);
         return (!q || (p.name ?? "").toLowerCase().includes(q.toLowerCase()) || String(p.id) === q) && (!status || s === status) && (p.integrity.score_bps ?? 0) >= minScore * 100;
       }),
     [projects, q, status, minScore],
@@ -52,7 +52,7 @@ export function ProjectList({ projects, selected, onSelect }: { projects: Projec
                     #{p.id} · {p.country ?? "—"} · {p.cell_count} cells · {p.status}
                   </div>
                 </div>
-                <IntegrityBadge scoreBps={p.integrity.score_bps} status={integrityStatus(p.integrity.score_bps, p.status)} size="sm" />
+                <IntegrityBadge scoreBps={p.integrity.score_bps} status={integrityStatus(p.integrity.score_bps, p.status, 5000, p.integrity_status)} size="sm" />
               </div>
               <Link href={`/projects/${p.id}`} className="mt-2 inline-block text-xs underline" onClick={(e) => e.stopPropagation()}>
                 Open project →

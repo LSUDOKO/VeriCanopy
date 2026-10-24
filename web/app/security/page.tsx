@@ -19,7 +19,7 @@ export default function SecurityPage() {
   const zk = b.data?.zk_benchmarks;
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6 flex flex-col gap-6 text-sm">
-      <h1 className="text-2xl font-semibold">Security & trust model</h1>
+      <h1 className="display text-5xl sm:text-6xl">Security & trust model</h1>
 
       <section className="card p-4">
         <h2 className="font-medium">What is proven, and by what</h2>

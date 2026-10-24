@@ -55,7 +55,7 @@ export default function DemoPage() {
       <div className="rounded-md px-3 py-2 text-sm" style={{ background: "var(--surface-2)", borderLeft: "4px solid var(--amber)" }}>
         Replay of real pipeline outputs ({data?.provenance ?? "—"} data) on testnet contracts. Demo projects were drawn by the VeriCanopy team and are not real registered projects.
       </div>
-      <h1 className="text-2xl font-semibold">Guided demo</h1>
+      <h1 className="display text-5xl sm:text-6xl">Guided demo</h1>
       <ol className="flex flex-wrap gap-2 text-sm" aria-label="Demo steps">
         {STEPS.map((s, i) => (
           <li key={s.title}>

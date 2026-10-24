@@ -2,25 +2,20 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { api, type Stats } from "@/lib/api";
-import { fmt } from "@/lib/format";
+import { StatSticker } from "./StatSticker";
+
+const compact = (n?: number | null) => (n === null || n === undefined ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(n));
 
 export function StatsBar() {
   const { data, isLoading } = useQuery({ queryKey: ["stats"], queryFn: () => api<Stats>("/stats"), refetchInterval: 15_000 });
-  const items: [string, string][] = [
-    ["Projects", isLoading ? "…" : fmt(data?.projects)],
-    ["Credits issued", isLoading ? "…" : fmt(data?.credits_issued)],
-    ["Credits retired", isLoading ? "…" : fmt(data?.credits_retired)],
-    ["tCO2e reversed", isLoading ? "…" : fmt(data?.tonnes_reversed)],
-    ["Covered by buffers", isLoading ? "…" : fmt(data?.tonnes_covered_by_buffers)],
-  ];
+  const v = (n?: number | null) => (isLoading ? "…" : compact(n));
   return (
-    <dl className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-      {items.map(([k, v]) => (
-        <div key={k} className="card px-3 py-2">
-          <dt className="label">{k}</dt>
-          <dd className="mono text-lg">{v}</dd>
-        </div>
-      ))}
-    </dl>
+    <div className="flex flex-wrap gap-3">
+      <StatSticker label="Projects registered" value={v(data?.projects)} tone="lime" />
+      <StatSticker label="Credits issued (tCO2e)" value={v(data?.credits_issued)} tone="yellow" />
+      <StatSticker label="Credits retired" value={v(data?.credits_retired)} tone="sky" />
+      <StatSticker label="Forest lost, detected (tCO2e)" value={v(data?.tonnes_reversed)} tone="orange" />
+      <StatSticker label="Covered by buffer burns" value={v(data?.tonnes_covered_by_buffers)} tone="red" />
+    </div>
   );
 }

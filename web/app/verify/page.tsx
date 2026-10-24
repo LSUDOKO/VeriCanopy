@@ -26,7 +26,7 @@ export default function VerifyPage() {
   const subs = (projects.data?.projects ?? []).map((p) => p.integrity.latest_submission).filter((s): s is NonNullable<typeof s> => !!s);
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-6">
-      <h1 className="text-2xl font-semibold">Verify an attestation</h1>
+      <h1 className="display text-5xl sm:text-6xl">Verify an attestation</h1>
       <p className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>Re-checks everything independently of the UI: manifest hash vs chain, ML-DSA-65 key registration and signature (NIST FIPS 204), and the zk proof status.</p>
       <div className="card mt-4 p-4 flex flex-col gap-3 text-sm">
         <label>

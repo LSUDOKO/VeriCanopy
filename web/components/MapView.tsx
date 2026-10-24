@@ -1,6 +1,9 @@
 "use client";
 
-import { Map as MLMap, NavigationControl, type GeoJSONSource, type StyleSpecification } from "maplibre-gl";
+import { Map as MLMap, NavigationControl, setWorkerUrl, type GeoJSONSource, type StyleSpecification } from "maplibre-gl";
+
+// Turbopack production bundles cannot resolve maplibre's inline worker; serve the ESM worker from /public.
+if (typeof window !== "undefined") setWorkerUrl("/maplibre-gl-worker.mjs");
 import { useEffect, useRef } from "react";
 import type { Project } from "@/lib/api";
 import { integrityStatus, STATUS_META } from "@/lib/format";
@@ -76,7 +79,7 @@ export function MapView({
       .map((p) => ({
         type: "Feature" as const,
         geometry: p.geometry as GeoJSON.Geometry,
-        properties: { id: p.id, color: STATUS_META[integrityStatus(p.integrity.score_bps, p.status)]?.color ?? "#2e7d4f", selected: p.id === selected },
+        properties: { id: p.id, color: STATUS_META[integrityStatus(p.integrity.score_bps, p.status, 5000, p.integrity_status)]?.color ?? "#2e7d4f", selected: p.id === selected },
       }));
     (m.getSource("projects") as GeoJSONSource | undefined)?.setData({ type: "FeatureCollection", features });
     m.setPaintProperty("projects-line", "line-width", ["case", ["==", ["get", "id"], selected ?? -1], 4, 2]);
@@ -114,8 +117,8 @@ export function MapView({
   }, [fitTo]);
 
   return (
-    <div className={`relative ${className}`}>
-      <div ref={el} className="absolute inset-0" role="region" aria-label="Project map" />
+    <div className={`relative ${className}`} style={{ minHeight: "60vh" }}>
+      <div ref={el} style={{ position: "absolute", inset: 0 }} role="region" aria-label="Project map" />  {/* inline: maplibre's own CSS sets position:relative on the container */}
       {children}
     </div>
   );

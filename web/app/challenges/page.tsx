@@ -62,7 +62,7 @@ export default function ChallengesPage() {
   );
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6">
-      <h1 className="text-2xl font-semibold">Challenges</h1>
+      <h1 className="display text-5xl sm:text-6xl">Challenges</h1>
       <p className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>Anyone can dispute a pending score by posting a bond ≥ max(min bond, oracle stake / 2). A 2-of-3 resolver set re-runs the manifest and votes; upheld → oracle slashed 50% to challenger, 50% to treasury; rejected → bond split to oracle and treasury; no quorum in time → both refunded and the submission voided.</p>
       {q.isLoading && <Skeleton className="mt-4 h-32" />}
       {q.error && <ErrorState error={q.error} onRetry={() => q.refetch()} />}

@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { use, useState } from "react";
 import { useAccount, useReadContract } from "wagmi";
-import { api, type Challenge, type Evidence, type Project, type Submission } from "@/lib/api";
+import { API_URL, api, type Challenge, type Evidence, type Project, type Submission } from "@/lib/api";
 import { useContract } from "@/lib/contracts";
 import { bpsToScore, fmt, fmtEth, integrityStatus, STATUS_META, tsToDate } from "@/lib/format";
 import { IntegrityBadge } from "@/components/IntegrityBadge";
@@ -25,6 +25,12 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const q = useQuery({ queryKey: ["project", pid], queryFn: () => api<Project>(`/projects/${pid}`), refetchInterval: 15_000 });
   const hist = useQuery({ queryKey: ["history", pid], queryFn: () => api<{ submissions: Submission[]; reversals: { period: number; tonnes: number; covered: number; shortfall: number; tx_hash: string | null }[]; challenges: Challenge[] }>(`/projects/${pid}/history`), refetchInterval: 15_000 });
   const ev = useQuery({ queryKey: ["evidence", pid], queryFn: () => api<Evidence>(`/projects/${pid}/evidence`) });
+  const tiles = useQuery({
+    queryKey: ["tiles", pid, ev.data?.period],
+    queryFn: () => api<{ before: { year: number; url?: string; unavailable?: string }; after: { year: number; url?: string; unavailable?: string }; pending: boolean; source: string }>(`/projects/${pid}/tiles${ev.data?.period ? `?period=${ev.data.period}` : ""}`),
+    enabled: !!ev.data?.available,
+    refetchInterval: (q) => (q.state.data?.pending ? 4000 : false),
+  });
   const credit = useContract("VeriCredit");
   const onchain = useReadContract({ ...(credit ?? { abi: [], address: undefined }), functionName: "integrityOf", args: [BigInt(pid)], query: { enabled: !!credit, refetchInterval: 10_000 } });
   const [tab, setTab] = useState<(typeof TABS)[number]>("Evidence");
@@ -57,7 +63,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     <div className="mx-auto w-full max-w-6xl px-4 py-6">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">{p.name ?? `Project #${pid}`}</h1>
+          <h1 className="display text-5xl sm:text-6xl" style={{ color: "var(--forest)" }}>{p.name ?? `Project #${pid}`}</h1>
           <div className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>
             #{pid} · {p.country ?? "—"} · developer <span className="mono">{p.developer}</span> · start {p.start_date ?? "—"} · {p.cell_count} H3 cells (res {p.h3_res}) · registry status {p.status}
           </div>
@@ -72,7 +78,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
       <nav className="mt-5 flex gap-1 overflow-x-auto border-b" style={{ borderColor: "var(--border)" }} aria-label="Project tabs">
         {TABS.map((t) => (
-          <button key={t} className="whitespace-nowrap px-3 py-2 text-sm" style={tab === t ? { borderBottom: "2px solid var(--canopy)", fontWeight: 600 } : undefined} onClick={() => setTab(t)} aria-selected={tab === t} role="tab">
+          <button key={t} className="display whitespace-nowrap px-3 py-2 text-base tracking-wide" style={tab === t ? { background: "var(--lime)", color: "var(--forest)", borderRadius: 6 } : undefined} onClick={() => setTab(t)} aria-selected={tab === t} role="tab">
             {t}
           </button>
         ))}
@@ -93,7 +99,26 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                   {ev.data.provider === "fixture" && " (synthetic fixture samples; set Earth Engine credentials for live satellite data)"}
                 </div>
               )}
-              <div className="mt-3 text-xs" style={{ color: "var(--fg-muted)" }}>Sentinel-2 before/after tiles: — (not available without Earth Engine credentials)</div>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                {(["before", "after"] as const).map((slot) => {
+                  const t = tiles.data?.[slot];
+                  return (
+                    <figure key={slot} className="photo-card aspect-square" style={{ background: "var(--surface-2)" }}>
+                      {t?.url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={`${API_URL}${t.url}`} alt={`Sentinel-2 ${slot} ${t.year}`} />
+                      ) : (
+                        <div className="grid h-full place-items-center p-4 text-center text-xs" style={{ color: "var(--fg-muted)" }}>
+                          {t?.unavailable ?? (tiles.data?.pending ? "Rendering Sentinel-2 composite…" : "Loading…")}
+                        </div>
+                      )}
+                      <figcaption className="absolute bottom-0 left-0 right-0 px-3 py-1.5 text-xs font-semibold" style={{ background: "rgba(1,57,0,.78)", color: "var(--lime)" }}>
+                        {slot === "before" ? "Before" : "After"} · {t?.year ?? "—"} · Sentinel-2
+                      </figcaption>
+                    </figure>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}

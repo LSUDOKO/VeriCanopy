@@ -38,6 +38,7 @@ export type Project = {
   metadata_uri: string | null;
   demo_id: string | null;
   cell_count: number;
+  integrity_status: string | null;
   created_tx: string | null;
   integrity: Integrity;
   vintages: Vintage[];

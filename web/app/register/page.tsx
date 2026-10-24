@@ -107,7 +107,7 @@ export default function Register() {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6">
-      <h1 className="text-2xl font-semibold">Register a project</h1>
+      <h1 className="display text-5xl sm:text-6xl">Register a project</h1>
       <ol className="mt-3 flex flex-wrap gap-2 text-sm" aria-label="Steps">
         {["Polygon", "Overlap pre-check", "Metadata", "Transactions", "Done"].map((s, i) => (
           <li key={s} className="rounded-full border px-3 py-1" style={{ borderColor: step === i + 1 ? "var(--canopy)" : "var(--border)", fontWeight: step === i + 1 ? 600 : 400 }}>
