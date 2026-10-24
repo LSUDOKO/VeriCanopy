@@ -13,6 +13,7 @@ import json
 from typing import Any
 
 from fastapi import FastAPI
+from starlette.routing import Route
 from mcp.server.mcpserver import MCPServer
 from sqlalchemy import select
 
@@ -224,6 +225,15 @@ def mount(app: FastAPI, path: str = "/mcp") -> None:
     # stateless + JSON responses keep it simple for CLI clients and tests.
     sub = mcp.streamable_http_app(streamable_http_path="/", stateless_http=True, json_response=True, host="0.0.0.0")
     app.mount(path, sub)
+
+    class _Root:
+        """Serve the bare `/mcp` path directly: Starlette's Mount would 307 to `/mcp/`, which some MCP clients reject."""
+
+        async def __call__(self, scope, receive, send):
+            scope = dict(scope, path="/", raw_path=b"/", root_path=scope.get("root_path", "") + path)
+            await sub(scope, receive, send)
+
+    app.router.routes.insert(0, Route(path, endpoint=_Root(), methods=["GET", "POST", "DELETE", "OPTIONS"]))
     stack = contextlib.AsyncExitStack()
 
     @app.on_event("startup")
