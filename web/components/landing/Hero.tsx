@@ -27,7 +27,7 @@ export function Hero() {
 
   return (
     <section ref={root} className="relative overflow-hidden" style={{ background: "var(--forest)" }}>
-      <div className="crumple arc-bottom relative z-10 pb-[14vw] pt-10 text-center" style={{ background: "var(--lime)", color: "var(--forest)" }}>
+      <div className="crumple arc-bottom relative z-10 overflow-hidden pb-[14vw] pt-10 text-center" style={{ background: "var(--lime)", color: "var(--forest)" }}>
         <div className="absolute left-5 top-4 hidden sm:block text-left display text-sm leading-tight">⋮ Proving forests<br />since the first pixel</div>
         <div className="mx-auto flex items-center justify-center gap-4 display text-xl sm:text-2xl">
           <span>We&apos;re</span>
