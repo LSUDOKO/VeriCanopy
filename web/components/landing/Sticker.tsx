@@ -19,7 +19,7 @@ export function Sticker({
   const bg: Record<string, string> = { lime: "var(--lime)", yellow: "var(--yellow)", sky: "var(--sky)", orange: "var(--orange)", red: "var(--red)", forest: "var(--forest)", cream: "var(--cream)" };
   const ink = tone === "forest" || tone === "red" ? "#f4f3ef" : "#0b1f0a";
   return (
-    <div className={`sticker ${className}`} style={{ width: size, height: size, background: bg[tone], color: ink, ...style }}>
+    <div className={`sticker ${className}`} style={{ width: size, height: size, flex: "none", background: bg[tone], color: ink, ...style }}>
       <svg className="ring" viewBox="0 0 100 100" aria-hidden>
         <defs>
           <path id={`c-${title.replace(/\W/g, "")}`} d="M50 50 m-40 0 a40 40 0 1 1 80 0 a40 40 0 1 1 -80 0" />

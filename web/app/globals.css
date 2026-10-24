@@ -119,3 +119,44 @@ body { background: var(--bg); color: var(--fg); font-family: var(--font-sans); o
 @media (prefers-reduced-motion: reduce) { .preloader { display: none; } }
 
 .crumple-dark::before { mix-blend-mode: soft-light; opacity: 0.35; }
+
+/* ---------- sweet-tape mechanics: cursor, curves, explore ripple, chips, scrollbar ---------- */
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+.cursor-arrow { position: fixed; left: 0; top: 0; width: 44px; height: 47px; pointer-events: none; z-index: 9999; will-change: transform;
+  background: url("/cursor.svg") 50%/contain no-repeat; }
+html { scrollbar-color: var(--lime) var(--forest); }
+::-webkit-scrollbar { width: 10px; } ::-webkit-scrollbar-track { background: var(--forest); } ::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 6px; }
+::selection { background: var(--lime); color: var(--forest); }
+
+/* curved section joins as masks (bite/curve), like --section-curve / --section-bite */
+.curve-bottom { -webkit-mask: linear-gradient(#000 0 0) top/100% calc(100% - 10vw) no-repeat,
+  url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1456 150.5' preserveAspectRatio='none'><path d='M1456 0C801.9 272 212.833 113.333 0 0Z' fill='black'/></svg>") bottom/100% 10vw no-repeat;
+  mask: linear-gradient(#000 0 0) top/100% calc(100% - 10vw) no-repeat,
+  url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1456 150.5' preserveAspectRatio='none'><path d='M1456 0C801.9 272 212.833 113.333 0 0Z' fill='black'/></svg>") bottom/100% 10vw no-repeat; }
+.curve-top { -webkit-mask: linear-gradient(#000 0 0) bottom/100% calc(100% - 10vw) no-repeat,
+  url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1456 150.5' preserveAspectRatio='none'><path d='M0 0C212.833 113.333 801.9 272 1456 0L1456 150.5L0 150.5Z' fill='black'/></svg>") top/100% 10vw no-repeat;
+  mask: linear-gradient(#000 0 0) bottom/100% calc(100% - 10vw) no-repeat,
+  url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1456 150.5' preserveAspectRatio='none'><path d='M0 0C212.833 113.333 801.9 272 1456 0L1456 150.5L0 150.5Z' fill='black'/></svg>") top/100% 10vw no-repeat; }
+
+/* explore button: dotted ring that rotates, radial ripple fill on hover */
+@property --ripple { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+.explore { --explore-ink: var(--forest); position: relative; display: grid; place-items: center; width: 8.5rem; height: 8.5rem; border-radius: 50%; background: var(--cream); color: var(--explore-ink); font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; line-height: 1; isolation: isolate; transform: rotate(8deg); transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
+.explore::before { content: ""; position: absolute; inset: .45rem; border: 3px dotted var(--explore-ink); border-radius: 50%; transition: rotate .5s ease-out; pointer-events: none; z-index: 1; }
+.explore::after { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: -1; --ripple: 0%;
+  background: radial-gradient(circle closest-side, #fff calc(var(--ripple) - 47%), var(--lime) calc(var(--ripple) - 47%) calc(var(--ripple) - 31%), var(--yellow) calc(var(--ripple) - 31%) calc(var(--ripple) - 18%), var(--orange) calc(var(--ripple) - 18%) calc(var(--ripple) - 8%), transparent var(--ripple));
+  transition: --ripple 1.1s cubic-bezier(.3,.45,.3,1); }
+.explore:hover, .explore:focus-visible { transform: rotate(0deg) scale(1.04); }
+.explore:hover::before, .explore:focus-visible::before { rotate: 24deg; transition: rotate .8s linear; }
+.explore:hover::after, .explore:focus-visible::after { --ripple: 147%; }
+.explore .arrow { display: inline-block; margin-left: .25rem; transition: transform .4s cubic-bezier(.34,1.56,.64,1); }
+.explore:hover .arrow { transform: rotate(45deg); }
+
+/* chips: heading face, dotted left marker, slight tilt */
+.chip { display: inline-flex; align-items: center; gap: .5rem; padding: .45rem .75rem .45rem 1.35rem; border-radius: 6px; font-family: var(--font-display); text-transform: uppercase; letter-spacing: .02em; font-size: .9rem; position: relative; transform: rotate(-1.8deg); background: var(--tag-bg, var(--yellow)); color: var(--tag-ink, #5a3a12); }
+.chip::before { content: ""; position: absolute; left: .55rem; top: 50%; translate: 0 -50%; width: .2rem; height: 1rem; opacity: .85; background-image: radial-gradient(circle, currentColor 42%, transparent 45%); background-size: 100% 33.333%; background-repeat: repeat-y; }
+
+/* arc title: letters lifted along a parabola (rolling-title) */
+.arc > span { display: inline-block; --u: calc(2 * var(--i) / (var(--n) - 1) - 1); transform: translateY(calc(var(--arc-drop, .18em) * (1 - var(--u) * var(--u)) * -1)) rotate(calc(var(--arc-tilt, 10deg) * var(--u))); transform-origin: 50% 100%; }
+
+/* page hero for app pages */
+.page-hero { background: var(--lime); color: var(--forest); }

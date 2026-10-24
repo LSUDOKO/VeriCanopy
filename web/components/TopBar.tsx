@@ -9,12 +9,13 @@ import { LogoMark } from "@/components/Logo";
 
 const NAV = [
   ["/explore", "Registry"],
+  ["/market", "Market"],
   ["/register", "Register"],
   ["/portfolio", "Portfolio"],
   ["/challenges", "Challenges"],
   ["/verify", "Verify"],
   ["/security", "Security"],
-  ["/demo", "Demo"],
+  ["/how-it-works", "How it works"],
 ] as const;
 
 export function TopBar() {

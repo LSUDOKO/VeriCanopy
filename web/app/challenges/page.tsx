@@ -1,5 +1,7 @@
 "use client";
 
+import { PageHero } from "@/components/PageHero";
+
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useAccount, useWriteContract } from "wagmi";
@@ -61,9 +63,8 @@ export default function ChallengesPage() {
     </li>
   );
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-6">
-      <h1 className="display text-5xl sm:text-6xl">Challenges</h1>
-      <p className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>Anyone can dispute a pending score by posting a bond ≥ max(min bond, oracle stake / 2). A 2-of-3 resolver set re-runs the manifest and votes; upheld → oracle slashed 50% to challenger, 50% to treasury; rejected → bond split to oracle and treasury; no quorum in time → both refunded and the submission voided.</p>
+    <div className="flex flex-1 flex-col"><PageHero title="Challenges" lede="Any pending score can be disputed with a bond. Resolvers recompute the manifest and vote; the losing side pays." /><div className="mx-auto w-full max-w-5xl px-4 pb-6">
+      
       {q.isLoading && <Skeleton className="mt-4 h-32" />}
       {q.error && <ErrorState error={q.error} onRetry={() => q.refetch()} />}
       {q.data && (
@@ -74,6 +75,7 @@ export default function ChallengesPage() {
           {done.length === 0 ? <EmptyState title="No resolved challenges yet" /> : <ul className="mt-2 flex flex-col gap-2">{done.map((c) => <Row key={c.id} c={c} />)}</ul>}
         </>
       )}
+    </div>
     </div>
   );
 }

@@ -4,8 +4,9 @@ import VeriCredit from "./abis/VeriCredit.json";
 import BufferPool from "./abis/BufferPool.json";
 import IntegrityOracle from "./abis/IntegrityOracle.json";
 import ChallengeManager from "./abis/ChallengeManager.json";
+import Marketplace from "./abis/Marketplace.json";
 
-const ALL_ABI = [...ProjectRegistry, ...VeriCredit, ...BufferPool, ...IntegrityOracle, ...ChallengeManager] as Abi;
+const ALL_ABI = [...ProjectRegistry, ...VeriCredit, ...BufferPool, ...IntegrityOracle, ...ChallengeManager, ...Marketplace] as Abi;
 
 const MESSAGES: Record<string, (args: readonly unknown[]) => string> = {
   OverlapDetected: (a) => `This land overlaps Project #${String(a[1])} at H3 cell ${String(a[0])}. The registry refuses double-registration.`,
@@ -26,6 +27,13 @@ const MESSAGES: Record<string, (args: readonly unknown[]) => string> = {
   ChallengeNotOpen: () => "The challenge is not open.",
   NothingToWithdraw: () => "Nothing to withdraw.",
   AccessControlUnauthorizedAccount: () => "Your wallet does not have the required role.",
+  ZeroPrice: () => "Price per tonne must be greater than zero.",
+  UnknownListing: () => "This listing does not exist.",
+  ListingInactive: () => "This listing is no longer active.",
+  NotSeller: () => "Only the seller can cancel this listing.",
+  InsufficientAmount: () => "The listing does not have that many tonnes left.",
+  WrongPayment: () => "Payment must equal amount × price per tonne exactly.",
+  FeeTooHigh: () => "Fee cannot exceed 10%.",
   ProjectNotScorable: () => "The project must be Active or Under review to receive a score.",
   PendingSubmissionExists: () => "A submission for this project and period is already pending.",
   ResolutionPeriodNotOver: () => "The resolution period has not ended yet; resolvers can still vote.",

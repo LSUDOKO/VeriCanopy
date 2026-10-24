@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { TopBar } from "@/components/TopBar";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { Cursor } from "@/components/Cursor";
 
 const anton = Anton({ weight: "400", variable: "--font-anton", subsets: ["latin"] });
 const inter = Inter_Tight({ variable: "--font-inter-tight", subsets: ["latin"] });
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         <Providers>
           <SmoothScroll />
+          <Cursor />
           <TopBar />
           <main className="flex-1 flex flex-col">{children}</main>
         </Providers>

@@ -1,5 +1,7 @@
 "use client";
 
+import { PageHero } from "@/components/PageHero";
+
 import { useQuery } from "@tanstack/react-query";
 import { api, type Deployments } from "@/lib/api";
 
@@ -18,9 +20,7 @@ export default function SecurityPage() {
   const pq = b.data?.pq_benchmarks;
   const zk = b.data?.zk_benchmarks;
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-6 flex flex-col gap-6 text-sm">
-      <h1 className="display text-5xl sm:text-6xl">Security & trust model</h1>
-
+    <div className="flex flex-1 flex-col"><PageHero title="Security & trust model" lede="What is proven by cryptography, what is enforced by incentives, and what you still have to trust." /><div className="mx-auto w-full max-w-5xl px-4 pb-6 flex flex-col gap-6 text-sm">
       <section className="card p-4">
         <h2 className="font-medium">What is proven, and by what</h2>
         <table className="mt-2 w-full">
@@ -117,6 +117,7 @@ export default function SecurityPage() {
           {d.data ? Object.entries(d.data.contracts).map(([k, a]) => <li key={k}>{k}: {a}</li>) : <li>—</li>}
         </ul>
       </section>
+    </div>
     </div>
   );
 }

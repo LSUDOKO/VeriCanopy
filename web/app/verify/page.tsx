@@ -1,5 +1,7 @@
 "use client";
 
+import { PageHero } from "@/components/PageHero";
+
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { api, type Project } from "@/lib/api";
@@ -25,9 +27,8 @@ export default function VerifyPage() {
   };
   const subs = (projects.data?.projects ?? []).map((p) => p.integrity.latest_submission).filter((s): s is NonNullable<typeof s> => !!s);
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-6">
-      <h1 className="display text-5xl sm:text-6xl">Verify an attestation</h1>
-      <p className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>Re-checks everything independently of the UI: manifest hash vs chain, ML-DSA-65 key registration and signature (NIST FIPS 204), and the zk proof status.</p>
+    <div className="flex flex-1 flex-col"><PageHero title="Verify an attestation" lede="Independent of this site: re-check the manifest hash against the chain, the ML-DSA-65 signature against the registered key, and the zk proof status." /><div className="mx-auto w-full max-w-4xl px-4 pb-6">
+      
       <div className="card mt-4 p-4 flex flex-col gap-3 text-sm">
         <label>
           <span className="label">Select a submission</span>
@@ -53,6 +54,7 @@ export default function VerifyPage() {
         </button>
         {res && <VerifyChecklist r={res} />}
       </div>
+    </div>
     </div>
   );
 }

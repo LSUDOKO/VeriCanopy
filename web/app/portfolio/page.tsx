@@ -3,11 +3,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { api } from "@/lib/api";
 import { bpsToScore, fmt, tsToDate } from "@/lib/format";
 import { IntegrityBadge } from "@/components/IntegrityBadge";
 import { HashChip } from "@/components/HashChip";
 import { RetireModal } from "@/components/Modals";
+import { SellModal, WithdrawProceeds } from "@/components/MarketModals";
+import { PageHero } from "@/components/PageHero";
 import { EmptyState, ErrorState, Skeleton } from "@/components/States";
 
 type Portfolio = {
@@ -23,6 +26,7 @@ export default function PortfolioPage() {
   const addr = (address ?? manual).toLowerCase();
   const q = useQuery({ queryKey: ["portfolio", addr], queryFn: () => api<Portfolio>(`/portfolio/${addr}`), enabled: !!addr, refetchInterval: 15_000 });
   const [retire, setRetire] = useState<{ tokenId: bigint; max: bigint } | null>(null);
+  const [sell, setSell] = useState<{ tokenId: bigint; max: bigint; projectName: string; vintage: number } | null>(null);
 
   const certificate = (r: Portfolio["retirements"][number]) => {
     const html = `<!doctype html><html><head><meta charset="utf-8"><title>VeriCanopy retirement certificate #${r.id}</title><style>body{font-family:Inter,system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;color:#10231b}h1{color:#0f3d2e}.k{color:#51635b;font-size:12px;text-transform:uppercase}.v{font-family:ui-monospace,monospace;margin-bottom:12px}</style></head><body><h1>Retirement certificate #${r.id}</h1><div class="k">Beneficiary</div><div class="v">${r.beneficiary ?? "—"}</div><div class="k">Project</div><div class="v">#${r.project_id} ${r.project_name ?? ""}</div><div class="k">Amount</div><div class="v">${r.amount} tCO2e (token ${r.token_id})</div><div class="k">Integrity score at retirement</div><div class="v">${bpsToScore(r.score_at_retirement)} / 100</div><div class="k">Retired at</div><div class="v">${tsToDate(r.ts)}</div><div class="k">Transaction</div><div class="v">${r.tx_hash ?? "—"}</div><div class="k">Live status</div><div class="v"><a href="${location.origin}/projects/${r.project_id}">${location.origin}/projects/${r.project_id}</a></div><p style="font-size:12px;color:#51635b">This credit is a <b>living credit</b>: its integrity score keeps updating. Check the live link for the current score and any reversal notices.</p></body></html>`;
@@ -34,21 +38,23 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6">
-      <h1 className="display text-5xl sm:text-6xl">Portfolio</h1>
+    <div className="flex flex-1 flex-col"><PageHero title="Portfolio" lede="Your living credits, retirements and sale proceeds. Scores update every monitoring period; impact notices arrive here when a forest you hold changes." /><div className="mx-auto w-full max-w-6xl px-0 pb-6">
+      
       {!address && (
-        <div className="mt-3 text-sm">
-          Connect a wallet, or look up an address: <input className="input mono mt-1" placeholder="0x…" value={manual} onChange={(e) => setManual(e.target.value)} />
+        <div className="mx-4 mt-4 flex flex-wrap items-center gap-3 rounded-xl p-4 text-sm" style={{ background: "#fff", border: "1.5px solid var(--border)" }}>
+          <span className="display text-xl" style={{ color: "var(--forest)" }}>Connect a wallet to see your credits</span>
+          <ConnectButton chainStatus="none" showBalance={false} />
+          <span className="text-xs" style={{ color: "var(--fg-muted)" }}>or look up any address</span> <input className="input mono !w-80" placeholder="0x…" value={manual} onChange={(e) => setManual(e.target.value)} />
         </div>
       )}
       {q.isLoading && <Skeleton className="mt-4 h-40" />}
       {q.error && <ErrorState error={q.error} onRetry={() => q.refetch()} />}
       {q.data && (
-        <div className="mt-4 grid gap-4 lg:grid-cols-3">
+        <div className="mt-4 grid gap-4 px-4 lg:grid-cols-3">
           <section className="card p-4 lg:col-span-2">
             <h2 className="font-medium">Holdings</h2>
             {q.data.holdings.length === 0 ? (
-              <EmptyState title="No credits held" hint="On testnet the demo issuer mints credits to buyer wallets." />
+              <EmptyState title="No credits held" hint="Buy vintages on the Market; they appear here within a few blocks." />
             ) : (
               <table className="mt-2 w-full text-sm">
                 <thead><tr className="label text-left"><th>Project</th><th>Vintage</th><th>Amount</th><th>Live integrity</th><th></th></tr></thead>
@@ -59,7 +65,7 @@ export default function PortfolioPage() {
                       <td className="mono">{h.vintage}</td>
                       <td className="mono">{fmt(h.amount)}</td>
                       <td><IntegrityBadge scoreBps={h.score_now} status={h.project_status === "UnderReview" ? "UnderReview" : (h.score_now ?? 0) < 5000 ? "Impaired" : "Active"} size="sm" /></td>
-                      <td><button className="btn btn-ghost" disabled={!address} onClick={() => setRetire({ tokenId: BigInt(h.token_id), max: BigInt(h.amount) })}>Retire…</button></td>
+                      <td className="flex gap-1"><button className="btn btn-ghost" disabled={!address} onClick={() => setRetire({ tokenId: BigInt(h.token_id), max: BigInt(h.amount) })}>Retire</button><button className="btn btn-lime" disabled={!address} onClick={() => setSell({ tokenId: BigInt(h.token_id), max: BigInt(h.amount), projectName: h.project_name ?? `Project #${h.project_id}`, vintage: h.vintage })}>Sell</button></td>
                     </tr>
                   ))}
                 </tbody>
@@ -88,7 +94,9 @@ export default function PortfolioPage() {
               </table>
             )}
           </section>
-          <section className="card p-4">
+          <section className="flex flex-col gap-4">
+            <WithdrawProceeds />
+            <div className="card p-4">
             <h2 className="font-medium">Impact notices</h2>
             {q.data.notifications.length === 0 ? (
               <EmptyState title="Inbox empty" hint="You will be notified here when a project you hold or retired loses forest or changes status." />
@@ -105,10 +113,13 @@ export default function PortfolioPage() {
                 ))}
               </ul>
             )}
+            </div>
           </section>
         </div>
       )}
       {retire && <RetireModal tokenId={retire.tokenId} max={retire.max} onClose={() => setRetire(null)} />}
+      {sell && <SellModal tokenId={sell.tokenId} max={sell.max} projectName={sell.projectName} vintage={sell.vintage} onClose={() => setSell(null)} />}
+    </div>
     </div>
   );
 }

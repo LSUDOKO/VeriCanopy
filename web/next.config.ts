@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [{ source: "/demo", destination: "/how-it-works", permanent: true }];
+  },
   turbopack: {
     rules: {
       "*.css": {

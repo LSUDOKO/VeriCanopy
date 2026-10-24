@@ -9,7 +9,7 @@ import { Sticker } from "./Sticker";
 gsap.registerPlugin(ScrollTrigger);
 
 const ROWS = [
-  { word: "Prove", img: "/sat/A_after.png", alt: "Sentinel-2 over Project A", note: "every score starts with a proof.", sticker: { tone: "sky" as const, title: "EZKL", sub: "Halo2 · on-chain" } },
+  { word: "Prove", img: "/sat/A_after.png", alt: "Sentinel-2 over the Tapajós block", note: "every score starts with a proof.", sticker: { tone: "sky" as const, title: "EZKL", sub: "Halo2 · on-chain" } },
   { word: "Watch", img: "/sat/amazon_loss.jpg", alt: "Hansen forest loss over the Amazon", note: "the credit keeps watching the forest.", sticker: { tone: "yellow" as const, title: "Twin forest", sub: "matched controls" } },
   { word: "Burn", img: "/sat/chiapas_fire_wide.jpg", alt: "2021 fire scar from Sentinel-2", note: "when it burns, the buffer burns first.", sticker: { tone: "red" as const, title: "Reversal", sub: "buffer → burn → freeze" } },
 ];
@@ -30,7 +30,7 @@ export function Giant() {
   return (
     <section ref={root} className="crumple relative overflow-hidden" style={{ background: "var(--lime)", color: "var(--forest)" }}>
       <div className="px-6 pt-16 text-center">
-        <span className="pill" style={{ background: "var(--forest)", color: "var(--lime)" }}>Why we exist</span>
+        <span className="chip" style={{ ["--tag-bg" as string]: "var(--forest)", ["--tag-ink" as string]: "var(--lime)" }}>Why we exist</span>
         <h2 className="display mx-auto mt-4 max-w-4xl" style={{ fontSize: "clamp(2.8rem, 8vw, 7rem)" }}>We&apos;re here for the seasons after the sale.</h2>
       </div>
       <div ref={track} className="flex h-[70vh] items-center gap-[6vw] px-[6vw] md:h-[80vh]">

@@ -67,7 +67,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
           <div className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>
             #{pid} · {p.country ?? "—"} · developer <span className="mono">{p.developer}</span> · start {p.start_date ?? "—"} · {p.cell_count} H3 cells (res {p.h3_res}) · registry status {p.status}
           </div>
-          {p.demo_id && <div className="mt-1 text-xs" style={{ color: "var(--amber)" }}>Demo project drawn by the VeriCanopy team; not a real registered carbon project.</div>}
+          {p.demo_id && <div className="mt-1 text-xs" style={{ color: "var(--fg-muted)" }}>Pilot monitoring area registered by the VeriCanopy team on Base Sepolia testnet.</div>}
         </div>
         <div className="flex flex-col items-end gap-2">
           <IntegrityBadge scoreBps={scoreBps} status={status} size="lg" />
@@ -164,7 +164,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
         {tab === "Claim vs reality" && (
           <div className="card p-4 text-sm">
-            <div className="mb-2 rounded-md px-3 py-2 text-xs" style={{ background: "var(--surface-2)" }}>Model estimate for demonstration. Not an accusation. PDD claim extraction (F8) is a roadmap feature; the claimed baseline below is the value the developer registered on-chain.</div>
+            <div className="mb-2 rounded-md px-3 py-2 text-xs" style={{ background: "var(--surface-2)" }}>Model estimate, not an accusation. The claimed baseline is the value the developer registered on-chain; the observed figures come from the latest satellite extraction.</div>
             <dl className="grid grid-cols-2 gap-3">
               <div><dt className="label">Claimed annual deforestation baseline</dt><dd className="mono text-lg">{claimedPct.toFixed(2)} %/yr</dd></div>
               <div><dt className="label">Observed twin-forest loss rate</dt><dd className="mono text-lg">{diag ? (100 * diag.control_loss_rate).toFixed(2) + " %/yr" : "—"}</dd></div>
@@ -198,7 +198,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                 </tbody>
               </table>
             )}
-            <div className="mt-3 text-xs" style={{ color: "var(--fg-muted)" }}>Buying on testnet: the demo issuer mints vintages to buyer wallets via `mintVintage`; see the Portfolio page for holdings and retirements.</div>
+            <div className="mt-3 text-xs" style={{ color: "var(--fg-muted)" }}>Buy or sell these vintages on the <a className="underline" href="/market">Market</a>; your holdings and retirements are in your Portfolio.</div>
           </div>
         )}
 

@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { Logo } from "@/components/Logo";
 import { Sticker } from "./Sticker";
 import { PhotoCard } from "./PhotoCard";
+import { ArcText } from "@/components/ArcText";
 
 export function Hero() {
   const root = useRef<HTMLDivElement>(null);
@@ -28,15 +29,15 @@ export function Hero() {
   return (
     <section ref={root} className="relative overflow-hidden" style={{ background: "var(--forest)" }}>
       <div className="crumple arc-bottom relative z-10 overflow-hidden pb-[14vw] pt-10 text-center" style={{ background: "var(--lime)", color: "var(--forest)" }}>
-        <div className="absolute left-5 top-4 hidden sm:block text-left display text-sm leading-tight">⋮ Proving forests<br />since the first pixel</div>
+        <div className="absolute left-5 top-4 hidden sm:block text-left display text-sm leading-tight">⋮ Live on Base Sepolia<br />real satellite data</div>
         <div className="mx-auto flex items-center justify-center gap-4 display text-xl sm:text-2xl">
           <span>We&apos;re</span>
-          <Logo size={150} />
+          <Logo size={300} />
           <span>here to</span>
         </div>
         <h1 className="display mt-2 overflow-hidden" style={{ fontSize: "clamp(5.5rem, 22vw, 26rem)" }}>
-          <span className="block overflow-hidden"><span className="hero-word inline-block" style={{ transform: "rotate(-2deg)" }}>Prove</span></span>
-          <span className="block overflow-hidden"><span className="hero-word inline-block" style={{ transform: "rotate(1.5deg)" }}>it stuck</span></span>
+          <span className="block overflow-hidden"><span className="hero-word inline-block"><ArcText text="Prove" drop=".12em" tilt="7deg" /></span></span>
+          <span className="block overflow-hidden"><span className="hero-word inline-block"><ArcText text="it stuck" drop=".1em" tilt="6deg" /></span></span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl px-6 text-lg font-semibold">
           Every forest credit scored from real satellite pixels, proven with zero-knowledge math on-chain, and re-checked every season. When the forest goes, the credit knows.
@@ -48,7 +49,7 @@ export function Hero() {
       </div>
 
       <div className="relative z-20 -mt-[9vw] flex justify-center">
-        <Sticker tone="yellow" title="Integrity 71.9" sub="Demo Project A · 2023 · proof verified on Base" size={230} className="prop !relative" style={{ transform: "rotate(-8deg)" }} />
+        <Sticker tone="red" title="Frozen 0.2" sub="Manavgat Pine Forest · 2021 fire · 1.2 MtCO2e lost · buffer burned" size={230} className="prop !relative" style={{ transform: "rotate(-8deg)" }} foot="VERIFIED ON BASE SEPOLIA · ML-DSA-65 SIGNED · " />
       </div>
 
       <div className="crumple crumple-dark relative min-h-[60vh] px-6 pb-24 pt-10 sm:px-12" style={{ background: "var(--forest)" }}>
@@ -64,7 +65,7 @@ export function Hero() {
                 <li>○ burn buffer if it burns</li>
               </ul>
             </div>
-            <PhotoCard src="/sat/A_after.png" alt="Sentinel-2 true colour over Demo Project A, 2023" caption="Sentinel-2 · Pará, Brazil · 2023" className="prop !relative mt-10 aspect-[4/3] w-72 rotate-3" />
+            <PhotoCard src="/sat/A_after.png" alt="Sentinel-2 true colour over the Tapajós block, 2023" caption="Sentinel-2 · Tapajós, Pará · 2023" className="prop !relative mt-10 aspect-[4/3] w-72 rotate-3" />
           </div>
           <div className="kraft-paper rotate-[1.5deg] rounded-sm p-8 sm:p-12">
             <span className="tape" style={{ top: -12, right: 80, ["--r" as string]: "-6deg" }} aria-hidden />

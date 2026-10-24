@@ -10,6 +10,7 @@ import ChallengeManager from "./abis/ChallengeManager.json";
 import RetirementRegistry from "./abis/RetirementRegistry.json";
 import ModelRegistry from "./abis/ModelRegistry.json";
 import PQKeyRegistry from "./abis/PQKeyRegistry.json";
+import Marketplace from "./abis/Marketplace.json";
 import type { Abi } from "viem";
 
 export const ABIS = {
@@ -21,6 +22,7 @@ export const ABIS = {
   RetirementRegistry: RetirementRegistry as Abi,
   ModelRegistry: ModelRegistry as Abi,
   PQKeyRegistry: PQKeyRegistry as Abi,
+  Marketplace: Marketplace as Abi,
 };
 export type ContractName = keyof typeof ABIS;
 

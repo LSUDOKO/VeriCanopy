@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 // Smoke: every page renders without a client error, even with no API/chain reachable.
-const PAGES = ["/", "/explore", "/register", "/portfolio", "/challenges", "/verify", "/security", "/demo"];
+const PAGES = ["/", "/explore", "/register", "/portfolio", "/challenges", "/verify", "/security", "/how-it-works", "/market"];
 
 for (const path of PAGES) {
   test(`renders ${path}`, async ({ page }) => {

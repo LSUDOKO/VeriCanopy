@@ -1,5 +1,7 @@
 "use client";
 
+import { PageHero } from "@/components/PageHero";
+
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { keccak256, stringToHex } from "viem";
@@ -106,8 +108,7 @@ export default function Register() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6">
-      <h1 className="display text-5xl sm:text-6xl">Register a project</h1>
+    <div className="flex flex-1 flex-col"><PageHero title="Register a project" lede="Paste or upload the boundary. We lock its H3 cells on-chain so the same land can never be registered twice, then the oracle starts scoring it every monitoring period." /><div className="mx-auto w-full max-w-6xl px-4 pb-6">
       <ol className="mt-3 flex flex-wrap gap-2 text-sm" aria-label="Steps">
         {["Polygon", "Overlap pre-check", "Metadata", "Transactions", "Done"].map((s, i) => (
           <li key={s} className="rounded-full border px-3 py-1" style={{ borderColor: step === i + 1 ? "var(--canopy)" : "var(--border)", fontWeight: step === i + 1 ? 600 : 400 }}>
@@ -124,8 +125,8 @@ export default function Register() {
                 <textarea className="input mono h-48" value={geomText} onChange={(e) => setGeomText(e.target.value)} placeholder='{"type":"Polygon","coordinates":[[[lon,lat],…]]}' />
               </label>
               <div className="flex flex-wrap gap-2">
-                <button className="btn btn-ghost" onClick={() => setGeomText(JSON.stringify(rect(-54.74, -3.38, 0.12, 0.1)))}>Example: overlaps Demo A</button>
-                <button className="btn btn-ghost" onClick={() => setGeomText(JSON.stringify(rect(-60.1, -8.2, 0.1, 0.08)))}>Example: fresh land</button>
+                <button className="btn btn-ghost" onClick={() => setGeomText(JSON.stringify(rect(-54.74, -3.38, 0.12, 0.1)))}>Example: overlaps the Tapajós block</button>
+                <button className="btn btn-ghost" onClick={() => setGeomText(JSON.stringify(rect(-60.1, -8.2, 0.1, 0.08)))}>Example: fresh land (Rondônia)</button>
                 <label className="btn btn-ghost cursor-pointer">
                   Upload .geojson
                   <input type="file" accept=".json,.geojson" className="hidden" onChange={async (e) => { const f = e.target.files?.[0]; if (f) setGeomText(await f.text()); }} />
@@ -180,6 +181,7 @@ export default function Register() {
         </div>
         <MapView className="h-[28rem] card overflow-hidden" overlays={overlays} fitTo={geom} />
       </div>
+    </div>
     </div>
   );
 }
