@@ -140,7 +140,7 @@ html { scrollbar-color: var(--lime) var(--forest); }
 
 /* explore button: dotted ring that rotates, radial ripple fill on hover */
 @property --ripple { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
-.explore { --explore-ink: var(--forest); position: relative; display: grid; place-items: center; width: 8.5rem; height: 8.5rem; border-radius: 50%; background: var(--cream); color: var(--explore-ink); font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; line-height: 1; isolation: isolate; transform: rotate(8deg); transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
+.explore { --explore-ink: var(--forest); display: grid; place-items: center; width: 8.5rem; height: 8.5rem; border-radius: 50%; background: var(--cream); color: var(--explore-ink); font-family: var(--font-display); text-transform: uppercase; font-size: 1.35rem; line-height: 1; isolation: isolate; transform: rotate(8deg); transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
 .explore::before { content: ""; position: absolute; inset: .45rem; border: 3px dotted var(--explore-ink); border-radius: 50%; transition: rotate .5s ease-out; pointer-events: none; z-index: 1; }
 .explore::after { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: -1; --ripple: 0%;
   background: radial-gradient(circle closest-side, #fff calc(var(--ripple) - 47%), var(--lime) calc(var(--ripple) - 47%) calc(var(--ripple) - 31%), var(--yellow) calc(var(--ripple) - 31%) calc(var(--ripple) - 18%), var(--orange) calc(var(--ripple) - 18%) calc(var(--ripple) - 8%), transparent var(--ripple));
