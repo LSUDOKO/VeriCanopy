@@ -34,3 +34,19 @@ def test_ee_provider_requires_credentials(monkeypatch):
     with pytest.raises(RuntimeError, match="Earth Engine"):
         get_provider(PipelineConfig())
     os.environ.pop("EE_SERVICE_ACCOUNT_JSON", None)
+
+
+def test_ee_key_from_base64_env(monkeypatch, tmp_path):
+    import base64
+    import tempfile
+
+    monkeypatch.delenv("EE_SERVICE_ACCOUNT_JSON", raising=False)
+    monkeypatch.setenv(
+        "EE_SERVICE_ACCOUNT_JSON_B64", base64.b64encode(b'{"client_email":"x","private_key":"y"}').decode()
+    )
+    monkeypatch.setattr(tempfile, "gettempdir", lambda: str(tmp_path))
+    with pytest.raises(
+        Exception
+    ):  # key is materialised, then EE init fails on the bogus key (no network creds)
+        get_provider(PipelineConfig())
+    assert (tmp_path / "vc-ee-service-account.json").exists()

@@ -40,7 +40,10 @@ DATASETS = {
     "gedi": {"id": "LARSE/GEDI/GEDI04_B_002", "bands": ["MU"]},
     "fire": {"id": "MODIS/061/MCD64A1", "bands": ["BurnDate"]},
     "srtm": {"id": "USGS/SRTMGL1_003", "bands": ["elevation"]},
-    "access": {"id": "Oxford/MAP/accessibility_to_cities_2015_v1_0", "bands": ["accessibility"]},
+    "access": {
+        "id": "projects/malariaatlasproject/assets/accessibility/accessibility_to_cities/2015_v1_0",
+        "bands": ["accessibility"],
+    },
     "worldcover": {"id": "ESA/WorldCover/v200", "bands": ["Map"]},
 }
 
@@ -53,8 +56,10 @@ CACHE_DIR = REPO_ROOT / "data" / "cache"
 @dataclass
 class PipelineConfig:
     ring_km: tuple[float, float] = (10.0, 50.0)
-    n_t: int = 2000
-    n_c: int = 20000
+    n_t: int = field(default_factory=lambda: int(os.environ.get("VC_N_T", "1000")))
+    n_c: int = field(
+        default_factory=lambda: int(os.environ.get("VC_N_C", "6000"))
+    )  # EE sample sizes; keep getInfo payloads bounded
     seed: int = 42
     caliper_sd: float = 0.25
     bootstrap: int = 100

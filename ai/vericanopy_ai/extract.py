@@ -100,6 +100,16 @@ def get_provider(cfg: PipelineConfig) -> Provider:
     """`VC_PROVIDER=fixture|earthengine|auto`; auto picks Earth Engine only when credentials are configured."""
     mode = cfg.provider
     creds = os.environ.get("EE_SERVICE_ACCOUNT_JSON", "").strip()
+    b64 = os.environ.get("EE_SERVICE_ACCOUNT_JSON_B64", "").strip()
+    if not creds and b64:  # hosted services pass the key inline; materialise it once
+        import base64
+        import tempfile
+
+        f = Path(tempfile.gettempdir()) / "vc-ee-service-account.json"
+        if not f.exists():
+            f.write_bytes(base64.b64decode(b64))
+            f.chmod(0o600)
+        creds = str(f)
     if mode == "fixture" or (mode == "auto" and not creds):
         return FixtureProvider()
     if not creds or not Path(creds).exists():
@@ -273,13 +283,13 @@ class EarthEngineProvider:
         geom = ee.Geometry(project.geometry)
         hansen = ee.Image(DATASETS["hansen"]["id"])
         cover = hansen.select("treecover2000")
-        lossyear = hansen.select("lossyear")  # 0 = no loss, 1..23 => 2001..2023
+        lossyear = hansen.select("lossyear").unmask(0)  # 0 = no loss, N => 2000+N (band is masked where 0)
         forest_at_start = cover.gte(cfg.forest_threshold).And(lossyear.eq(0).Or(lossyear.gte(start - 2000)))
         srtm = ee.Image(DATASETS["srtm"]["id"])
         slope = ee.Terrain.slope(srtm)
         access = ee.Image(DATASETS["access"]["id"]).select("accessibility")
-        agb = ee.ImageCollection(DATASETS["gedi"]["id"]).mosaic().select("MU")
-        worldcover = ee.Image(DATASETS["worldcover"]["id"]).select("Map")
+        agb = ee.Image(DATASETS["gedi"]["id"]).select("MU")  # GEDI L4B is a single gridded image
+        worldcover = ee.ImageCollection(DATASETS["worldcover"]["id"]).first().select("Map")
         valid = worldcover.neq(80).And(worldcover.neq(50))  # not water / built-up
         pre_loss = (
             lossyear.gte(start - 2000 - cfg.pre_years)
@@ -290,7 +300,11 @@ class EarthEngineProvider:
             ee.ImageCollection(DATASETS["fire"]["id"])
             .filterDate(f"{start}-01-01", f"{period}-12-31")
             .select("BurnDate")
-            .map(lambda img: img.gt(0).multiply(ee.Number(img.date().get("year"))))
+            .map(
+                lambda img: (
+                    img.gt(0).multiply(ee.Number(img.date().get("year"))).toInt16().rename("burned_year")
+                )
+            )
             .max()
             .rename("burned_year")
         )
