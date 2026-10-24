@@ -23,7 +23,7 @@ Satellite evidence → integrity score → zero-knowledge proof on-chain → a c
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
   <a href="docs/BENCHMARKS.md">Benchmarks</a> ·
   <a href="docs/LIMITATIONS.md">Limitations</a> ·
-  <a href="docs/video/SCRIPT.md">Film script</a>
+  <a href="docs/video/v2/STORYBOARD.md">Launch film</a>
 </p>
 
 <p align="center"><img src="docs/media/landing.gif" alt="VeriCanopy landing page" width="900" /></p>
