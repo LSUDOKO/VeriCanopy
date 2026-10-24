@@ -21,16 +21,16 @@ Deadline: 25 Oct 2026, 7:30 pm IST. Public repo: https://github.com/LSUDOKO/Veri
 **What's next.** Polygon Amoy deployment with live Earth Engine data, decentralised resolvers, STARK-based PQ proofs, risk-priced buffers, PDD claim extraction, community witness app, methane module, registry partnerships.
 
 ## Live vs scripted data
-Submissions #4–#6 on Base Sepolia use live Earth Engine data (`provider: earthengine`); #1–#3 and Demo Mode use labelled fixture data. Say so on camera; the honest low real-data scores for arbitrary rectangles are a feature.
+Submissions #4 onward on Base Sepolia use live Earth Engine data (`provider: earthengine`); #1–#3 used labelled fixture data before Earth Engine access existed. Say so on camera; the honest low real-data scores for arbitrary pilot rectangles are a feature.
 
 ## Demo video script (4:30)
 | Time | Scene | Say |
 |---|---|---|
 | 0:00–0:35 | Explore map | "Forest carbon credits are checked once, by someone you must trust. Studies of dozens of projects found widespread over-crediting." |
 | 0:35–1:05 | `/security` trust tables | "ZK proofs prove the maths, not the truth. VeriCanopy closes three gaps: computation, input, and time." |
-| 1:05–1:45 | `/register` with the "overlaps Demo A" example → red cells → on-chain revert decoded | "Same land, sold twice? The contract refuses." |
-| 1:45–2:40 | Project B: twin chart, claim vs reality, low score; Proofs tab → proof badge, manifest, ML-DSA verify | "The AI compares the project with its twin forest. The proof shows the registered model produced this score." |
-| 2:40–3:30 | `/demo` slider to 2021 on Project C: score drops, buffer burn, toast; Portfolio inbox | "When the forest burns, the credit corrects itself and buyers are told." |
+| 1:05–1:45 | `/register` with the "overlaps the Tapajós block" example → red cells → on-chain revert decoded | "Same land, sold twice? The contract refuses." |
+| 1:45–2:40 | Manavgat Pine Forest: live Sentinel-2 before/after, twin chart with the 2021 fire, Frozen badge; Proofs tab → proof badge, manifest, ML-DSA verify | "Real pixels, real fire, real proof: the registered model produced this score." |
+| 2:40–3:30 | `/market`: buy 5 t of Tapajós 2021 with MetaMask on Base Sepolia; Portfolio shows the holding, Sell and Retire | "A living credit you can actually trade — with its integrity score on the price tag." |
 | 3:30–4:05 | `/challenges` + `/verify` | "Anyone can challenge the inputs. Every record is signed post-quantum, scoped honestly." |
 | 4:05–4:30 | README competitor table + roadmap | "Ratings you must trust → proofs you can check." |
 
