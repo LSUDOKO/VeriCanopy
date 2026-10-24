@@ -13,9 +13,9 @@ import json
 from typing import Any
 
 from fastapi import FastAPI
-from starlette.routing import Route
 from mcp.server.mcpserver import MCPServer
 from sqlalchemy import select
+from starlette.routing import Route
 
 from app.chain import explorer_tx, load_abi, load_deployments
 from app.config import settings
@@ -233,7 +233,9 @@ def mount(app: FastAPI, path: str = "/mcp") -> None:
             scope = dict(scope, path="/", raw_path=b"/", root_path=scope.get("root_path", "") + path)
             await sub(scope, receive, send)
 
-    app.router.routes.insert(0, Route(path, endpoint=_Root(), methods=["GET", "POST", "DELETE", "OPTIONS"]))
+    root = _Root()
+    root.__name__, root.__module__ = "mcp_root", __name__  # slowapi's middleware names handlers this way
+    app.router.routes.insert(0, Route(path, endpoint=root, methods=["GET", "POST", "DELETE", "OPTIONS"]))
     stack = contextlib.AsyncExitStack()
 
     @app.on_event("startup")
