@@ -203,3 +203,33 @@ class NamedBlob(Base):
     name: Mapped[str] = mapped_column(String(200), primary_key=True)
     cid: Mapped[str] = mapped_column(String(128))
     updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class Listing(Base):
+    """Marketplace listing (escrowed fixed-price sale of a vintage)."""
+
+    __tablename__ = "listings"
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    seller: Mapped[str] = mapped_column(String(42), index=True)
+    token_id: Mapped[str] = mapped_column(String(80), index=True)
+    project_id: Mapped[int] = mapped_column(BigInteger, index=True)
+    vintage: Mapped[int] = mapped_column(Integer)
+    amount_listed: Mapped[int] = mapped_column(BigInteger)
+    amount_left: Mapped[int] = mapped_column(BigInteger)
+    price_per_unit_wei: Mapped[str] = mapped_column(String(40))
+    active: Mapped[bool] = mapped_column(default=True)
+    tx_hash: Mapped[str | None] = mapped_column(String(66))
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class Trade(Base):
+    __tablename__ = "trades"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    listing_id: Mapped[int] = mapped_column(BigInteger, index=True)
+    buyer: Mapped[str] = mapped_column(String(42), index=True)
+    token_id: Mapped[str] = mapped_column(String(80))
+    amount: Mapped[int] = mapped_column(BigInteger)
+    paid_wei: Mapped[str] = mapped_column(String(40))
+    fee_wei: Mapped[str] = mapped_column(String(40))
+    tx_hash: Mapped[str | None] = mapped_column(String(66))
+    ts: Mapped[int | None] = mapped_column(BigInteger)

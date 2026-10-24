@@ -15,6 +15,7 @@ from app.routers import (
     challenges,
     evidence,
     jobs,
+    market,
     metadata,
     misc,
     portfolio,
@@ -37,7 +38,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for r in (projects, submissions, challenges, portfolio, stats, metadata, verify, jobs, evidence, tiles):
+for r in (
+    projects,
+    submissions,
+    challenges,
+    portfolio,
+    stats,
+    metadata,
+    verify,
+    jobs,
+    evidence,
+    tiles,
+    market,
+):
     app.include_router(r.router, prefix="/api/v1")
 app.include_router(misc.router, prefix="/api/v1")
 app.include_router(misc.router)  # /healthz at root too

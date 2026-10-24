@@ -14,6 +14,7 @@ NAMES = [
     "IntegrityOracle",
     "ChallengeManager",
     "IHalo2Verifier",
+    "Marketplace",
 ]
 for name in NAMES:
     src = ROOT / "contracts" / "out" / f"{name}.sol" / f"{name}.json"

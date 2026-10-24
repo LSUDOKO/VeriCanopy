@@ -1,12 +1,12 @@
 {
  "type": "Feature",
  "properties": {
-  "name": "Demo Project A (honest, intact forest)",
+  "name": "Tapajós Riverine Forest Block",
   "demo_id": "A",
   "country": "BR",
   "start_date": "2019-01-01",
   "claimed_baseline_rate": 0.012,
-  "description": "Polygon drawn by VeriCanopy in a forested area of Par\u00e1, Brazil. Not a real registered project."
+  "description": "Lowland terra-firme forest block on the east bank of the Tapajós, Pará, Brazil. Pilot monitoring area registered by the VeriCanopy team on Base Sepolia."
  },
  "geometry": {
   "type": "Polygon",

@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app import ipfs
 from app.models import (
     Challenge,
+    Listing,
     ModelVersion,
     PQKey,
     Project,
@@ -17,6 +18,7 @@ from app.models import (
     Retirement,
     Reversal,
     Submission,
+    Trade,
     Vintage,
 )
 from app.services import notify
@@ -341,6 +343,57 @@ def ProjectReversal(db: Session, log, ctx):
     notify.on_reversal(db, r.project_id, r.period, r.tonnes, r.covered, r.shortfall, r.tx_hash)
 
 
+# ------------------------------------------------------------- marketplace
+
+
+def Listed(db: Session, log, ctx):
+    a = log["args"]
+    tid = int(a["tokenId"])
+    db.merge(
+        Listing(
+            id=int(a["listingId"]),
+            seller=a["seller"].lower(),
+            token_id=str(tid),
+            project_id=tid >> 16,
+            vintage=tid & 0xFFFF,
+            amount_listed=int(a["amount"]),
+            amount_left=int(a["amount"]),
+            price_per_unit_wei=str(a["pricePerUnit"]),
+            active=True,
+            tx_hash=_tx(log),
+        )
+    )
+
+
+def Purchased(db: Session, log, ctx):
+    a = log["args"]
+    li = db.get(Listing, int(a["listingId"]))
+    if li:
+        li.amount_left = max(0, li.amount_left - int(a["amount"]))
+        if li.amount_left == 0:
+            li.active = False
+    blk = ctx["w3"].eth.get_block(log["blockNumber"])
+    db.add(
+        Trade(
+            listing_id=int(a["listingId"]),
+            buyer=a["buyer"].lower(),
+            token_id=str(int(a["tokenId"])),
+            amount=int(a["amount"]),
+            paid_wei=str(a["paid"]),
+            fee_wei=str(a["fee"]),
+            tx_hash=_tx(log),
+            ts=int(blk["timestamp"]),
+        )
+    )
+
+
+def Cancelled(db: Session, log, ctx):
+    li = db.get(Listing, int(log["args"]["listingId"]))
+    if li:
+        li.amount_left = 0
+        li.active = False
+
+
 HANDLERS = {
     "ProjectRegistry": [ProjectCreated, CellsAdded, ProjectActivated, ProjectStatusChanged, OverlapProven],
     "ModelRegistry": [ModelRegistered, ModelActiveSet],
@@ -358,4 +411,5 @@ HANDLERS = {
     ],
     "RetirementRegistry": [Retired],
     "BufferPool": [ProjectReversal],
+    "Marketplace": [Listed, Purchased, Cancelled],
 }

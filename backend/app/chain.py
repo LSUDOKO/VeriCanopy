@@ -20,6 +20,7 @@ CONTRACT_NAMES = [
     "PQKeyRegistry",
     "IntegrityOracle",
     "ChallengeManager",
+    "Marketplace",
 ]
 
 

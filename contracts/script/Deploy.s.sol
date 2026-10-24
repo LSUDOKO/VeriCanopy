@@ -10,6 +10,7 @@ import {ModelRegistry} from "../src/ModelRegistry.sol";
 import {PQKeyRegistry} from "../src/PQKeyRegistry.sol";
 import {IntegrityOracle} from "../src/IntegrityOracle.sol";
 import {ChallengeManager} from "../src/ChallengeManager.sol";
+import {Marketplace} from "../src/Marketplace.sol";
 import {MockVerifier} from "../test/mocks/MockVerifier.sol";
 
 /// @notice Deploys the full VeriCanopy stack with demo parameters and writes deployments/<chainId>.json.
@@ -44,6 +45,7 @@ contract Deploy is Script {
             deployer, address(reg), address(credit), address(pool), address(models), address(pqKeys)
         );
         ChallengeManager cm = new ChallengeManager(deployer, address(oracle));
+        Marketplace market = new Marketplace(deployer, address(credit), deployer, 100);
 
         // wiring
         reg.grantRole(reg.ISSUER_ROLE(), deployer);
@@ -78,6 +80,7 @@ contract Deploy is Script {
         vm.serializeAddress(c, "PQKeyRegistry", address(pqKeys));
         vm.serializeAddress(c, "IntegrityOracle", address(oracle));
         vm.serializeAddress(c, "ChallengeManager", address(cm));
+        vm.serializeAddress(c, "Marketplace", address(market));
         string memory cj = vm.serializeAddress(c, "Verifier", verifierAddr);
         vm.serializeString(j, "contracts", cj);
         string memory p = "params";

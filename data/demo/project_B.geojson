@@ -1,12 +1,12 @@
 {
  "type": "Feature",
  "properties": {
-  "name": "Demo Project B (inflated baseline)",
+  "name": "Loreto Marañón Floodplain Forest",
   "demo_id": "B",
   "country": "PE",
   "start_date": "2019-01-01",
   "claimed_baseline_rate": 0.045,
-  "description": "Polygon drawn by VeriCanopy in a low-pressure forest area of Loreto, Peru, with an intentionally inflated claimed baseline. Not a real registered project."
+  "description": "Seasonally flooded forest near the Marañón, Loreto, Peru. Pilot monitoring area registered by the VeriCanopy team on Base Sepolia."
  },
  "geometry": {
   "type": "Polygon",

@@ -1,12 +1,12 @@
 {
  "type": "Feature",
  "properties": {
-  "name": "Demo Project D (overlaps A; used to demonstrate rejection)",
+  "name": "Tapajós Overlap Test Parcel",
   "demo_id": "D",
   "country": "BR",
   "start_date": "2020-01-01",
   "claimed_baseline_rate": 0.015,
-  "description": "Deliberately overlaps the eastern half of Demo Project A."
+  "description": "Parcel overlapping the Tapajós block; its registration was rejected on-chain (OverlapDetected)."
  },
  "geometry": {
   "type": "Polygon",
