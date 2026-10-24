@@ -15,7 +15,7 @@ for (const path of PAGES) {
 
 test("register wizard pre-checks overlap against the API", async ({ page }) => {
   await page.goto("/register");
-  await page.getByRole("button", { name: /Example: overlaps Demo A/ }).click();
+  await page.getByRole("button", { name: /Example: overlaps the Tapajós block/ }).click();
   await page.getByRole("button", { name: /Compute H3 cells/ }).click();
   // either the API answers (conflict/ok panel) or it is down (error box); both must be visible, never a blank page
   await expect(page.locator("text=/Overlap detected|No overlap|Something went wrong|fetch|Failed/").first()).toBeVisible({ timeout: 20_000 });
