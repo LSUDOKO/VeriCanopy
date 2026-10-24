@@ -38,11 +38,11 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="flex flex-1 flex-col"><PageHero title="Portfolio" lede="Your living credits, retirements and sale proceeds. Scores update every monitoring period; impact notices arrive here when a forest you hold changes." /><div className="mx-auto w-full max-w-6xl px-0 pb-6">
+    <div className="flex flex-1 flex-col"><PageHero eyebrow="Holdings" title="Portfolio" lede="Your living credits, retirements and sale proceeds. Scores update every monitoring period; impact notices arrive here when a forest you hold changes." /><div className="wrap py-8">
       
       {!address && (
-        <div className="mx-4 mt-4 flex flex-wrap items-center gap-3 rounded-xl p-4 text-sm" style={{ background: "#fff", border: "1.5px solid var(--border)" }}>
-          <span className="display text-xl" style={{ color: "var(--forest)" }}>Connect a wallet to see your credits</span>
+        <div className="card mt-2 flex flex-wrap items-center gap-3 p-5 text-sm">
+          <span className="display text-xl">Connect a wallet to see your credits</span>
           <ConnectButton chainStatus="none" showBalance={false} />
           <span className="text-xs" style={{ color: "var(--fg-muted)" }}>or look up any address</span> <input className="input mono !w-80" placeholder="0x…" value={manual} onChange={(e) => setManual(e.target.value)} />
         </div>
@@ -50,17 +50,17 @@ export default function PortfolioPage() {
       {q.isLoading && <Skeleton className="mt-4 h-40" />}
       {q.error && <ErrorState error={q.error} onRetry={() => q.refetch()} />}
       {q.data && (
-        <div className="mt-4 grid gap-4 px-4 lg:grid-cols-3">
+        <div className="mt-4 grid gap-4 lg:grid-cols-3">
           <section className="card p-4 lg:col-span-2">
-            <h2 className="font-medium">Holdings</h2>
+            <h2 className="display text-xl">Holdings</h2>
             {q.data.holdings.length === 0 ? (
               <EmptyState title="No credits held" hint="Buy vintages on the Market; they appear here within a few blocks." />
             ) : (
-              <table className="mt-2 w-full text-sm">
-                <thead><tr className="label text-left"><th>Project</th><th>Vintage</th><th>Amount</th><th>Live integrity</th><th></th></tr></thead>
+              <table className="data-table mt-3">
+                <thead><tr><th>Project</th><th>Vintage</th><th>Amount</th><th>Live integrity</th><th></th></tr></thead>
                 <tbody>
                   {q.data.holdings.map((h) => (
-                    <tr key={h.token_id} className="border-t" style={{ borderColor: "var(--border)" }}>
+                    <tr key={h.token_id}>
                       <td className="py-1"><a className="underline" href={`/projects/${h.project_id}`}>{h.project_name ?? `#${h.project_id}`}</a></td>
                       <td className="mono">{h.vintage}</td>
                       <td className="mono">{fmt(h.amount)}</td>
@@ -75,11 +75,11 @@ export default function PortfolioPage() {
             {q.data.retirements.length === 0 ? (
               <EmptyState title="No retirements yet" />
             ) : (
-              <table className="mt-2 w-full text-sm">
-                <thead><tr className="label text-left"><th>#</th><th>Project</th><th>Amount</th><th>Beneficiary</th><th>Score then</th><th>Score now</th><th>Tx</th><th></th></tr></thead>
+              <table className="data-table mt-3">
+                <thead><tr><th>#</th><th>Project</th><th>Amount</th><th>Beneficiary</th><th>Score then</th><th>Score now</th><th>Tx</th><th></th></tr></thead>
                 <tbody>
                   {q.data.retirements.map((r) => (
-                    <tr key={r.id} className="border-t" style={{ borderColor: "var(--border)" }}>
+                    <tr key={r.id}>
                       <td className="py-1 mono">{r.id}</td>
                       <td><a className="underline" href={`/projects/${r.project_id}`}>{r.project_name ?? `#${r.project_id}`}</a></td>
                       <td className="mono">{fmt(r.amount)}</td>
@@ -96,8 +96,8 @@ export default function PortfolioPage() {
           </section>
           <section className="flex flex-col gap-4">
             <WithdrawProceeds />
-            <div className="card p-4">
-            <h2 className="font-medium">Impact notices</h2>
+            <div className="card p-5">
+            <h2 className="display text-xl">Impact notices</h2>
             {q.data.notifications.length === 0 ? (
               <EmptyState title="Inbox empty" hint="You will be notified here when a project you hold or retired loses forest or changes status." />
             ) : (

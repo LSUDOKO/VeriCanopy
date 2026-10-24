@@ -15,6 +15,7 @@ import { BuyModal, WithdrawProceeds } from "@/components/MarketModals";
 import { StatSticker } from "@/components/StatSticker";
 import { EmptyState, ErrorState, Skeleton } from "@/components/States";
 import { HashChip } from "@/components/HashChip";
+import { PriceGuide } from "@/components/PriceGuide";
 import { useToast } from "@/components/Toast";
 
 const compact = (n: number) => Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(n);
@@ -37,14 +38,14 @@ export default function MarketPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <PageHero title="Market" lede="Buy and sell living forest credits on Base Sepolia. Every tonne carries the project's live integrity score, and frozen projects cannot trade.">
+      <PageHero eyebrow="Marketplace" title="Market" lede="Buy and sell living forest credits on Base Sepolia. Every tonne carries the project's live integrity score, and frozen projects cannot trade.">
         <div className="flex flex-wrap gap-2">
           <StatSticker label="Tonnes for sale" value={stats.data ? compact(stats.data.open_units) : "…"} tone="lime" />
           <StatSticker label="Tonnes traded" value={stats.data ? compact(stats.data.units_traded) : "…"} tone="yellow" />
           <StatSticker label="Volume (ETH)" value={stats.data ? Number(formatEther(BigInt(stats.data.volume_wei))).toFixed(3) : "…"} tone="sky" />
         </div>
       </PageHero>
-      <div className="mx-auto w-full max-w-7xl px-4 py-5">
+      <div className="wrap py-6">
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <label className="flex items-center gap-2">Sort
             <select className="input !w-auto" value={sort} onChange={(e) => setSort(e.target.value as typeof sort)}>
@@ -65,11 +66,10 @@ export default function MarketPage() {
             const status = integrityStatus(l.score_bps, l.project_status ?? "Active", 5000, l.integrity_status);
             const mine = address && l.seller === address.toLowerCase();
             return (
-              <li key={l.id} className="card relative overflow-hidden p-4" style={{ transform: `rotate(${(l.id % 3) - 1}deg)` }}>
-                <span className="tape" style={{ top: -10, left: 24, width: 90, ["--r" as string]: "-5deg" }} aria-hidden />
+              <li key={l.id} className="card relative overflow-hidden p-5">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <a href={`/projects/${l.project_id}`} className="display text-2xl leading-none hover:underline" style={{ color: "var(--forest)" }}>{l.project_name ?? `Project #${l.project_id}`}</a>
+                    <a href={`/projects/${l.project_id}`} className="font-semibold text-lg leading-tight hover:underline">{l.project_name ?? `Project #${l.project_id}`}</a>
                     <div className="mt-1 text-xs" style={{ color: "var(--fg-muted)" }}>{l.country} · vintage {l.vintage} · listing #{l.id}</div>
                   </div>
                   <IntegrityBadge scoreBps={l.score_bps} status={status} size="sm" />
@@ -94,13 +94,18 @@ export default function MarketPage() {
           })}
         </ul>
         <section className="mt-8">
-          <h2 className="display text-3xl" style={{ color: "var(--forest)" }}>Recent trades</h2>
+          <h2 className="display text-2xl">Price guide by integrity band</h2>
+          <div className="mt-3"><PriceGuide /></div>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="display text-2xl">Recent trades</h2>
           {trades.data?.trades.length ? (
-            <table className="mt-2 w-full text-sm">
-              <thead><tr className="label text-left"><th>When</th><th>Buyer</th><th>Token</th><th>Tonnes</th><th>Paid</th><th>Tx</th></tr></thead>
+            <table className="data-table mt-3">
+              <thead><tr><th>When</th><th>Buyer</th><th>Token</th><th>Tonnes</th><th>Paid</th><th>Tx</th></tr></thead>
               <tbody>{trades.data.trades.map((t) => (
-                <tr key={t.id} className="border-t" style={{ borderColor: "var(--border)" }}>
-                  <td className="py-1">{t.ts ? new Date(t.ts * 1000).toLocaleString() : "—"}</td><td><HashChip value={t.buyer} kind="address" /></td><td className="mono">{t.token_id}</td><td className="mono">{t.amount.toLocaleString()}</td><td className="mono">{formatEther(BigInt(t.paid_wei))} ETH</td><td><HashChip value={t.tx_hash} kind="tx" /></td>
+                <tr key={t.id}>
+                  <td>{t.ts ? new Date(t.ts * 1000).toLocaleString() : "—"}</td><td><HashChip value={t.buyer} kind="address" /></td><td className="mono">{t.token_id}</td><td className="mono">{t.amount.toLocaleString()}</td><td className="mono">{formatEther(BigInt(t.paid_wei))} ETH</td><td><HashChip value={t.tx_hash} kind="tx" /></td>
                 </tr>))}</tbody>
             </table>
           ) : <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>No trades yet. Be the first.</p>}

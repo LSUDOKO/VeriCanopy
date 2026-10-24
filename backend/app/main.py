@@ -12,15 +12,24 @@ from slowapi.util import get_remote_address
 from app.config import settings
 from app.db import init_db
 from app.routers import (
+    alerts,
     challenges,
     evidence,
+    explain,
+    fires,
     jobs,
     market,
     metadata,
     misc,
+    model,
     portfolio,
+    pricing,
     projects,
+    reports,
+    retirements,
+    rings,
     stats,
+    status,
     submissions,
     tiles,
     verify,
@@ -50,10 +59,20 @@ for r in (
     evidence,
     tiles,
     market,
+    fires,
+    alerts,
+    pricing,
+    status,
+    model,
+    retirements,
+    rings,
+    explain,
+    reports,
 ):
     app.include_router(r.router, prefix="/api/v1")
 app.include_router(misc.router, prefix="/api/v1")
 app.include_router(misc.router)  # /healthz at root too
+__import__("app.mcp").mcp.mount(app)  # MCP server at /mcp (streamable HTTP)
 
 
 @app.on_event("startup")

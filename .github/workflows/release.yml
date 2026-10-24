@@ -1,0 +1,69 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+  packages: write
+jobs:
+  artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: foundry-rs/foundry-toolchain@v1
+        with: { version: v1.4.2 }
+      - name: Build contracts
+        run: cd contracts && forge build
+      - name: Package release assets
+        run: |
+          set -e
+          V=${GITHUB_REF_NAME}
+          mkdir -p dist
+          # ABIs + deployments
+          mkdir -p pkg/abis
+          for n in ProjectRegistry ModelRegistry PQKeyRegistry IntegrityOracle ChallengeManager VeriCredit BufferPool RetirementRegistry Marketplace; do
+            jq .abi contracts/out/$n.sol/$n.json > pkg/abis/$n.json
+          done
+          cp -r contracts/deployments pkg/ 2>/dev/null || true
+          tar czf dist/vericanopy-contracts-$V.tar.gz -C pkg .
+          # Verifier + zk artifacts (settings, verification key, sample proof) if present
+          mkdir -p zk
+          cp ai/zk/artifacts/{settings.json,vk.key,vk.sha256,calibration.json,zk_benchmarks.json,pq_benchmarks.json} zk/
+          cp contracts/verifier/Halo2Verifier.sol contracts/verifier/Halo2Verifier.abi.json contracts/verifier/Halo2Verifier.meta.json zk/
+          tar czf dist/vericanopy-zk-verifier-$V.tar.gz -C zk .
+          # Model artifacts (ONNX + training report)
+          mkdir -p model
+          cp ai/zk/artifacts/model.onnx ai/zk/artifacts/training_report.json model/
+          tar czf dist/vericanopy-model-$V.tar.gz -C model .
+          # Docs bundle
+          tar czf dist/vericanopy-docs-$V.tar.gz README.md CHANGELOG.md docs brand/BRAND.md 2>/dev/null || tar czf dist/vericanopy-docs-$V.tar.gz README.md CHANGELOG.md docs
+          (cd dist && sha256sum * > SHA256SUMS.txt)
+      - name: GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body_path: CHANGELOG.md
+          files: dist/*
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/vericanopy-api
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

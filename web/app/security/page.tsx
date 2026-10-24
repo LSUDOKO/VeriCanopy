@@ -20,11 +20,11 @@ export default function SecurityPage() {
   const pq = b.data?.pq_benchmarks;
   const zk = b.data?.zk_benchmarks;
   return (
-    <div className="flex flex-1 flex-col"><PageHero title="Security & trust model" lede="What is proven by cryptography, what is enforced by incentives, and what you still have to trust." /><div className="mx-auto w-full max-w-5xl px-4 pb-6 flex flex-col gap-6 text-sm">
-      <section className="card p-4">
-        <h2 className="font-medium">What is proven, and by what</h2>
-        <table className="mt-2 w-full">
-          <thead><tr className="label text-left"><th>Claim</th><th>Covered by</th></tr></thead>
+    <div className="flex flex-1 flex-col"><PageHero eyebrow="Trust model" title="Security & trust model" lede="What is proven by cryptography, what is enforced by incentives, and what you still have to trust." /><div className="wrap max-w-5xl flex flex-col gap-6 py-8 text-[15px]">
+      <section className="card p-5">
+        <h2 className="display text-xl">What is proven, and by what</h2>
+        <table className="data-table mt-3">
+          <thead><tr><th>Claim</th><th>Covered by</th></tr></thead>
           <tbody>
             {[
               ["The registered model was used, unmodified", "zk proof (fixed params; verifier bound to the circuit) + ModelRegistry"],
@@ -32,16 +32,16 @@ export default function SecurityPage() {
               ["The features came from the stated satellite data", "NOT the zk proof → reproducible manifest + open challenge game"],
               ["The scoring rule is scientifically right", "NOT cryptography → open methodology + governance"],
             ].map(([a, c]) => (
-              <tr key={a} className="border-t" style={{ borderColor: "var(--border)" }}><td className="py-1 pr-3">{a}</td><td style={{ color: "var(--fg-muted)" }}>{c}</td></tr>
+              <tr key={a}><td className="py-1 pr-3">{a}</td><td style={{ color: "var(--fg-muted)" }}>{c}</td></tr>
             ))}
           </tbody>
         </table>
       </section>
 
-      <section className="card p-4">
-        <h2 className="font-medium">Post-quantum scope (honest)</h2>
-        <table className="mt-2 w-full">
-          <thead><tr className="label text-left"><th>Element</th><th>Quantum-safe?</th></tr></thead>
+      <section className="card p-5">
+        <h2 className="display text-xl">Post-quantum scope (honest)</h2>
+        <table className="data-table mt-3">
+          <thead><tr><th>Element</th><th>Quantum-safe?</th></tr></thead>
           <tbody>
             {[
               ["Manifest attestations (ML-DSA-65, FIPS 204)", "✅ Yes"],
@@ -50,16 +50,16 @@ export default function SecurityPage() {
               ["zk proofs (Halo2 + KZG)", "❌ No (pairing-based); roadmap: hash-based STARK proofs"],
               ["Overall", "Records are double-anchored: forging history requires breaking both ML-DSA and the chain"],
             ].map(([a, c]) => (
-              <tr key={a} className="border-t" style={{ borderColor: "var(--border)" }}><td className="py-1 pr-3">{a}</td><td>{c}</td></tr>
+              <tr key={a}><td className="py-1 pr-3">{a}</td><td>{c}</td></tr>
             ))}
           </tbody>
         </table>
       </section>
 
-      <section className="card p-4">
-        <h2 className="font-medium">Trust model (MVP)</h2>
-        <table className="mt-2 w-full">
-          <thead><tr className="label text-left"><th>Component</th><th>MVP assumption</th><th>Production path</th></tr></thead>
+      <section className="card p-5">
+        <h2 className="display text-xl">Trust model (MVP)</h2>
+        <table className="data-table mt-3">
+          <thead><tr><th>Component</th><th>MVP assumption</th><th>Production path</th></tr></thead>
           <tbody>
             {[
               ["Satellite data", "Public datasets via Earth Engine (fixture samples when no credentials)", "Multiple providers, data-availability commitments"],
@@ -69,17 +69,17 @@ export default function SecurityPage() {
               ["Registry admin", "Multisig / deployer (testnet)", "DAO / standards body"],
               ["Signatures", "ML-DSA-65 on manifests + ECDSA on txs", "PQ account abstraction"],
             ].map(([a, c, p]) => (
-              <tr key={a} className="border-t" style={{ borderColor: "var(--border)" }}><td className="py-1 pr-3">{a}</td><td>{c}</td><td style={{ color: "var(--fg-muted)" }}>{p}</td></tr>
+              <tr key={a}><td className="py-1 pr-3">{a}</td><td>{c}</td><td style={{ color: "var(--fg-muted)" }}>{p}</td></tr>
             ))}
           </tbody>
         </table>
       </section>
 
-      <section className="card p-4">
-        <h2 className="font-medium">Measured: ECDSA secp256k1 vs ML-DSA-65</h2>
+      <section className="card p-5">
+        <h2 className="display text-xl">Measured: ECDSA secp256k1 vs ML-DSA-65</h2>
         <div className="text-xs" style={{ color: "var(--fg-muted)" }}>Measured by ai/pq/bench.py on {pq?.machine ?? "—"}. Dashes mean not measured.</div>
         <table className="mt-2 w-full mono">
-          <thead><tr className="label text-left"><th>Metric</th><th>ECDSA</th><th>ML-DSA-65</th></tr></thead>
+          <thead><tr><th>Metric</th><th>ECDSA</th><th>ML-DSA-65</th></tr></thead>
           <tbody>
             {[
               ["Public key size", v(pq?.ecdsa_secp256k1.public_key_bytes, " B"), v(pq?.ml_dsa_65.public_key_bytes, " B")],
@@ -87,14 +87,14 @@ export default function SecurityPage() {
               ["Sign time", v(pq?.ecdsa_secp256k1.sign_ms, " ms"), v(pq?.ml_dsa_65.sign_ms, " ms")],
               ["Verify time", v(pq?.ecdsa_secp256k1.verify_ms, " ms"), v(pq?.ml_dsa_65.verify_ms, " ms")],
             ].map(([a, b2, c]) => (
-              <tr key={a} className="border-t" style={{ borderColor: "var(--border)" }}><td className="py-1">{a}</td><td>{b2}</td><td>{c}</td></tr>
+              <tr key={a}><td className="py-1">{a}</td><td>{b2}</td><td>{c}</td></tr>
             ))}
           </tbody>
         </table>
       </section>
 
-      <section className="card p-4">
-        <h2 className="font-medium">Measured: zkML (EZKL / Halo2-KZG)</h2>
+      <section className="card p-5">
+        <h2 className="display text-xl">Measured: zkML (EZKL / Halo2-KZG)</h2>
         <table className="mt-2 w-full mono">
           <tbody>
             {[
@@ -105,14 +105,14 @@ export default function SecurityPage() {
               ["Float vs proven max abs error", v(zk?.float_vs_proven_max_abs_err)],
               ["Verifier bytecode", "see docs/BENCHMARKS.md"],
             ].map(([a, c]) => (
-              <tr key={a} className="border-t" style={{ borderColor: "var(--border)" }}><td className="py-1">{a}</td><td>{c}</td></tr>
+              <tr key={a}><td className="py-1">{a}</td><td>{c}</td></tr>
             ))}
           </tbody>
         </table>
       </section>
 
-      <section className="card p-4">
-        <h2 className="font-medium">Deployed contracts (chain {d.data?.chainId ?? "—"})</h2>
+      <section className="card p-5">
+        <h2 className="display text-xl">Deployed contracts (chain {d.data?.chainId ?? "—"})</h2>
         <ul className="mt-2 mono text-xs">
           {d.data ? Object.entries(d.data.contracts).map(([k, a]) => <li key={k}>{k}: {a}</li>) : <li>—</li>}
         </ul>

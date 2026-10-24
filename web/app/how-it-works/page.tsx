@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
-import { Sticker } from "@/components/landing/Sticker";
 
 const STEPS: [string, string, string][] = [
   ["Register land", "A developer submits a polygon. Its H3 cells are locked on-chain; any later polygon touching those cells is rejected with OverlapDetected. No land can be sold twice.", "Registry"],
@@ -15,19 +14,20 @@ const STEPS: [string, string, string][] = [
 export default function HowItWorks() {
   return (
     <div className="flex flex-1 flex-col">
-      <PageHero title="How it works" lede="Seven steps from a polygon to a credit that keeps proving itself. Everything below runs on Base Sepolia today with real satellite data." />
-      <ol className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-8 sm:grid-cols-2">
+      <PageHero eyebrow="Pipeline" title="How it works" lede="Seven steps from a polygon to a credit that keeps proving itself. Everything below runs on Base Sepolia today with real satellite data." />
+      <ol className="wrap grid gap-4 py-10 sm:grid-cols-2">
         {STEPS.map(([t, d, tag], i) => (
-          <li key={t} className="card relative flex gap-4 p-5" style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 0.6}deg)` }}>
-            <Sticker tone={(["lime", "yellow", "sky", "cream", "orange", "red", "lime"] as const)[i]} title={String(i + 1)} size={72} foot={`${tag.toUpperCase()} · `} />
+          <li key={t} className="card relative flex gap-5 p-6">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full display text-lg" style={{ background: "var(--forest)", color: "#fff" }}>{i + 1}</div>
             <div>
-              <h2 className="display text-2xl" style={{ color: "var(--forest)" }}>{t}</h2>
-              <p className="mt-1 text-sm" style={{ color: "var(--fg)" }}>{d}</p>
+              <div className="chip mb-2">{tag}</div>
+              <h2 className="display text-xl">{t}</h2>
+              <p className="mt-2 text-[15px]" style={{ color: "var(--fg-muted)" }}>{d}</p>
             </div>
           </li>
         ))}
       </ol>
-      <div className="mx-auto mb-12 flex w-full max-w-6xl flex-wrap gap-3 px-4">
+      <div className="wrap mb-14 flex flex-wrap gap-3">
         <Link href="/explore" className="btn btn-primary">Open the registry</Link>
         <Link href="/market" className="btn btn-lime">See what is for sale</Link>
         <Link href="/security" className="btn btn-ghost">Read the trust model</Link>

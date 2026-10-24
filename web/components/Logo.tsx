@@ -1,47 +1,28 @@
 /**
- * VeriCanopy mark — a tree crown drawn as three overlapping canopy lobes over a short trunk, with a check-stroke
- * running through the crown (verified canopy). Monochrome-safe: ink on leaf, or leaf on ink.
+ * VeriCanopy mark: three forest facets (an isometric crown) over a lime check-chevron, plus a small lime "+".
+ * Redrawn as clean geometry from brand/logo-original.png. Same paths as public/brand/logo-mark*.svg.
  */
-function Crown({ ink, leaf }: { ink: string; leaf: string }) {
+export function LogoMark({ size = 28, ink = "#012c19", leaf = "#7ad101", className = "" }: { size?: number; ink?: string; leaf?: string; className?: string }) {
   return (
-    <>
-      <circle cx="32" cy="32" r="30" fill={ink} />
-      {/* crown lobes */}
-      <circle cx="22" cy="31" r="10" fill={leaf} />
-      <circle cx="42" cy="31" r="10" fill={leaf} />
-      <circle cx="32" cy="23" r="11" fill={leaf} />
-      <rect x="20" y="30" width="24" height="10" fill={leaf} />
-      {/* trunk */}
-      <path d="M30 40h4v10h-4z" fill={leaf} />
-      <path d="M24 50h16" stroke={leaf} strokeWidth="3" strokeLinecap="round" />
-      {/* verification stroke */}
-      <path d="M23 31l6 6 13-13" stroke={ink} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    </>
-  );
-}
-
-export function LogoMark({ size = 32, ink = "#013900", leaf = "#b6fe00", className = "" }: { size?: number; ink?: string; leaf?: string; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" className={className} role="img" aria-label="VeriCanopy mark">
-      <Crown ink={ink} leaf={leaf} />
+    <svg width={size} height={size} viewBox="0 0 120 120" className={className} role="img" aria-label="VeriCanopy mark">
+      <polygon fill={ink} points="60,6 86,20 86,46 60,60 34,46 34,20" />
+      <polygon fill={ink} points="8,38 30,26 30,64 19,78 8,72" />
+      <polygon fill={ink} points="112,38 90,26 90,64 101,78 112,72" />
+      <polygon fill={leaf} points="36,60 60,74 84,60 84,76 60,92 36,76" />
+      <path fill={leaf} d="M98 4h8v8h8v8h-8v8h-8v-8h-8v-8h8z" />
     </svg>
   );
 }
 
-export function Logo({ size = 88, ink = "#013900", leaf = "#b6fe00", text = "#013900", className = "" }: { size?: number; ink?: string; leaf?: string; text?: string; className?: string }) {
-  const h = Math.round(size * 0.225);
-  const accent = leaf === "#b6fe00" && text === "#013900" ? "#2e7d4f" : leaf;
+/** Mark + wordmark. `tone="light"` for dark backgrounds. */
+export function Logo({ size = 28, tone = "dark", className = "", compact = false }: { size?: number; tone?: "dark" | "light"; className?: string; compact?: boolean }) {
+  const ink = tone === "light" ? "#ffffff" : "#012c19";
   return (
-    <svg width={size} height={h} viewBox="0 0 400 90" className={className} role="img" aria-label="VeriCanopy">
-      <g transform="translate(3 3) scale(1.3)">
-        <Crown ink={ink} leaf={leaf} />
-      </g>
-      <text x="100" y="56" fontFamily="var(--font-anton), Impact, 'Arial Narrow', sans-serif" fontSize="46" fill={text} letterSpacing="0.5">
-        VERI<tspan fill={accent}>CANOPY</tspan>
-      </text>
-      <text x="101" y="76" fontFamily="var(--font-inter-tight), system-ui, sans-serif" fontSize="11.5" fontWeight="600" fill={text} letterSpacing="1.9">
-        CREDITS THAT PROVE THEMSELVES
-      </text>
-    </svg>
+    <span className={`inline-flex items-center gap-2 ${className}`} style={{ color: ink }}>
+      <LogoMark size={size} ink={ink} />
+      <span className={`display ${compact ? "hidden sm:inline" : ""}`} style={{ fontSize: size * 0.82, letterSpacing: "-0.035em", fontWeight: 700, lineHeight: 1 }}>
+        Veri<span style={{ color: "#7ad101" }}>Canopy</span>
+      </span>
+    </span>
   );
 }

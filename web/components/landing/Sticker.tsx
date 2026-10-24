@@ -24,7 +24,7 @@ export function Sticker({
         <defs>
           <path id={`c-${title.replace(/\W/g, "")}`} d="M50 50 m-40 0 a40 40 0 1 1 80 0 a40 40 0 1 1 -80 0" />
         </defs>
-        <text fontSize="5.4" fontFamily="var(--font-anton)" fill={ink} letterSpacing="1" opacity="0.85">
+        <text fontSize="5.4" fontFamily="var(--font-geist-sans)" fontWeight="600" fill={ink} letterSpacing="1" opacity="0.85">
           <textPath href={`#c-${title.replace(/\W/g, "")}`} textLength="250" lengthAdjust="spacingAndGlyphs">{(foot ?? "VERICANOPY · PROVEN ON-CHAIN · ").repeat(2)}</textPath>
         </text>
       </svg>

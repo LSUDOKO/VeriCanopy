@@ -27,7 +27,7 @@ export default function VerifyPage() {
   };
   const subs = (projects.data?.projects ?? []).map((p) => p.integrity.latest_submission).filter((s): s is NonNullable<typeof s> => !!s);
   return (
-    <div className="flex flex-1 flex-col"><PageHero title="Verify an attestation" lede="Independent of this site: re-check the manifest hash against the chain, the ML-DSA-65 signature against the registered key, and the zk proof status." /><div className="mx-auto w-full max-w-4xl px-4 pb-6">
+    <div className="flex flex-1 flex-col"><PageHero eyebrow="Independent check" title="Verify an attestation" lede="Independent of this site: re-check the manifest hash against the chain, the ML-DSA-65 signature against the registered key, and the zk proof status." /><div className="wrap max-w-4xl py-8">
       
       <div className="card mt-4 p-4 flex flex-col gap-3 text-sm">
         <label>

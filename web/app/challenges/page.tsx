@@ -63,7 +63,7 @@ export default function ChallengesPage() {
     </li>
   );
   return (
-    <div className="flex flex-1 flex-col"><PageHero title="Challenges" lede="Any pending score can be disputed with a bond. Resolvers recompute the manifest and vote; the losing side pays." /><div className="mx-auto w-full max-w-5xl px-4 pb-6">
+    <div className="flex flex-1 flex-col"><PageHero eyebrow="Disputes" title="Challenges" lede="Any pending score can be disputed with a bond. Resolvers recompute the manifest and vote; the losing side pays." /><div className="wrap max-w-5xl py-8">
       
       {q.isLoading && <Skeleton className="mt-4 h-32" />}
       {q.error && <ErrorState error={q.error} onRetry={() => q.refetch()} />}

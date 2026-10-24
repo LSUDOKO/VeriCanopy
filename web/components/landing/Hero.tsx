@@ -3,77 +3,55 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Logo } from "@/components/Logo";
-import { Sticker } from "./Sticker";
-import { PhotoCard } from "./PhotoCard";
-import { ArcText } from "@/components/ArcText";
+import { useQuery } from "@tanstack/react-query";
+import { api, type Stats } from "@/lib/api";
+
+const compact = (n?: number | null) => (n === null || n === undefined ? "—" : Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(n));
 
 export function Hero() {
-  const root = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null);
+  const stats = useQuery({ queryKey: ["stats"], queryFn: () => api<Stats>("/stats"), refetchInterval: 30_000 });
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ctx = gsap.context(() => {
-      gsap.from(".hero-word", { yPercent: 110, duration: 1, ease: "power4.out", stagger: 0.12, delay: 0.1 });
-      gsap.from(".prop", { scale: 0.6, opacity: 0, rotate: "+=20", duration: 0.9, ease: "back.out(1.6)", stagger: 0.08, delay: 0.7 });
-      const onMove = (e: MouseEvent) => {
-        const dx = (e.clientX / window.innerWidth - 0.5) * 2;
-        const dy = (e.clientY / window.innerHeight - 0.5) * 2;
-        gsap.to(".prop", { x: (i) => dx * (10 + i * 8), y: (i) => dy * (8 + i * 6), duration: 1.2, ease: "power2.out", overwrite: "auto" });
-      };
-      window.addEventListener("mousemove", onMove);
-      return () => window.removeEventListener("mousemove", onMove);
+      gsap.from(".hero-in", { y: 28, opacity: 0, duration: 1.1, ease: "power3.out", stagger: 0.1, delay: 0.15 });
+      gsap.to(".hero-video", { yPercent: 12, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true } });
     }, root);
     return () => ctx.revert();
   }, []);
-
+  const s = stats.data;
   return (
-    <section ref={root} className="relative overflow-hidden" style={{ background: "var(--forest)" }}>
-      <div className="crumple arc-bottom relative z-10 overflow-hidden pb-[14vw] pt-10 text-center" style={{ background: "var(--lime)", color: "var(--forest)" }}>
-        <div className="absolute left-5 top-4 hidden sm:block text-left display text-sm leading-tight">⋮ Live on Base Sepolia<br />real satellite data</div>
-        <div className="mx-auto flex items-center justify-center gap-4 display text-xl sm:text-2xl">
-          <span>We&apos;re</span>
-          <Logo size={300} />
-          <span>here to</span>
+    <section ref={root} className="relative -mt-14 flex min-h-[100svh] flex-col justify-end overflow-hidden" style={{ background: "var(--deep)", color: "#fff" }}>
+      <video className="hero-video absolute inset-0 h-[112%] w-full object-cover opacity-80" src="/video/hero.mp4" poster="/video/poster.jpg" autoPlay muted loop playsInline aria-hidden />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(1,26,16,.55) 0%, rgba(1,26,16,.15) 40%, rgba(1,26,16,.85) 100%)" }} aria-hidden />
+      <div className="wrap relative z-10 pb-16 pt-32 sm:pb-24">
+        <div className="hero-in eyebrow mb-5 flex items-start gap-2">
+          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--lime)" }} aria-hidden />
+          Live on Base Sepolia · real satellite data · open source
         </div>
-        <h1 className="display mt-2 overflow-hidden" style={{ fontSize: "clamp(5.5rem, 22vw, 26rem)" }}>
-          <span className="block overflow-hidden"><span className="hero-word inline-block"><ArcText text="Prove" drop=".12em" tilt="7deg" /></span></span>
-          <span className="block overflow-hidden"><span className="hero-word inline-block"><ArcText text="it stuck" drop=".1em" tilt="6deg" /></span></span>
+        <h1 className="hero-in display max-w-4xl text-[2.75rem] leading-[1] sm:text-7xl lg:text-[6rem]">
+          Carbon credits that <span style={{ color: "var(--lime)" }}>prove themselves.</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-xl px-6 text-lg font-semibold">
-          Every forest credit scored from real satellite pixels, proven with zero-knowledge math on-chain, and re-checked every season. When the forest goes, the credit knows.
+        <p className="hero-in lede mt-6 max-w-2xl" style={{ color: "rgba(255,255,255,.78)" }}>
+          Satellite AI scores every forest. A zero-knowledge proof puts the score on-chain. The credit keeps watching.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link href="/explore" className="btn btn-primary text-base">Open the registry</Link>
-          <Link href="/demo" className="btn btn-ghost text-base">Watch the 2021 fire</Link>
+        <div className="hero-in mt-8 flex flex-wrap gap-3">
+          <Link href="/explore" className="btn btn-lime btn-lg">Explore the registry</Link>
+          <Link href="/how-it-works" className="btn btn-lg" style={{ background: "rgba(255,255,255,.12)", color: "#fff", backdropFilter: "blur(10px)" }}>How it works</Link>
         </div>
-      </div>
-
-      <div className="relative z-20 -mt-[9vw] flex justify-center">
-        <Sticker tone="red" title="Frozen 0.2" sub="Manavgat Pine Forest · 2021 fire · 1.2 MtCO2e lost · buffer burned" size={230} className="prop !relative" style={{ transform: "rotate(-8deg)" }} foot="VERIFIED ON BASE SEPOLIA · ML-DSA-65 SIGNED · " />
-      </div>
-
-      <div className="crumple crumple-dark relative min-h-[60vh] px-6 pb-24 pt-10 sm:px-12" style={{ background: "var(--forest)" }}>
-        <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-[1fr_1.2fr]">
-          <div className="relative">
-            <div className="prop !relative rotate-[-5deg] rounded-md p-6 text-left" style={{ background: "var(--yellow)", color: "#5a3a12", maxWidth: 360 }}>
-              <span className="tape" style={{ top: -14, left: 60, ["--r" as string]: "4deg" }} aria-hidden />
-              <div className="display text-3xl">Monitoring list</div>
-              <ul className="hand mt-3 space-y-1 text-xl">
-                <li>○ compare with twin forest</li>
-                <li>○ prove the score (EZKL)</li>
-                <li>○ sign it for 30 years (ML-DSA)</li>
-                <li>○ burn buffer if it burns</li>
-              </ul>
+        <dl className="hero-in mt-14 grid max-w-3xl grid-cols-2 gap-y-6 border-t border-white/15 pt-6 sm:grid-cols-4" aria-label="Live network figures">
+          {[
+            ["Projects monitored", s ? String(s.projects) : "…"],
+            ["Credits issued", s ? `${compact(s.credits_issued)} t` : "…"],
+            ["Forest loss detected", s ? `${compact(s.tonnes_reversed)} t` : "…"],
+            ["Buffer burned to cover it", s ? `${compact(s.tonnes_covered_by_buffers)} t` : "…"],
+          ].map(([k, v]) => (
+            <div key={k}>
+              <dt className="text-xs font-medium" style={{ color: "rgba(255,255,255,.6)" }}>{k}</dt>
+              <dd className="display mt-1 text-2xl tabular-nums">{v}</dd>
             </div>
-            <PhotoCard src="/sat/A_after.png" alt="Sentinel-2 true colour over the Tapajós block, 2023" caption="Sentinel-2 · Tapajós, Pará · 2023" className="prop !relative mt-10 aspect-[4/3] w-72 rotate-3" />
-          </div>
-          <div className="kraft-paper rotate-[1.5deg] rounded-sm p-8 sm:p-12">
-            <span className="tape" style={{ top: -12, right: 80, ["--r" as string]: "-6deg" }} aria-hidden />
-            <h2 className="display relative text-4xl leading-[0.9] sm:text-6xl" style={{ color: "#7a4a12" }}>
-              Over-credited baselines, phantom forests, credits sold twice, fires nobody reported. We always check by you.
-            </h2>
-          </div>
-        </div>
+          ))}
+        </dl>
       </div>
     </section>
   );

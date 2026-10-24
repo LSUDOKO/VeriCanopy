@@ -1,0 +1,30 @@
+name: Bug report
+description: Something is broken in the app, API, contracts or pipeline
+labels: [bug]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options: [web, backend API, indexer/workers, contracts, AI pipeline, zk circuit, MCP server, docs]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include the URL, project id, period, or tx hash where relevant.
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      render: bash
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Browser / wallet / chain id 84532 / commit"
