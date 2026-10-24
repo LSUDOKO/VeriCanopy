@@ -25,14 +25,14 @@ export function TopBar() {
   const chainId = useChainId();
   return (
     <header className="sticky top-0 z-40" style={{ background: "var(--forest)", color: "var(--lime)" }}>
-      <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-2">
+      <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-4 py-2">
         <Link href="/" className="flex items-center gap-2 display text-2xl" style={{ color: "var(--lime)" }}>
           <LogoMark size={30} />
           VeriCanopy
         </Link>
-        <nav className="hidden md:flex items-center gap-1 text-sm" aria-label="Main">
+        <nav className="hidden md:flex items-center gap-0.5 text-sm whitespace-nowrap" aria-label="Main">
           {NAV.map(([href, label]) => (
-            <Link key={href} href={href} className="display rounded-md px-2.5 py-1.5 text-base tracking-wide hover:bg-[rgba(182,254,0,.15)]" style={path === href ? { background: "var(--lime)", color: "var(--forest)" } : undefined}>
+            <Link key={href} href={href} className="display rounded-md px-2 py-1.5 text-[15px] tracking-wide whitespace-nowrap hover:bg-[rgba(182,254,0,.15)]" style={path === href ? { background: "var(--lime)", color: "var(--forest)" } : undefined}>
               {label}
             </Link>
           ))}
