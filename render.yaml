@@ -12,11 +12,11 @@ services:
     autoDeploy: true
     envVars:
       - key: CHAIN_ID
-        value: "80002"
+        value: "11155111"
       - key: RPC_URL
-        value: https://polygon-amoy-bor-rpc.publicnode.com
+        value: https://ethereum-sepolia-rpc.publicnode.com
       - key: EXPLORER_URL
-        value: https://amoy.polygonscan.com
+        value: https://sepolia.etherscan.io
       - key: CORS_ORIGINS
         value: https://vericanopy.vercel.app,http://localhost:3000
       - key: ZK_MODE

@@ -23,7 +23,7 @@ export const wagmiConfig = getDefaultConfig({
 
 export const NETWORK_LABEL: Record<number, string> = {
   31337: "Anvil (local)",
-  80002: "Polygon Amoy testnet",
+  80002: "Ethereum Sepolia testnet",
   84532: "Base Sepolia testnet",
   11155111: "Sepolia testnet",
 };
