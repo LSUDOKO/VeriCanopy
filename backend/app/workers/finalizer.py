@@ -21,7 +21,11 @@ def finalize_due(log=print) -> list[int]:
             continue
         if cm.functions.openChallengeOf(sid).call() != 0:
             continue
-        send(web3, oracle.functions.finalize(sid), settings.oracle_private_key or ANVIL_KEYS["oracle"])
+        send(
+            web3,
+            oracle.functions.finalize(sid),
+            settings.keeper_private_key or settings.oracle_private_key or ANVIL_KEYS["oracle"],
+        )
         log(f"finalized submission #{sid}")
         done.append(sid)
     return done

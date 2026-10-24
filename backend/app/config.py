@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     ipfs_gateway: str = "https://ipfs.io/ipfs/"
     ipfs_store_dir: str = str(REPO_ROOT / "data" / "ipfs")
     oracle_private_key: str = ""
+    keeper_private_key: str = (
+        ""  # funded key for permissionless upkeep (finalize); falls back to the oracle key
+    )
     pq_secret_key_path: str = str(REPO_ROOT / "secrets" / "ml_dsa_65.sk")
     pq_public_key_path: str = str(REPO_ROOT / "secrets" / "ml_dsa_65.pk")
     zk_mode: str = "onchain"  # onchain | offchain
