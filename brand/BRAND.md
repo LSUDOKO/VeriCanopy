@@ -11,7 +11,7 @@ Source mark: `brand/logo-original.png` (user supplied). Clean vector set lives i
 | `og.png` | 1200×630 social card |
 
 ## Mark
-Three dark canopy facets (an isometric crown) over a lime check-chevron: the forest, and the verification under it. The small lime plus marks additionality. Minimum size 20 px. Clear space = height of the plus on every side. Never rotate, recolour outside the palette, or add drop shadows.
+A hexagonal canopy of six faceted panels with a downward chevron: the forest crown, and the verified credit beneath it. Single colour, neon green `#b6fe00`, on dark backgrounds. Minimum size 20 px. Clear space = height of the plus on every side. Never rotate, recolour outside the palette, or add drop shadows.
 
 ## Palette
 | Token | Hex | Role |

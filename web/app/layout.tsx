@@ -13,7 +13,7 @@ const hand = Nothing_You_Could_Do({ weight: "400", variable: "--font-hand", subs
 export const metadata: Metadata = {
   title: "VeriCanopy — Carbon credits that prove themselves",
   description: "Satellite AI scores every forest credit, a zero-knowledge proof verifies the score on-chain, and the credit keeps watching the forest.",
-  icons: { icon: "/logo-mark.svg" },
+  icons: { icon: [{ url: "/brand/logo-mark-tile.svg", type: "image/svg+xml" }, { url: "/favicon.ico" }], apple: "/apple-touch-icon.png" },
   openGraph: { title: "VeriCanopy", description: "Carbon credits that prove themselves.", images: ["/og.png"] },
 };
 
