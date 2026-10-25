@@ -1,23 +1,20 @@
 <p align="center">
-  <img src="brand/logo-original.png" alt="VeriCanopy" width="200" />
+  <a href="https://vericanopy.vercel.app"><img src="https://vericanopy.vercel.app/media/banner.jpg" alt="VeriCanopy — forest carbon credits that prove themselves" width="100%" /></a>
 </p>
 
-<h1 align="center">VeriCanopy</h1>
-
-<p align="center"><strong>Carbon credits that prove themselves.</strong><br/>
-Satellite evidence → integrity score → zero-knowledge proof on-chain → a credit that keeps watching the forest.</p>
-
 <p align="center">
-  <a href="https://vericanopy.vercel.app"><img alt="Live app" src="https://img.shields.io/badge/app-vericanopy.vercel.app-013900?style=flat-square&labelColor=b6fe00" /></a>
-  <a href="https://vericanopy-api.onrender.com/api/v1/status"><img alt="API status" src="https://img.shields.io/badge/api-status-013900?style=flat-square&labelColor=b6fe00" /></a>
-  <a href="https://sepolia.basescan.org/address/0xa3a203519f86DdeeCA51771F43ca0840e51387b6"><img alt="Base Sepolia" src="https://img.shields.io/badge/chain-Base%20Sepolia%2084532-013900?style=flat-square&labelColor=b6fe00" /></a>
+  <a href="https://vericanopy.vercel.app"><img alt="Live app" src="https://img.shields.io/badge/app-vericanopy.vercel.app-050806?style=for-the-badge&labelColor=b6fe00" /></a>
+  <a href="https://vericanopy-api.onrender.com/api/v1/status"><img alt="API status" src="https://img.shields.io/badge/api-live-050806?style=for-the-badge&labelColor=b6fe00" /></a>
+  <a href="https://sepolia.basescan.org/address/0xa3a203519f86DdeeCA51771F43ca0840e51387b6"><img alt="Base Sepolia" src="https://img.shields.io/badge/chain-Base%20Sepolia%2084532-050806?style=for-the-badge&labelColor=b6fe00" /></a>
+  <a href="https://github.com/users/LSUDOKO/packages/npm/package/vericanopy-mcp"><img alt="MCP package" src="https://img.shields.io/badge/MCP-%40lsudoko%2Fvericanopy--mcp-050806?style=for-the-badge&labelColor=b6fe00" /></a>
+  <br/>
   <a href="https://github.com/LSUDOKO/VeriCanopy/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/LSUDOKO/VeriCanopy/actions/workflows/ci.yml/badge.svg" /></a>
-  <a href="https://github.com/LSUDOKO/VeriCanopy/releases"><img alt="Release" src="https://img.shields.io/github/v/release/LSUDOKO/VeriCanopy?style=flat-square&color=013900" /></a>
-  <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-013900?style=flat-square" /></a>
+  <a href="https://github.com/LSUDOKO/VeriCanopy/releases"><img alt="Release" src="https://img.shields.io/github/v/release/LSUDOKO/VeriCanopy?style=flat-square&color=b6fe00&labelColor=050806" /></a>
+  <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-b6fe00?style=flat-square&labelColor=050806" /></a>
 </p>
 
 <p align="center">
-  <a href="https://vericanopy.vercel.app">Live app</a> ·
+  <a href="https://vericanopy.vercel.app"><b>Live app</b></a> ·
   <a href="https://vericanopy-api.onrender.com/docs">API docs</a> ·
   <a href="docs/MCP.md">MCP server</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
@@ -26,62 +23,121 @@ Satellite evidence → integrity score → zero-knowledge proof on-chain → a c
   <a href="docs/video/v2/STORYBOARD.md">Launch film</a>
 </p>
 
-<p align="center"><img src="docs/media/landing.gif" alt="VeriCanopy landing page" width="900" /></p>
+> **Forest carbon credits that prove themselves.** Satellite AI scores every forest against a matched twin, a zero-knowledge proof puts the score on-chain, every record is signed post-quantum, and the credit keeps watching the forest after it is sold.
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/whole-picture.gif" alt="The whole VeriCanopy system drawn as one diagram" width="100%" /></p>
 
 ---
 
-## The problem
+## 1 · The problem
 
-Forest carbon credits are verified once, by someone you have to trust, against a baseline the developer chose. Nobody re-derives that baseline from pixels, nothing re-scores the forest after issuance, and the ratings that exist come from private models you cannot check. Independent studies keep finding that most claimed reductions never happened.
+Today a forest credit is verified **once**, by someone you have to trust, against a baseline the developer wrote. Then nobody looks at the forest again.
 
-**VeriCanopy closes three trust gaps with one system:**
+<p align="center"><img src="https://vericanopy.vercel.app/media/problem-baseline.gif" alt="How a credit is made today: developer-chosen baseline, never re-derived from pixels" width="100%" /></p>
 
-| Gap | Question | Mechanism |
+| | What happens today | What it costs |
 |---|---|---|
-| **Computation** | Did the AI really run the registered model? | EZKL/Halo2 proof verified on-chain by `Halo2Verifier`; the score is decoded from the proof's public instances, never trusted from the oracle |
-| **Input** | Was the right land and data used? Is this land sold twice? | Reproducible, ML-DSA-65-signed manifest (datasets, dates, geometry hash, code commit); staked challenge game; H3 cell exclusivity in `ProjectRegistry` |
-| **Time** | Is the credit still true today? | Living integrity score per project, automatic buffer burns, project freeze on shortfall, holder notifications |
+| **① Baseline** | The developer picks the reference region and the deforestation rate. That one number decides how many credits exist. Nobody re-derives it from pixels. | Independent investigations found more than 90 % of some rainforest offsets to be phantom reductions (West et al., *Science* 2023; Guardian / SourceMaterial 2023). |
+| **② Time** | The credit is issued, sold and resold. Nothing re-scores the forest after issuance. | On our Manavgat pilot area a single fire year removed **1.2 MtCO₂e**. The registry would never notice. |
+| **③ Score** | Ratings come from a private model and a letter grade. | No proof the model ran, no proof which data it saw. |
 
-## How it works
+<p align="center"><img src="https://vericanopy.vercel.app/media/problem-fire.gif" alt="Manavgat: Sentinel-2 2019 vs 2021 fire scar" width="49%" /> <img src="https://vericanopy.vercel.app/media/problem-blackbox.jpg" alt="Private model, letter grade, no proof" width="49%" /></p>
+
+**This is real satellite data, not a mock-up.** Both cards below are Sentinel-2 L2A composites rendered by Google Earth Engine for the exact polygons registered on Base Sepolia:
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/sat-manavgat.jpg" alt="Manavgat, Türkiye — 2019 vs 2021 fire, project frozen" width="100%" /></p>
+<p align="center"><img src="https://vericanopy.vercel.app/media/sat-tapajos.jpg" alt="Tapajós, Brazil — 2019 vs 2024, score 71.9 to 3.9" width="100%" /></p>
+
+## 2 · The solution: from pixels to proof
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/solution-overview.jpg" alt="VeriCanopy: from pixels to proof" width="100%" /></p>
+
+| Gap | Question | VeriCanopy's mechanism |
+|---|---|---|
+| **Input** | Was the right land and data used? Is this land sold twice? | Earth Engine evidence for the project **and** a matched twin forest; reproducible ML-DSA-65-signed manifest (datasets, dates, geometry hash, code commit); H3 cell exclusivity in `ProjectRegistry`; staked challenge game |
+| **Computation** | Did the AI really run the registered model? | EZKL/Halo2 proof verified on-chain by `Halo2Verifier`; the score is decoded from the proof's public instances, never trusted from the oracle |
+| **Time** | Is the credit still true today? | Living integrity score per period, automatic buffer burns, freeze on shortfall, holder notifications |
+
+### Step 1 · Evidence from pixels, against a twin forest
+Every period the oracle pulls Sentinel-2, Sentinel-1, Hansen GFC 2025, GEDI L4B biomass, MODIS burned area and Dynamic World for the project polygon and a matched twin nearby: 776 project pixels against 2,396 twin pixels. The twin is the counterfactual, not the developer's spreadsheet.
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/solution-evidence.jpg" alt="Sentinel-2 tile with project and twin polygons and the six datasets" width="49%" /> <img src="https://vericanopy.vercel.app/media/solution-twin.gif" alt="Twin-forest chart from real evidence data" width="49%" /></p>
+
+### Step 2 · An integrity score that follows the forest
+Sixteen features feed a 417-parameter audited network (MAE 0.0125 against the transparent expert rule, zero monotonicity violations). Tapajós scored **71.9** in 2023; after 8,080 t of detected loss it scores **3.9**.
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/solution-score.jpg" alt="16 features, 417-parameter network, score 71.9 to 3.9" width="100%" /></p>
+
+### Step 3 · A zero-knowledge proof the oracle cannot fake
+Inference runs inside a Halo2 circuit (EZKL 23.0.5): about 6 s, a 4,416-byte proof. `Halo2Verifier` on Base Sepolia checks it inside `submitScore`; a wrong proof reverts. The manifest is signed with ML-DSA-65 (FIPS 204) and the key is registered on-chain.
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/solution-proof.gif" alt="zk circuit to proof.bin" width="49%" /> <img src="https://vericanopy.vercel.app/media/solution-mldsa.jpg" alt="ML-DSA-65 seal" width="49%" /></p>
+
+**On-chain receipt.** The real 2025 Tapajós submission, verified by the deployed verifier: [`0xba0aaa…7ff4db`](https://sepolia.basescan.org/tx/0xba0aaa0f4ec04419e0768298a97976db7153df2ead755e553e975852977ff4db) (Base Sepolia, block 49,603,029, status Success). The event log carries period 7, project 1 and the oracle address as indexed topics.
+
+<p align="center"><a href="https://sepolia.basescan.org/tx/0xba0aaa0f4ec04419e0768298a97976db7153df2ead755e553e975852977ff4db"><img src="https://vericanopy.vercel.app/media/basescan-tx.jpg" alt="Basescan: IntegrityOracle submitScore transaction" width="49%" /></a> <a href="https://sepolia.basescan.org/tx/0xba0aaa0f4ec04419e0768298a97976db7153df2ead755e553e975852977ff4db#eventlog"><img src="https://vericanopy.vercel.app/media/basescan-logs.jpg" alt="Basescan: ScoreSubmitted event log" width="49%" /></a></p>
+
+### Step 4 · A living credit
+Credits carry the live score. Detected loss burns buffer credits first; a shortfall freezes the project, blocks transfers and notifies every holder. Anyone can challenge a score with a bond; two of three independent resolvers recompute it.
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/solution-living-credit.gif" alt="Buffer burn, freeze, challenge with 2-of-3 resolvers" width="100%" /></p>
 
 ```mermaid
 flowchart LR
-  A[Sentinel-1/2 · Hansen GFC · GEDI L4B · MODIS burned area · Dynamic World] --> B[Twin-forest matching<br/>776 project px vs 2,396 twin px]
+  A[Sentinel-1/2 · Hansen GFC · GEDI L4B · MODIS · Dynamic World] --> B[Twin-forest matching<br/>776 vs 2,396 px]
   B --> C[16-feature vector fv1]
-  C --> D[417-parameter MLP<br/>integrity score 0–100]
+  C --> D[417-param MLP<br/>integrity score]
   D --> E[EZKL Halo2 proof<br/>4,416 B · ~6 s]
-  E --> F[IntegrityOracle.submitScore<br/>Halo2Verifier on Base Sepolia]
-  C --> G[Manifest signed with ML-DSA-65]
+  E --> F[IntegrityOracle.submitScore<br/>Halo2Verifier · Base Sepolia]
+  C --> G[Manifest signed ML-DSA-65]
   G --> F
-  F --> H[VeriCredit ERC-1155<br/>buffer pool · freeze · challenges · marketplace]
+  F --> H[VeriCredit ERC-1155<br/>buffer · freeze · challenges · market]
 ```
 
-1. **Evidence.** Every monitoring period the oracle pulls Sentinel-2 and Sentinel-1 composites, Hansen tree-cover loss, GEDI L4B biomass, MODIS burned area and Dynamic World for the project polygon *and* for a matched twin forest nearby. The twin is the counterfactual, not a spreadsheet.
-2. **Score.** Sixteen features go into a small, audited neural network (417 parameters, MAE 0.0125 against the transparent expert rule, zero monotonicity violations). Tapajós scored 71.9 in 2023; after 8,080 t of detected loss it scores 3.9.
-3. **Proof.** Inference runs inside a Halo2 circuit (EZKL 23.0.5). The deployed verifier checks the proof before the score is stored; a wrong proof reverts the transaction. The evidence manifest is signed with ML-DSA-65 (FIPS 204) and the key is registered on-chain.
-4. **A living credit.** Credits carry the live score. Detected loss burns buffer credits first; a shortfall freezes the project, blocks transfers and notifies every holder. Anyone can challenge a score with a bond; two of three independent resolvers recompute it.
+## 3 · Use it today (live on Base Sepolia)
 
-## What you can do today (Base Sepolia)
+Every clip below is a real recording of [vericanopy.vercel.app](https://vericanopy.vercel.app), driven click by click.
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/site-landing.gif" alt="Landing page" width="100%" /></p>
 
 | | |
 |---|---|
-| <img src="docs/media/registry.gif" width="440" /> | **Registry** — every project on a map with its live integrity status, H3 cells, and the credits, reversals and buffer coverage behind it. |
-| <img src="docs/media/project.gif" width="440" /> | **Project page** — real Sentinel-2 before/after, the twin-forest chart with the fire year, integrity history, claim vs reality, proofs & signatures, ML-DSA-signed auditor report, FIRMS fire badge, 10 km leakage ring and a year slider over the satellite tiles. |
-| <img src="docs/media/market.gif" width="440" /> | **Market** — escrowed fixed-price listings with the integrity score on the price tag, a price guide by integrity band, and portfolio retire → printable certificate. Frozen projects cannot trade. |
-| <img src="docs/media/ask.gif" width="440" /> | **Ask** — deterministic, model-faithful explanation of any score (per-feature attribution, data sources, proof and signature status). No language model in the loop. |
-| <img src="docs/media/status.gif" width="440" /> | **Status** — database, RPC head, indexer lag, Earth Engine, signer, keeper balance and all ten contracts, refreshed every 30 s. |
+| <img src="https://vericanopy.vercel.app/media/site-registry.gif" width="440" /> | **Registry.** Every project on a map with its live integrity status, H3 cells, credits issued, loss detected and buffer coverage. |
+| <img src="https://vericanopy.vercel.app/media/site-project.gif" width="440" /> | **Project page.** Real Sentinel-2 before/after, the twin-forest chart with the fire year, integrity history and claim vs reality. |
+| <img src="https://vericanopy.vercel.app/media/site-project-tools.gif" width="440" /> | **Year slider, fire watch, leakage ring.** Scrub Sentinel-2 composites 2017–2025, NASA FIRMS detections for the last 30 days, and Hansen loss in a 10 km ring around the parcel. |
+| <img src="https://vericanopy.vercel.app/media/site-proofs.gif" width="440" /> | **Proofs & signatures.** Model hash, feature commitment, manifest CID, the on-chain tx, ML-DSA-65 verification, and a signed auditor report (PDF + JSON). |
+| <img src="https://vericanopy.vercel.app/media/site-register.gif" width="440" /> | **Register.** Draw or paste a polygon; H3 overlap is pre-checked and the contract refuses land that is already registered (`OverlapDetected`). |
+| <img src="https://vericanopy.vercel.app/media/site-market.gif" width="440" /> | **Market.** Escrowed fixed-price listings with the integrity score on the price tag and a price guide by integrity band. Frozen projects cannot trade. |
+| <img src="https://vericanopy.vercel.app/media/site-ask.gif" width="440" /> | **Ask.** Deterministic, model-faithful explanation of any score: per-feature attribution, data sources, proof and signature status. No language model in the loop. |
+| <img src="https://vericanopy.vercel.app/media/site-status.gif" width="440" /> | **Status.** Database, RPC head, indexer lag, Earth Engine, signer, keeper balance and all ten contracts, refreshed every 30 s. |
+| <img src="https://vericanopy.vercel.app/media/site-verify.gif" width="440" /> | **Verify.** Re-check hash ↔ chain, key ↔ registry, signature and proof mode for any manifest. |
 
-Also: **Register** wizard with live H3 overlap pre-check and decoded `OverlapDetected` reverts · **Challenges** with bonds and 2-of-3 resolver votes · **Verify** page that re-checks hash ↔ chain, key ↔ registry, signature and proof mode · **Alerts** feed as JSON and RSS · **Model registry** page that compares the on-chain model hash with the published ONNX artifact.
+Also: **Challenges** with bonds and 2-of-3 resolver votes · **Retirements** with printable certificates · **Alerts** as JSON and RSS · **Model registry** page that compares the on-chain model hash with the published ONNX artifact.
 
-### For agents: MCP server
+## 4 · For agents: the VeriCanopy MCP server, working in claude.ai
 
-Any Model Context Protocol client can read the registry, explain a score, verify a manifest and prepare **unsigned** marketplace or retirement transactions (your wallet signs; the server holds no keys).
+VeriCanopy is a Model Context Protocol server. Below is a real claude.ai session: the connector added under **Customize → Connectors**, then one prompt. Claude listed the projects, explained the 3.9 score feature by feature, found the cheapest listing and prepared an **unsigned** buy transaction for the user's wallet. The server holds no keys.
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/claude-mcp.gif" alt="claude.ai using the VeriCanopy MCP connector" width="100%" /></p>
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/claude-connector.jpg" alt="claude.ai connector settings: VeriCanopy, 10 tools" width="32%" /> <img src="https://vericanopy.vercel.app/media/claude-tools.jpg" alt="Claude calling list projects, explain score, list listings, prepare buy tx" width="32%" /> <img src="https://vericanopy.vercel.app/media/claude-tx.jpg" alt="Unsigned buy transaction returned by Claude" width="32%" /></p>
+
+**Connect it**
 
 ```sh
-claude mcp add --transport http vericanopy https://vericanopy-api.onrender.com/mcp
+# Claude Code, remote HTTP
+claude mcp add --transport http vericanopy https://vericanopy-api.onrender.com/mcp/
+
+# Any stdio client (Claude Desktop, Cursor) via the GitHub package
+echo "@lsudoko:registry=https://npm.pkg.github.com" >> ~/.npmrc
+npx -y @lsudoko/vericanopy-mcp
 ```
 
-Ten tools, two resources — see [`docs/MCP.md`](docs/MCP.md).
+claude.ai: Customize → Connectors → Add custom connector → `https://vericanopy-api.onrender.com/mcp/`, no sign-in.
+
+Tools: `list_projects` · `get_project` · `get_submissions` · `get_evidence` · `explain_score` · `list_listings` · `prepare_buy_tx` · `prepare_retire_tx` · `get_challenge` · `verify_manifest`. Package: [`@lsudoko/vericanopy-mcp`](https://github.com/users/LSUDOKO/packages/npm/package/vericanopy-mcp) ([source](packages/mcp)). Details: [`docs/MCP.md`](docs/MCP.md).
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/product-overview.jpg" alt="The live product as one wall of recordings" width="100%" /></p>
 
 ## Measured, not promised
 
@@ -100,6 +156,8 @@ Every number is produced by code in this repository (`scripts/write_benchmarks.p
 | Satellite datasets via Earth Engine | 10 |
 
 ## Pilot areas and data provenance
+
+<p align="center"><img src="https://vericanopy.vercel.app/media/sat-loreto.jpg" alt="Loreto, Peru — Sentinel-2 before and after" width="100%" /></p>
 
 Two kinds of results exist on purpose:
 
