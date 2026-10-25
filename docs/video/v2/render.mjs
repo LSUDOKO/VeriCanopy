@@ -18,6 +18,7 @@ page.on("pageerror", (e) => console.error("PAGE ERROR", e.message));
 page.on("console", (m) => { if (m.type() === "error") console.error("CONSOLE", m.text()); });
 await page.goto(HTML);
 await page.evaluate(() => window.ready());
+if (process.argv.includes("--nosubs")) await page.addStyleTag({ content: "#subs{display:none!important}" });
 const total = await page.evaluate(() => window.TOTAL);
 T1 = T1 == null ? total : Number(T1);
 console.log(`timeline ${total.toFixed(2)}s · ${T0}–${T1.toFixed(2)} @ ${FPS}fps ×${SUB}`);

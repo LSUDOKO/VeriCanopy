@@ -5,7 +5,7 @@ export function Band({ text, tone = "lime", tilt = -3 }: { text: string; tone?: 
   const items = Array.from({ length: 6 }, (_, i) => (
     <span key={i} className="display inline-flex items-center gap-8" style={{ fontSize: "clamp(2.4rem, 6vw, 5.5rem)" }}>
       {text}
-      <span className="inline-grid place-items-center rounded-full" style={{ width: "1.1em", height: "1.1em", background: tone === "lime" ? "var(--forest)" : "var(--cream)" }}>
+      <span className="inline-grid place-items-center rounded-full" style={{ width: "1.1em", height: "1.1em", background: "var(--forest)" }}>
         <LogoMark size={40} />
       </span>
     </span>

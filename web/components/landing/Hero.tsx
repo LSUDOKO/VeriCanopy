@@ -32,7 +32,7 @@ export function Hero() {
         <div className="absolute left-5 top-4 hidden sm:block text-left display text-sm leading-tight">⋮ Live on Base Sepolia<br />real satellite data</div>
         <div className="mx-auto flex items-center justify-center gap-4 display text-xl sm:text-2xl">
           <span>We&apos;re</span>
-          <Logo size={300} />
+          <span className="inline-flex rounded-2xl px-4 py-3" style={{ background: "var(--forest)" }}><Logo size={300} /></span>
           <span>here to</span>
         </div>
         <h1 className="display mt-2 overflow-hidden" style={{ fontSize: "clamp(5.5rem, 22vw, 26rem)" }}>

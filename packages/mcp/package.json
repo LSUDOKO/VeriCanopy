@@ -1,0 +1,14 @@
+{
+  "name": "@lsudoko/vericanopy-mcp",
+  "version": "1.0.0",
+  "description": "VeriCanopy MCP server for Claude Desktop, Claude Code, Cursor and any stdio MCP client: verifiable forest carbon credits (satellite evidence, zkML proofs on Base Sepolia, ML-DSA-65 signatures).",
+  "type": "module",
+  "bin": { "vericanopy-mcp": "bin/vericanopy-mcp.js" },
+  "files": ["bin", "README.md"],
+  "engines": { "node": ">=18" },
+  "keywords": ["mcp", "model-context-protocol", "carbon-credits", "zkml", "earth-engine", "base-sepolia", "claude"],
+  "license": "MIT",
+  "homepage": "https://vericanopy.vercel.app",
+  "repository": { "type": "git", "url": "https://github.com/LSUDOKO/VeriCanopy.git", "directory": "packages/mcp" },
+  "publishConfig": { "registry": "https://npm.pkg.github.com" }
+}

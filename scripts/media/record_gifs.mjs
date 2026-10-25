@@ -7,7 +7,7 @@ import { mkdirSync, readdirSync, renameSync, rmSync } from "node:fs";
 import path from "node:path";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3100";
-const OUT = "/home/arpit/Desktop/hackathon_projects/VeriCanopy/docs/media";
+const OUT = process.env.OUT_DIR ?? "/home/arpit/Desktop/hackathon_projects/VeriCanopy/docs/media";
 const TMP = "/tmp/claude-1000/gifs-tmp";
 mkdirSync(OUT, { recursive: true });
 rmSync(TMP, { recursive: true, force: true });
@@ -23,7 +23,9 @@ const SCENES = [
 ];
 
 const browser = await chromium.launch();
+const ONLY = process.argv.slice(2);
 for (const s of SCENES) {
+  if (ONLY.length && !ONLY.includes(s.name)) continue;
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 760 }, recordVideo: { dir: TMP, size: { width: 1280, height: 760 } }, deviceScaleFactor: 1 });
   const page = await ctx.newPage();
   await page.goto(BASE + s.url, { waitUntil: "networkidle" }).catch(() => {});
